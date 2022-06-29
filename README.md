@@ -1,2 +1,2 @@
-# Data structure and algorithm practice c
+# Data structure and algorithm practice c++
 
