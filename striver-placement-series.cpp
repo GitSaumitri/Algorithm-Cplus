@@ -89,8 +89,50 @@ class placement{
     */
     int unique_paths(int m, int n){
         /* recurssive solution */
-        return grid_recurssive_paths(0,0,m,n);
+        //return grid_recurssive_paths(0,0,m,n);
         /* DP */
+        vector<vector<int>> dp(m, vector<int>(n,1));
+        for(int i=1; i<m; i++){
+            for(int j=1; j<n; j++){
+                dp[i][j]=dp[i-1][j]+dp[i][j-1];
+            }
+        }
+        return dp[m-1][n-1];
+    }
+
+    /* 1. sorting - O(nlogn)
+       2. couting number of 0,1,2 than replaying - O(n)+O(n)
+       3. this - Dutch National Flag algorithm
+    */
+    void sort_0_1_2(vector<int> &arr){
+        int start=0;
+        int mid=0;
+        int end=arr.size()-1;
+        while(mid<=end){
+            //if the element is 0
+            if(arr[mid]==0){
+                swap(arr[start++],arr[mid++]);
+                /*swap
+                int temp = arr[start];
+                arr[start] = arr[mid];
+                arr[mid] = temp;
+                start++;mid++;
+                */
+            //if the element is 1
+            }else if(arr[mid]==1){
+                mid++;
+            //if the element is 2
+            }else{
+                swap(arr[mid],arr[end--]);
+                /*
+                int temp = arr[mid];
+                arr[mid] = arr[end];
+                arr[end] = temp;
+                end--;
+                */
+            }
+        }
+        return;
     }
 };
 
@@ -107,11 +149,17 @@ int main(){
     vector<int> arr1({2,4,3,5,1});
     cout<<"Number of inversions "<<ob.find_inversion(arr1)<<endl;
 
-    //3. grid Unique path
+    //3. Grid Unique path
     //https://leetcode.com/problems/unique-paths/discuss/22954/C%2B%2B-DP
     cout<<"Number of Unique paths "<<ob.unique_paths(3,7)<<endl;
 
-
+    //4. sort an array of 0's 1's 2's without using extra space or sorting algo
+    vector<int> arr2({2,1,0,2,1,0});
+    ob.sort_0_1_2(arr2);
+    for(int i=0; i<arr2.size(); i++){
+        cout<<arr2[i]<<" ";
+    }
+    cout<<endl;
 
     return 0;
 }
