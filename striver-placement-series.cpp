@@ -134,6 +134,53 @@ class placement{
         }
         return;
     }
+
+    /* Given an array nums containing n+1 integers where each
+    integer is between 1 to n, inclusive. Assuming that there 
+    is only one duplicate number, find the duplicate one.
+        1. sorting - O(nlogn) space - O(1)
+        2. Hashing - O(n) space - O(n)
+        3. linked list cycle method + tortoise method
+        4. Math - calculate sum
+    */
+    int findDuplicate(vector<int> arr){
+        int slow = arr[0];
+        int fast = arr[0];
+        do{
+            slow = arr[slow];
+            fast = arr[arr[fast]];
+        }while(slow!=fast);
+
+        fast = arr[0];
+        while(slow !=fast){
+            slow = arr[slow];
+            fast = arr[fast];
+        }
+        return slow;
+        /* Calculate SUM
+        int len = arr.size();
+        int sum1 = ((len-1)*len)/2;
+        int sum2 = 0;
+        for(int i=0; i<len; i++){
+            sum2 += arr[i];
+        }
+        return sum2-sum1;
+        */
+    }
+
+    /* Given as unsorted array of size n. Array elements are in the
+    range from 1 to n. One number from set {1,2,..n} is missing and 
+    one number occurs twice in the array. Find these two numbers
+            1. Hashing - O(2n) - space - O(n)
+            2. Math
+            3. XOR
+    */
+   vector<int> findMissingRepeating(vector<int> arr){
+       vector<int> res(2,0);
+
+       return res;
+   }
+
 };
 
 int main(){
@@ -160,6 +207,15 @@ int main(){
         cout<<arr2[i]<<" ";
     }
     cout<<endl;
+
+    //5. Find the duplicate number
+    vector<int> arr3({2,5,9,6,9,3,8,4,7,1});
+    cout<<"Duplicate number: "<<ob.findDuplicate(arr3)<<endl;
+
+    //6. Find the repeating and missing 
+    vector<int> arr4({3,1,2,5,4,6,7,5});
+    res = ob.findMissingRepeating(arr4);
+    cout<<"Missing&Repating: "<<res[0]<<" "<<res[1]<<endl;
 
     return 0;
 }
