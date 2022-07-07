@@ -241,8 +241,8 @@ class placement{
 
     /* 9. Merge Intervals
      -> ask if the intervals are in sorted order?
-            1. Bruteforce - O(nlogn) + O(n*n)
-            2. 
+        Bruteforce - O(nlogn) + O(n*n)
+        Merge eachpair - O(nlogn) + O(n)    
     */
    vector<vector<int>> mergeIntervals(vector<vector<int>> intervals){
        vector<vector<int>> result;
@@ -264,6 +264,37 @@ class placement{
        result.push_back(interval);
        return result;
    }
+
+   /* 10. set matrix zeros
+        1. Bruteforce - for each zero set to -1 for all row/col then set 0 at the end
+        2. reserve extra space for col n row - mark them based on zero
+        3. For the exta space above - reserve the first row and col.
+   */
+    void setMatrixZeros(vector<vector<int>> & matrix){
+        int col0=1;
+        int rows = matrix.size();
+        int cols = matrix[0].size();
+        for(int i=0; i<rows; i++){
+            if(matrix[i][0]==0) col0=0;
+            for(int j=1; j<cols; j++){
+                if(matrix[i][j]==0){
+                    matrix[i][0]=0;
+                    matrix[0][j]=0;
+                }
+            }
+        }
+
+        for(int i=rows-1; i>=0; i--){
+            for(int j=cols-1; j>=0; j--){
+                if(matrix[i][0]==0 || matrix[0][i]==0)
+                    matrix[i][j]=0;
+            }
+            if(col0==0){
+                matrix[i][0]=0;
+            }
+        }
+        return;
+    }
 };
 
 int main(){
@@ -329,5 +360,16 @@ int main(){
     cout<<endl;
 
     //10. set matrix zeros
+    vector<vector<int>> mat({{1,1,1,1},
+    {1,0,1,1},
+    {1,1,0,1},
+    {0,0,0,1}});
+    ob.setMatrixZeros(mat);
+    for(int i=0; i<mat.size(); i++){
+        for(int j=0; j<mat[0].size(); j++){
+            cout<<" "<<mat[i][j];
+        }
+        cout<<endl;
+    }
     return 0;
 }
