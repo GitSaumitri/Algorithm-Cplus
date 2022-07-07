@@ -1,7 +1,20 @@
+/* Strivers Placement series  
+    //1. Two SUM
+    //2. find inversion
+    //3. Grid Unique path
+    //https://leetcode.com/problems/unique-paths/discuss/22954/C%2B%2B-DP
+    //4. sort an array of 0's 1's 2's without using extra space or sorting algo
+    //5. Find the duplicate number
+    //6. Find the repeating and missing 
+    //https://takeuforward.org/data-structure/find-the-repeating-and-missing-numbers/
+    //7. Merge two sorted array with O(1) extra space
+    //https://www.geeksforgeeks.org/efficiently-merging-two-sorted-arrays-with-o1-extra-space/
+    //8. Maximum Subarray
+    
+*/
 #include<iostream>
 using namespace std;
-#include<vector>
-#include<map>
+#include<bits/stdc++.h>
 
 class placement{
 
@@ -181,6 +194,76 @@ class placement{
        return res;
    }
 
+    /* We need to merge these two sorted arrays, such that the intial numbers
+    (after complete sorting) are in the first array and the remaining numbers
+    are in the second array.
+        1. Using a third array - O(nlogn) + space - O(n)
+        2. insertion sort - O(m*n) space - O(1)
+        3. GAP O((n+m)log(n+m)
+        4. other methods in hard part of GfG
+    */
+   void mergeSortedArray(vector<int>& arr1, vector<int>& arr2){
+       int len1 = arr1.size();
+       int len2 = arr2.size();
+       int i=0, j=0;
+
+       for(int i=0; i<len1; i++){
+           if(arr1[i] > arr2[0]){
+               swap(arr1[i],arr2[0]);
+               /* after above step, second array
+               became unsorted so sort it */
+               int felement = arr2[0];
+               int k;
+               for(k=1; k<len2 && arr2[k]<felement; k++){
+                   arr2[k-1] = arr2[k];
+               }
+               arr2[k-1] = felement;
+           }
+       }
+       return;
+   }
+    
+    /* Find the contiguous subarray (containing at least one number)
+    which has the largest sum and return it.
+        1. Iterate over all elements - O(n*n*n) -> O(n*n)
+        2. Kadane's Algorithm - O(n) - space O(1)
+    */
+   int MaxSubarraySum(vector<int> arr){
+       int sum=0;
+       int maxs = INT_MIN;
+       for(auto it: arr){
+           sum += it;
+           maxs = max(sum, maxs);
+           if(sum < 0) sum=0;
+       }
+       return maxs;
+   }
+
+    /* 9. Merge Intervals
+     -> ask if the intervals are in sorted order?
+            1. Bruteforce - O(nlogn) + O(n*n)
+            2. 
+    */
+   vector<vector<int>> mergeIntervals(vector<vector<int>> intervals){
+       vector<vector<int>> result;
+       if(intervals.size()==0){
+           return result;
+       }
+       
+       sort(intervals.begin(), intervals.end());
+       vector<int> interval = intervals[0];
+
+       for(auto it: intervals){
+           if(it[0] <= interval[1]){
+               interval[1] = max(interval[1],it[1]);
+           }else{
+               result.push_back(interval);
+               interval = it;
+           }
+       }
+       result.push_back(interval);
+       return result;
+   }
 };
 
 int main(){
@@ -213,9 +296,38 @@ int main(){
     cout<<"Duplicate number: "<<ob.findDuplicate(arr3)<<endl;
 
     //6. Find the repeating and missing 
+    //https://takeuforward.org/data-structure/find-the-repeating-and-missing-numbers/
     vector<int> arr4({3,1,2,5,4,6,7,5});
     res = ob.findMissingRepeating(arr4);
     cout<<"Missing&Repating: "<<res[0]<<" "<<res[1]<<endl;
 
+    //7. Merge two sorted array with O(1) extra space
+    //https://www.geeksforgeeks.org/efficiently-merging-two-sorted-arrays-with-o1-extra-space/
+    vector<int> arr5({1,5,9,10,15,20});
+    vector<int> arr6({2,3,8,12});
+    ob.mergeSortedArray(arr5,arr6);
+    for(int i=0; i<arr5.size(); i++){
+        cout<<arr5[i]<<" ";
+    }
+    cout<<endl;
+    for(int i=0; i<arr6.size(); i++){
+        cout<<arr6[i]<<" ";
+    }
+    cout<<endl;
+
+    //8. Maximum Subarray
+    vector<int> arr7({-2,-3,4,-1,-2,1,5,-3});
+    cout<<"Subarray Sum: "<<ob.MaxSubarraySum(arr7)<<endl;
+
+    //9. Merge Intervals
+    vector<vector<int>> res1;
+    vector<vector<int>> arr8({{1,3},{2,4},{2,6},{8,9},{8,10},{9,11},{15,18},{16,17}});
+    res1 = ob.mergeIntervals(arr8);
+    for(auto it: res1){
+        cout<<"{"<<it[0]<<" "<<it[1]<<"} ";
+    }
+    cout<<endl;
+
+    //10. set matrix zeros
     return 0;
 }
