@@ -295,6 +295,34 @@ class placement{
         }
         return;
     }
+
+   /* 11. Pascal Triangle
+    n       n
+     C   =   P  / r!  = compute in O(n) = (n!) / (r!) * (n-r)!
+      r       r
+   Manly three type of problem
+            1. Given an non-negative integer, generate first n rows
+                O(n*n)   space - O(n*n) 
+            2. print the nth row of pascal triangle
+                O(n)     space - O(n)
+            3. print the nth row and mth column element - O(n) - O(1)
+                                    r-1       4
+    5th row 3rd column element =        C      C     =  (4*3)/(2*1) = 6
+                                         c-1    2
+
+   */   
+    vector<vector<int>> pascal_traingle(int nrows){
+        vector<vector<int>> r(nrows);
+        for(int i=0; i<nrows; i++){
+            r[i].resize(i+1);
+            r[i][0] = r[i][i] = 1;
+
+            for(int j = 1 ; j < i ; j++)
+                r[i][j] = r[i-1][j-1] + r[i-1][j];
+        }
+        return r;
+    } 
+
 };
 
 int main(){
@@ -371,5 +399,19 @@ int main(){
         }
         cout<<endl;
     }
+
+    //11. Pascal Triangle
+    vector<vector<int>> r;
+    r = ob.pascal_traingle(6);
+    for(int i=0; i<r.size(); i++){
+        for(int j=0; j<r[i].size(); j++){
+            cout<<" "<<r[i][j];
+        }
+        cout<<endl;
+    }
+
+    //12. Next Permutation
+    
+
     return 0;
 }
