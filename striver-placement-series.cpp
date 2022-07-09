@@ -298,7 +298,7 @@ class placement{
 
    /* 11. Pascal Triangle
     n       n
-     C   =   P  / r!  = compute in O(n) = (n!) / (r!) * (n-r)!
+     C   =   P  / r!  = compute in O(n) = (n!) / ((r!) * (n-r)!)    
       r       r
    Manly three type of problem
             1. Given an non-negative integer, generate first n rows
@@ -309,7 +309,7 @@ class placement{
                                     r-1       4
     5th row 3rd column element =        C      C     =  (4*3)/(2*1) = 6
                                          c-1    2
-
+    https://www.cuemath.com/ncr-formula/
    */   
     vector<vector<int>> pascal_traingle(int nrows){
         vector<vector<int>> r(nrows);
@@ -322,6 +322,35 @@ class placement{
         }
         return r;
     } 
+
+    /* 12. Next permutation
+       Implement next permutation, which rearranges numbers into the lexicographically
+       next greater permutation of numbers.
+       If such arrangement is not possible, it much rearrange it as the lowest possible
+       order (i.e sort in ascending order).
+       The replacement must be in-place and use only constant extra memory.
+            1. c++ inbuild next_permutation
+            2. bruteforce - find all permutations
+            3. lnear order -
+    */
+   void nextPermutation(vector<int>& nums){
+       int i,j;
+       int len = nums.size();
+       for(i=len-2; i>=0; i--){
+           if(nums[i] < nums[i+1])
+                break;
+       }
+       if(i<0){
+           reverse(nums.begin(), nums.end());
+       } else {
+           for(j=len-1; j>=0; j--){
+               if(nums[j] > nums[i])
+                    break;
+           }
+           swap(nums[j],nums[i]);
+           reverse(nums.begin()+i+1,nums.end());
+       }
+   }
 
 };
 
@@ -411,7 +440,19 @@ int main(){
     }
 
     //12. Next Permutation
-    
+    //vector<int> nums1({1,3,5,4,2});
+    vector<int> nums1({5,4,3,2,1});
+    cout<<"Number: ";
+    for(int i=0; i<nums1.size(); i++){
+        cout<<nums1[i]<<" ";
+    }
+    cout<<endl;
+    ob.nextPermutation(nums1);
+    cout<<"Next Permutation: ";  
+    for(int i=0; i<nums1.size(); i++){
+        cout<<nums1[i]<<" ";
+    }
+    cout<<endl;
 
     return 0;
 }
