@@ -1,23 +1,27 @@
 /* Strivers Placement series  
-    //1. Two SUM
-    //2. find inversion
-    //3. Grid Unique path
-    //https://leetcode.com/problems/unique-paths/discuss/22954/C%2B%2B-DP
-    //4. sort an array of 0's 1's 2's without using extra space or sorting algo
-    //5. Find the duplicate number
-    //6. Find the repeating and missing 
-    //https://takeuforward.org/data-structure/find-the-repeating-and-missing-numbers/
-    //7. Merge two sorted array with O(1) extra space
-    //https://www.geeksforgeeks.org/efficiently-merging-two-sorted-arrays-with-o1-extra-space/
-    //8. Maximum Subarray
-    
+    1. Two SUM
+    2. Reverse pairs (appl: find inversion)
+    3. Grid Unique path
+       https://leetcode.com/problems/unique-paths/discuss/22954/C%2B%2B-DP
+    4. sort an array of 0's 1's 2's without using extra space or sorting algo
+    5. Find the duplicate number
+    6. Find the repeating and missing 
+       https://takeuforward.org/data-structure/find-the-repeating-and-missing-numbers/
+    7. Merge two sorted array with O(1) extra space
+       https://www.geeksforgeeks.org/efficiently-merging-two-sorted-arrays-with-o1-extra-space/
+    8. Maximum Subarray
+    9.
+    10.
+    11.
+    12.
+
 */
 #include<iostream>
 using namespace std;
 #include<bits/stdc++.h>
 
 class placement{
-
+    //2. Reverse pairs (appl: find inversion)
     int merge(vector<int>& nums, int low, int mid, int high){
         int cnt=0;
         int j=mid+1;
@@ -54,6 +58,7 @@ class placement{
         }
         return cnt;
     }
+    //2. Reverse pairs (appl: find inversion)
     int merge_sort(vector<int>& nums, int low, int high){
         if(low>=high) return 0;
         int mid = (low+high)/2;
@@ -71,8 +76,55 @@ class placement{
         else
             return (grid_recurssive_paths(i+1,j,m,n)+grid_recurssive_paths(i,j+1,m,n));
     }
+
+    // 13. count Inversion
+    int merge1(vector<int> nums, int low, int mid, int high){
+        int inv=0;
+        /*
+        int j=mid+1;
+        for(int i=low; i<=mid; i++){
+            while((j<=high) && (nums[low] > nums[j])){
+                j++;
+            }
+            inv += (j - (mid+1));
+        }
+        */
+        int left = low;
+        int right = mid+1;
+        vector<int> temp;
+        while(left <= mid && right <= high){
+            if(nums[left] <= nums[right]){
+                temp.push_back(nums[left++]);
+            }else{
+                temp.push_back(nums[right++]);
+                inv = inv + (mid -left +1);
+            }
+        }
+        while(left <= mid){
+            temp.push_back(nums[left++]);
+        }
+        while(right <= high){
+            temp.push_back(nums[right++]);
+        }
+        for(int i=low; i<high; i++){
+            nums[i] = temp[i-low];
+        }
+        return inv;
+    }
+    // 13. count Inversion
+    int merge_sort1(vector<int>& nums, int low, int high){
+        if(low >= high)
+            return 0;
+        int mid = (low+high)/2;
+        int inv = merge_sort1(nums, low, mid);
+        inv += merge_sort1(nums, mid+1, high);
+        inv += merge1(nums, low, mid, high);
+        return inv;
+    }
+
     public:
 
+    //1. Two SUM
     vector<int> twoSum(vector<int>&arr, int sum){
         /* Return the indices of the two numbers such that they add upto the target.
            Don't use same element twice, exactly one solution */
@@ -88,7 +140,7 @@ class placement{
         return {-1,-1};
     }
 
-    /*
+    /* 2. Reverse pairs (appl: find inversion)
     Given an array nums, we call (i,j) as important reverse pair if
     i < j and nums[i] > 2*nums[j]. Return the number of pairs.
     */
@@ -96,7 +148,8 @@ class placement{
         return merge_sort(nums,0,nums.size()-1);
     }
 
-    /* The robot is placed in top left corner, it can move either right or down.
+    /* 3. Grid Unique path
+       The robot is placed in top left corner, it can move either right or down.
        The robot is trying to reach the bottom right corner of the grid.
        How many possible unique paths are there.
     */
@@ -113,9 +166,10 @@ class placement{
         return dp[m-1][n-1];
     }
 
-    /* 1. sorting - O(nlogn)
-       2. couting number of 0,1,2 than replaying - O(n)+O(n)
-       3. this - Dutch National Flag algorithm
+    /* 4. sort an array of 0's 1's 2's without using extra space or sorting algo 
+            1. sorting - O(nlogn)
+            2. couting number of 0,1,2 than replaying - O(n)+O(n)
+            3. this - Dutch National Flag algorithm
     */
     void sort_0_1_2(vector<int> &arr){
         int start=0;
@@ -148,13 +202,14 @@ class placement{
         return;
     }
 
-    /* Given an array nums containing n+1 integers where each
-    integer is between 1 to n, inclusive. Assuming that there 
-    is only one duplicate number, find the duplicate one.
-        1. sorting - O(nlogn) space - O(1)
-        2. Hashing - O(n) space - O(n)
-        3. linked list cycle method + tortoise method
-        4. Math - calculate sum
+    /* 5. Find the duplicate number 
+        Given an array nums containing n+1 integers where each
+        integer is between 1 to n, inclusive. Assuming that there 
+        is only one duplicate number, find the duplicate one.
+            1. sorting - O(nlogn) space - O(1)
+            2. Hashing - O(n) space - O(n)
+            3. linked list cycle method + tortoise method
+            4. Math - calculate sum
     */
     int findDuplicate(vector<int> arr){
         int slow = arr[0];
@@ -181,9 +236,10 @@ class placement{
         */
     }
 
-    /* Given as unsorted array of size n. Array elements are in the
-    range from 1 to n. One number from set {1,2,..n} is missing and 
-    one number occurs twice in the array. Find these two numbers
+    /* 6. Find the repeating and missing 
+        Given as unsorted array of size n. Array elements are in the
+        range from 1 to n. One number from set {1,2,..n} is missing and 
+        one number occurs twice in the array. Find these two numbers
             1. Hashing - O(2n) - space - O(n)
             2. Math
             3. XOR
@@ -194,13 +250,14 @@ class placement{
        return res;
    }
 
-    /* We need to merge these two sorted arrays, such that the intial numbers
-    (after complete sorting) are in the first array and the remaining numbers
-    are in the second array.
-        1. Using a third array - O(nlogn) + space - O(n)
-        2. insertion sort - O(m*n) space - O(1)
-        3. GAP O((n+m)log(n+m)
-        4. other methods in hard part of GfG
+    /* 7. Merge two sorted array with O(1) extra space
+        We need to merge these two sorted arrays, such that the intial numbers
+        (after complete sorting) are in the first array and the remaining numbers
+        are in the second array.
+            1. Using a third array - O(nlogn) + space - O(n)
+            2. insertion sort - O(m*n) space - O(1)
+            3. GAP O((n+m)log(n+m)
+            4. other methods in hard part of GfG
     */
    void mergeSortedArray(vector<int>& arr1, vector<int>& arr2){
        int len1 = arr1.size();
@@ -223,10 +280,11 @@ class placement{
        return;
    }
     
-    /* Find the contiguous subarray (containing at least one number)
-    which has the largest sum and return it.
-        1. Iterate over all elements - O(n*n*n) -> O(n*n)
-        2. Kadane's Algorithm - O(n) - space O(1)
+    /* 8. Maximum Subarray 
+        Find the contiguous subarray (containing at least one number)
+        which has the largest sum and return it.
+            1. Iterate over all elements - O(n*n*n) -> O(n*n)
+            2. Kadane's Algorithm - O(n) - space O(1)
     */
    int MaxSubarraySum(vector<int> arr){
        int sum=0;
@@ -241,8 +299,8 @@ class placement{
 
     /* 9. Merge Intervals
      -> ask if the intervals are in sorted order?
-        Bruteforce - O(nlogn) + O(n*n)
-        Merge eachpair - O(nlogn) + O(n)    
+            1. Bruteforce - O(nlogn) + O(n*n)
+            2. Merge eachpair - O(nlogn) + O(n)    
     */
    vector<vector<int>> mergeIntervals(vector<vector<int>> intervals){
        vector<vector<int>> result;
@@ -352,6 +410,43 @@ class placement{
        }
    }
 
+   /* 13. Count Inversions
+      Two elements a[i] and a[j] form an inversion if a[i] > a[j] and i < j
+        1. brute force - O(n*n) space - O(1)
+        2. merge sort - O(nlogn) space - O(n)
+   */
+    int countInversions(vector<int> nums){
+        return merge_sort1(nums, 0, nums.size()-1);
+    }
+
+    /* 14. Best time to buy and sell stock
+            1. Brute force - O(n2)
+            2. 
+    */
+   int maxProfitStocks(vector<int> stocks){
+       int m = stocks[0];
+       int profit = 0;
+       for(int i=0; i<stocks.size(); i++){
+           // profit for today is the price for today minus
+           //the minimum seen till now
+           profit = max(profit, stocks[i]-m);
+           m = min(m,stocks[i]);
+       }
+       /*
+        int profit = 0;
+        int minPrice = INT_MIN;
+        for(int i=0; i<stocks.size(); i++){
+            minPrice = min(minPrice, stocks[i]);
+            profit = max(profit, stocks[i]-minPrice); 
+        }
+       */
+       return profit;
+   }
+
+    /* 15. Rotate Matrix
+       You are given an n x n 2D matrix representing an image.
+       Rotate an image by 90 degrees (clockwise)
+    */
 };
 
 int main(){
@@ -453,6 +548,17 @@ int main(){
         cout<<nums1[i]<<" ";
     }
     cout<<endl;
+
+    //13. Count inversions
+    vector<int> nums2({5,4,3,2,1}); //10
+    //vector<int> nums2({1,2,3,4,5}); //0
+    cout<<"Inversion count = "<<ob.countInversions(nums2)<<endl;
+
+    //14. Stock Buy and sell
+    vector<int> stocks({7,1,5,3,6,4});
+    cout<<"Max Profit = " <<ob.maxProfitStocks(stocks)<<endl;
+
+    //15. Rotate Matrix
 
     return 0;
 }
