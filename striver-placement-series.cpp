@@ -19,6 +19,7 @@
 #include<iostream>
 using namespace std;
 #include<bits/stdc++.h>
+#include <vector>
 
 class placement{
     //2. Reverse pairs (appl: find inversion)
@@ -446,7 +447,139 @@ class placement{
     /* 15. Rotate Matrix
        You are given an n x n 2D matrix representing an image.
        Rotate an image by 90 degrees (clockwise)
+            1. Using extra space - O(n*n) space - O(n*n)
+            2. Transpose (colms into rows) + reverse 
     */
+   void rotate_matrix(vector<vector<int>>& matrix){
+       int rows = matrix.size();
+       int cols = matrix[0].size();
+
+       for(int i=0; i<rows; i++){
+           for(int j=0; j<i; j++){
+               swap(matrix[i][j],matrix[j][i]);
+           }
+       }
+
+       for(int i=0; i<rows; i++){
+           reverse(matrix[i].begin(), matrix[i].end());
+       }
+   }
+
+   /* 16. Search a 2D matrix
+      Write an efficient algorithm that searches for a value in an m x n matrix.
+      The matrix has the following properties
+      1- integer in each row are sorted from left to right.
+      2- the first integer of each row is greater that the last integer of the previous row
+    - GFG - variation of same - search in a row wise and colum wise sorted matrix   
+      - here the 2nd condition might not be true.
+            1. linear seach - O(n*m)  space - O(1)
+            2. binary search on each row - O(nlogm)
+            3. start from right top cornet - if small than move left else move down
+            4. (with 2nd condition) binary search assuming a single sorted array  
+   */
+    bool search_2d(vector<vector<int>> nums, int val){
+        if(!nums.size())
+            return false;
+        int rows = nums.size();
+        int cols = nums[0].size();
+        /* WHEN - 2D array is row wise and colm wise sorted 
+        but not necessarily first integer of each is greater than the last
+        integer of the previous row 
+        int i=0, j=cols-1; //right top corner
+        while(i < rows && j >= 0){
+            if(nums[i][j]==val){
+                cout<<"Found element at "<<i<<" "<<j<<endl;
+                return true;
+            }else if(nums[i][j] > val){
+                j--;
+            }else {
+                i++;
+            }
+        }
+        return false;
+        */
+       int low = 0;
+       int high = (rows*cols - 1);
+       while(low <= high){
+           int mid = (low + (high - low)/2);
+           if(nums[mid/cols][mid%cols]==val){
+                cout<<"Found element at "<<mid/rows<<" "<<mid%cols<<endl;
+                return true;
+           }
+           if(nums[mid/rows][mid%cols] < val){
+               low = mid+1;
+           }else {
+               high = mid+1;
+           }
+       }
+       return false;
+    }
+
+    /* 17. Power x to n
+        n can be postive or negative - O(logn)
+    //if n is positive
+    int power(int x, int n){
+        if(n <= 1){
+            return x;
+        }
+        if(n%2==0){
+            return power(x,n/2) * power(x,n/2);
+        }else {
+            return x * power(x, n-1); 
+        }
+    }*/
+    double power(double x, int n){
+        double ans = 1.0;
+        long long nn = n; //taken long long so that while converting
+                        //max negative to positive it shouldn't go out of bound
+        if(nn<0) 
+            nn = -1 * nn; 
+        while(nn){
+            if(nn%2){
+                ans = ans * x;
+                nn = nn - 1;
+            } else {
+                x = x * x;
+                nn = nn/2;
+            }
+        }
+        if(n<0) 
+            ans = (double)(1.0)/(double)(ans);
+        return ans;
+    } 
+
+    /* 18. Majority element
+    Given an array of size n, The majority element is the element that appears more than
+    floor of (n/2) times.
+            1. Brute force - compare all O(n*n)
+            2. using hash-map -  O(nlogn)
+            3. Moore voting algorithm O(n)
+    */
+     int majority_element(vector<int> nums){
+         int count= 0;
+         int candidate = 0;
+         for(int num: nums){
+            if(count == 0){
+                candidate = num;
+            }
+            if(num == candidate)
+                count += 1;
+            else
+                count -= 1;
+         }
+         return candidate;
+     }
+
+    /* 19. Majority element
+    Given an array of size n, The majority element is the element that appears more than
+    floor of (n/3) times.
+            1. Brute force - compare all O(n*n)
+            2. using hash-map - O(n) if using frequency array - O(nlogn) with c++
+            3. Moore voting algorithm O(n)
+    */
+    int majority_element1(vector<int> nums){
+        return 0;
+    }
 };
 
 int main(){
@@ -559,6 +692,31 @@ int main(){
     cout<<"Max Profit = " <<ob.maxProfitStocks(stocks)<<endl;
 
     //15. Rotate Matrix
+    vector<vector<int>> matrix({{1,2,3},{4,5,6},{7,8,9}});
+    ob.rotate_matrix(matrix);
+    for(int i=0; i<matrix.size(); i++){
+        for(int j=0; j<matrix[0].size(); j++){
+            cout<<matrix[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+
+    //16. Search in 2D matrix
+    vector<vector<int>> matrix1({{1,2,3},{4,5,6},{7,8,9}});
+    cout<<"Search in 2D matrix: "<<ob.search_2d(matrix1,9)<<endl;
+    
+    //17. Pow x to n
+    int x = 5;
+    int n = -2;
+    cout<<"Pow "<<x<<" to "<<n<<" = "<<ob.power(x,n)<<endl;
+
+    //18. Majority element
+    vector<int> input18({1,3,4,5,6,1,1,1,1,1});
+    cout<<"Majority element: "<<ob.majority_element(input18)<<endl;
+
+    //19. Majority element - II
+    vector<int> input19({1,3,4,5,6,1,1,1,1,1});
+    cout<<"Majority element: "<<ob.majority_element1(input19)<<endl;
 
     return 0;
 }
