@@ -548,6 +548,11 @@ class placement{
         return ans;
     } 
 
+    //ceil(x) : Returns the smallest integer that is greater than or equal to x 
+    //(i.e : rounds up the nearest integer).
+    //floor(x) : Returns the largest integer that is smaller than or equal to x 
+    //(i.e : rounds downs the nearest integer).
+
     /* 18. Majority element
     Given an array of size n, The majority element is the element that appears more than
     floor of (n/2) times.
@@ -567,6 +572,8 @@ class placement{
             else
                 count -= 1;
          }
+         /* majority element has to appear in the input more than 
+         non-majority elements */
          return candidate;
      }
 
@@ -575,10 +582,45 @@ class placement{
     floor of (n/3) times.
             1. Brute force - compare all O(n*n)
             2. using hash-map - O(n) if using frequency array - O(nlogn) with c++
-            3. Moore voting algorithm O(n)
+            3. Moore voting algorithm O(n) - space O(1) find the two majority elemets
     */
-    int majority_element1(vector<int> nums){
-        return 0;
+    vector<int> majority_element1(vector<int> nums){
+        int count1 = 0;
+        int candidate1 = -1;
+        int count2 = 0;
+        int candidate2 = -1;
+        int len = nums.size();
+        vector<int> res;
+        for(int i=0; i<len; i++){
+            if(nums[i]==candidate1){
+                count1++;
+            }else if(nums[i]==candidate2){
+                count2++;
+            }else if(count1 == 0){
+                candidate1 = nums[i];
+                count1++;
+            }else if(count2 == 0){
+                candidate2 = nums[i];
+                count1++;
+            }else {
+                count1--;
+                count2--;
+            }
+        }
+        count1 = count2 = 0;
+        for(int i=0; i<len; i++){
+            if(nums[i]==candidate1)
+                count1++;
+            else if(nums[i]==candidate2){
+                count2++;
+            }
+        }
+        if(count1 > (len/3))
+            res.push_back(candidate1);
+        if(count2 > (len/3))
+            res.push_back(candidate2);
+
+        return res;
     }
 };
 
@@ -715,8 +757,14 @@ int main(){
     cout<<"Majority element: "<<ob.majority_element(input18)<<endl;
 
     //19. Majority element - II
-    vector<int> input19({1,3,4,5,6,1,1,1,1,1});
-    cout<<"Majority element: "<<ob.majority_element1(input19)<<endl;
+    vector<int> input19({2,2,2,2,5,6,1,1,1,1,1});
+    vector<int> res19;
+    res19 = ob.majority_element1(input19);
+    cout<<"Majority element: ";
+    for(int i=0; i<res19.size(); i++){
+        cout<<res19[i]<<" ";
+    }
+    cout<<endl;
 
     return 0;
 }
