@@ -8,8 +8,11 @@
     /* 11. iterative postorder traversal - using 2 stacks */
     /* 12. iterative postorder traversal - using 1 stacks */
     /* 13. pre-in-post order in one traversal */
-    /* 14. Maximum depth of binary tree */
-    /* 15. Check for balanced binary tree */
+    /* 14. Maximum depth of Binary Tree */
+    /* 15. Check for balanced Binary Tree */
+    /* 16. Diameter of Binary Tree */
+    /* 17. Maximum Path sum */
+    /* 18. Check if two trees are identical */
 
 #include<iostream>
 using namespace std;
@@ -85,6 +88,16 @@ class BinaryTreeSeries{
     int dfsHeight(BinaryTree *root);
     bool isBalanced(BinaryTree *root);
 
+    /* 16. Diameter of Binary Tree */
+    int diaHeight(BinaryTree *root, int& dia);
+    int diameter(BinaryTree *root);
+
+    /* 17. Maximum path sum */
+    int maxPath(BinaryTree *root, int &path);
+    int maxPathSum(BinaryTree *root);
+
+    /* 18. Check if two trees are identical */
+    bool isSameTree(BinaryTree* root1, BinaryTree* root2);
 };
 
 /* 5. recurssive preorder traversal */
@@ -250,6 +263,60 @@ bool BinaryTreeSeries::isBalanced(BinaryTree *root){
     return dfsHeight(root) != -1;
 }
 
+/* 16. Diameter of Binary Tree 
+    Longest path between two nodes
+    Path doesn't need to pass via root
+    for a given node - find the left height and right height
+        1. find height at each node - O(n*n)
+        2. 
+*/
+int BinaryTreeSeries::diaHeight(BinaryTree *root, int& dia){
+    if(root==nullptr)
+        return 0;
+    int lh = diaHeight(root->left,dia);
+    int rh = diaHeight(root->right,dia);
+    
+    dia = max(dia, lh+rh);
+    return 1 + max(lh,rh);
+}
+int BinaryTreeSeries::diameter(BinaryTree *root){
+    int dia=0;
+    diaHeight(root,dia);
+    return dia;
+}
+
+/* 17. Maximum path sum
+    A valid path passes through one node once only.
+    Use the same logic as applied for diameter
+*/
+int BinaryTreeSeries::maxPath(BinaryTree *root, int& max_path){
+    if(root==nullptr)
+        return 0;
+    int lsum = max(0, maxPath(root->left,max_path));
+    //don't take the negative value - so take max between 0 and value
+    int rsum = max(0, maxPath(root->right,max_path));
+
+    max_path = max(max_path, lsum + rsum + root->data);
+    return root->data + max(lsum,rsum);
+}
+int BinaryTreeSeries::maxPathSum(BinaryTree *root){
+    int path=INT_MIN; // so we might max as negative value as well
+    maxPath(root,path);
+    return path;
+}
+
+/* 18. Check if two trees are identical */
+bool BinaryTreeSeries::isSameTree(BinaryTree* root1, BinaryTree* root2){
+    if(root1 == nullptr || root2 == nullptr){
+        return root1 == root2;
+    }
+
+    return (root1->data == root2->data) &&
+        (isSameTree(root1->left,root2->left)) &&
+        (isSameTree(root1->right, root2->right));
+}
+
+
 int main(){
 
     BinaryTreeSeries ob;
@@ -309,6 +376,15 @@ int main(){
 
     /* 15. Check for balanced binary tree */
     cout<<"Is balanced "<<ob.isBalanced(ob.root)<<endl;
+
+    /* 16. Diameter of binary tree */
+    cout<<"Diameter "<<ob.diameter(ob.root)<<endl;
+
+    /* 17. Max path sum */
+    cout<<"Maximum Path sum "<<ob.maxPathSum(ob.root)<<endl;
+
+    /* 18. Check if two trees are identical */
+    cout<<"Is Same Tree "<<ob.isSameTree(ob.root, ob.root);
 
     return 0;
 }
