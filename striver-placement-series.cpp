@@ -10,16 +10,26 @@
     7. Merge two sorted array with O(1) extra space
        https://www.geeksforgeeks.org/efficiently-merging-two-sorted-arrays-with-o1-extra-space/
     8. Maximum Subarray
-    9.
-    10.
-    11.
-    12.
-
+    9. Merge Intervals
+    10. set matrix zeros
+    11. Pascal Triangle
+    12. Next permutation
+    13. Count Inversions
+    14. Best time to buy and sell stock
+    15. Rotate Matrix
+    16. Search a 2D matrix
+    17. Power x to n
+    18. Majority element
+    19. Majority element
+    20. Four SUM
+    21. Largest subarray with zero sum
+    22. Longest consecutive sequence
 */
+
 #include<iostream>
 using namespace std;
 #include<bits/stdc++.h>
-#include <vector>
+#include <stdlib.h>
 
 class placement{
     //2. Reverse pairs (appl: find inversion)
@@ -622,6 +632,52 @@ class placement{
 
         return res;
     }
+
+    /* 20. Four sum
+        use two sum with a for loop
+    */
+    vector<vector<int>> fourSum(vector<int>& nums, int target){
+        vector<vector<int>> res;
+        if(nums.empty())
+            return res;
+        int n = nums.size();
+        sort(nums.begin(),nums.end());
+
+        for(int i=0; i<n; i++){
+            for(int j=i+1; j<n; j++){
+                int target2 = target - nums[i] - nums[j];
+                int front = j+1;
+                int back = n-1;
+
+                while(front < back){
+                    int two_sum = nums[front] + nums[back];
+                    if(two_sum < target2) front++;
+                    else if(two_sum > target2) back--;
+                    else {
+                        vector<int> quadruplet(4,0);
+                        quadruplet[0]=nums[i];
+                        quadruplet[1]=nums[j];
+                        quadruplet[2]=nums[front];
+                        quadruplet[3]=nums[back];
+                        res.push_back(quadruplet);
+
+                        //processing the duplicates of 4th number
+                        while(front < back && nums[front] == quadruplet[2]) ++front;
+
+                        //processing the duplicates of 3rd number
+                        while(front < back && nums[back] == quadruplet[3]) --back;
+                    }
+                }
+
+                //processing the duplication of 2nd number
+                while(j+1 < n && nums[j+1] == nums[j]) ++j;
+            }
+
+            //processing the duplication of 1st number
+            while(i+1 < n && nums[i+1] == nums[i]) ++i;
+        }
+        return res;
+    }
 };
 
 int main(){
@@ -765,6 +821,18 @@ int main(){
         cout<<res19[i]<<" ";
     }
     cout<<endl;
+
+    //20. Four SUM
+    vector<int> input20({4,3,3,4,4,2,1,2,1,1});
+    vector<vector<int>> res20;
+    res20 = ob.fourSum(input20,7);
+    cout<<"Four SUM"<<endl;
+    for(int i=0; i<res20.size(); i++){
+        for(int j=0; j<res20[0].size(); j++){
+            cout<<res20[i][j]<<" ";
+        }
+        cout<<endl;
+    }
 
     return 0;
 }
