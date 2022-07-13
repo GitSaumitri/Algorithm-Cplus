@@ -13,6 +13,13 @@
     /* 16. Diameter of Binary Tree */
     /* 17. Maximum Path sum */
     /* 18. Check if two trees are identical */
+    /* 19. Zig-Zag traversal */
+    /* 20. Boundary traversal */
+    /* 21. Vertical order traversal */
+    /* 22. Top view of Binary tree */
+    /* 23. Bottom view of Binary tree */
+    /* 24. Right/Left view of Binary tree */
+    /* 25. Check for Symmetrical Binary tree */
 
 #include<iostream>
 using namespace std;
@@ -98,6 +105,17 @@ class BinaryTreeSeries{
 
     /* 18. Check if two trees are identical */
     bool isSameTree(BinaryTree* root1, BinaryTree* root2);
+
+    /* 19. Zig-Zag traversal */
+    vector<vector<int>> zigzag_traversal(BinaryTree *root);
+
+    /* 20. Boundary traversal in Binary tree */
+    bool isLeaf(BinaryTree *node);
+    void addLeftBoundary(BinaryTree *root, vector<int>& res);
+    void addRightBoundary(BinaryTree *root, vector<int>& res);
+    void addLeavesBoundary(BinaryTree *root, vector<int>& res);
+    vector<int> printBoundary(BinaryTree *root);
+
 };
 
 /* 5. recurssive preorder traversal */
@@ -300,7 +318,7 @@ int BinaryTreeSeries::maxPath(BinaryTree *root, int& max_path){
     return root->data + max(lsum,rsum);
 }
 int BinaryTreeSeries::maxPathSum(BinaryTree *root){
-    int path=INT_MIN; // so we might max as negative value as well
+    int path=INT_MIN; // we might max as negative value as well
     maxPath(root,path);
     return path;
 }
@@ -314,6 +332,104 @@ bool BinaryTreeSeries::isSameTree(BinaryTree* root1, BinaryTree* root2){
     return (root1->data == root2->data) &&
         (isSameTree(root1->left,root2->left)) &&
         (isSameTree(root1->right, root2->right));
+}
+
+/* 19. Zig-Zag traversal 
+    //follow same as level order traversal
+*/
+vector<vector<int>> BinaryTreeSeries::zigzag_traversal(BinaryTree *root){
+    queue<BinaryTree *> q;
+    vector<vector<int>> res;
+    if(root==nullptr){
+        return res;
+    }
+    q.push(root);
+    bool leftToright=true;
+
+    while(!q.empty()){
+        int size = q.size();
+        vector<int> row(size);
+
+        for(int i=0; i<size; i++){
+            BinaryTree *node = q.front();
+            q.pop();
+            //find position to fill node value
+            int index = leftToright? i : (size - i - 1);
+            row[index] = node->data;
+
+            if(node->left != nullptr) q.push(node->left);
+            if(node->right != nullptr) q.push(node->right);
+            
+            //cout<<node->data<<" ";
+        }
+        //after this level
+        leftToright = !leftToright;
+        res.push_back(row);
+    }
+    return res;
+}
+
+/* 20. Boundary traversal 
+    Anti-clock wise boundary traversal
+        - left boundary + leaf nodes + right boundary in reverse order
+        - if left then put in queue, else if right put in queue, if leaf leave it
+        - for leaf nodes we can't do level order, we want only the end leaf nodes 
+                can use inorder traversal
+        - if right then put in stack, else left put in stack, if leaf leave it.
+*/  
+bool BinaryTreeSeries::isLeaf(BinaryTree *node){
+    if(node->left == nullptr && 
+        node->right == nullptr)
+        return true;
+    return false;
+}
+void BinaryTreeSeries::addLeftBoundary(BinaryTree *root, vector<int>& res){
+    BinaryTree* curr = root->left;
+    while(curr){
+        if(!isLeaf(curr))
+            res.push_back(curr->data);
+        if(curr->left) curr = curr->left;
+        else curr = curr->right;
+    }
+}
+void BinaryTreeSeries::addRightBoundary(BinaryTree *root, vector<int>& res){
+    BinaryTree* curr = root->right;
+    stack<int> st; // to get reverse order
+    while(curr){
+        if(!isLeaf(curr))
+            st.push(curr->data);
+        if(curr->right) curr = curr->right;
+        else curr = curr->left;
+    }
+    while(!st.empty()){
+        //can use an array as well and reverse it here
+        res.push_back(st.top());
+        st.pop();
+    }
+}
+void BinaryTreeSeries::addLeavesBoundary(BinaryTree *root, vector<int>& res){
+    if(!root)
+        return;
+    if(isLeaf(root)){
+        res.push_back(root->data);
+        return;
+    }
+    if(root->left) addLeavesBoundary(root->left, res);
+    if(root->right) addLeavesBoundary(root->right, res);
+}
+vector<int> BinaryTreeSeries::printBoundary(BinaryTree *root){
+    vector<int> res;
+    if(!root)
+        return res;
+    if(!isLeaf(root)){
+        res.push_back(root->data);
+        //return res;
+    }
+    //res.push_back(root->data);
+    addLeftBoundary(root,res);
+    addLeavesBoundary(root,res);
+    addRightBoundary(root,res);
+    return res;
 }
 
 
@@ -384,7 +500,26 @@ int main(){
     cout<<"Maximum Path sum "<<ob.maxPathSum(ob.root)<<endl;
 
     /* 18. Check if two trees are identical */
-    cout<<"Is Same Tree "<<ob.isSameTree(ob.root, ob.root);
+    cout<<"Is Same Tree "<<ob.isSameTree(ob.root, ob.root)<<endl;
+
+    /* 19. zigzag traversal */
+    vector<vector<int>> res19;
+    res19 = ob.zigzag_traversal(ob.root);
+    for(int i=0; i<res19.size(); i++){
+        for(int j=0; j<res19[i].size(); j++){
+            cout<<res19[i][j]<<" ";
+        }
+        cout<<endl;
+    }   
+    cout<<endl;
+
+    /* 20. Boundary traversal */
+    vector<int> res20;
+    res20 = ob.printBoundary(ob.root);
+    for(auto value: res20){
+        cout<<value<<" ";
+    }
+    cout<<endl;
 
     return 0;
 }
