@@ -678,6 +678,37 @@ class placement{
         }
         return res;
     }
+
+    /* 21. Largest subarray with zero sum
+        Given an array having both positive and negative integers. The task
+        is to compute the length of the largest subarray with sum 0.
+            - Bruteforce approach - O(n*n)
+            - prefix sum - O(nlogn) - logn for hashmap
+    */
+   int LargestSubArraySum0(vector<int> arr){
+       map<int,int> prefixSum;
+       int sum=0, maxlen=0;
+       for(int i=0; i<arr.size(); i++){
+           sum += arr[i];
+           if(sum == 0){
+               maxlen = i + 1;
+           } else {
+               if(prefixSum.find(sum) != prefixSum.end()){
+                    maxlen = max(maxlen, i - prefixSum[sum]);
+               }else{
+                   prefixSum[sum] = i;
+               }
+           }
+       }
+       return maxlen;
+   }
+
+   /* 22. Longest consecutive sequence
+   Given an unsorted array of integers find the length of the longest
+   consecutive elements sequence. run in O(n).
+        - sorting then find sequence - O(nlogn) + O(n)
+    */
+
 };
 
 int main(){
@@ -833,6 +864,10 @@ int main(){
         }
         cout<<endl;
     }
+
+    //21. Largest subarray with SUM zero
+    vector<int> array21({1,-1,3,2,-2,-8,1,7,10,23});
+    cout<<"Largest sub-array sum zero length: "<<ob.LargestSubArraySum0(array21)<<endl;
 
     return 0;
 }
