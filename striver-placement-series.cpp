@@ -24,6 +24,32 @@
     20. Four SUM
     21. Largest subarray with zero sum
     22. Longest consecutive sequence
+    23. Count Subarrays with XOR as K
+    24. Longest sub string without repeat character
+    25. Reverse a linked list 
+    26. Middle of the linked list
+    27. Merge two sorted lists
+    28. Remove the nth node from end of the linkedlist
+    29. Delete node in a linkedlist
+    30. Add two numbers given as linked list
+    31. Intersection point of two linked list
+    32. Delete a cycle in a linked list
+    33. Reverse nodes in K-groups
+    34. Check for palindrom linked list
+    35. Find the starting point of a cycle
+    36. Flattening of a linkedlist
+    37. Rotate a linked list
+    38. Clone a linked list with next and random pointer
+    39. 3 SUM
+    40. Trapping rain water
+    41. Remove duplicates from a sorted array
+    42. Max consecutive ones
+    43. N meetings in one room.
+    44. Minimum platforms
+    45. Job sequencing problem
+    46. Minimum coins
+    47. Fractional knapsack
+    48. 
 */
 
 #include<iostream>
@@ -707,7 +733,29 @@ class placement{
    Given an unsorted array of integers find the length of the longest
    consecutive elements sequence. run in O(n).
         - sorting then find sequence - O(nlogn) + O(n)
+        - hash set - O(n) + O(n) + O(n)
     */
+   int longestConsecutive(vector<int>& nums){
+       set<int> hashSet;
+       for(int num: nums){
+           hashSet.insert(num);
+       }
+       int longestSteak = 0;
+       for(int num: nums){
+           if(!hashSet.count(num-1)){
+               int currentNum = num;
+               int currentSteak = 1;
+
+               while(hashSet.count(currentNum+1)){
+                   currentNum += 1;
+                   currentSteak +=1 ;
+               }
+
+               longestSteak = max(longestSteak, currentSteak);
+           }
+       }
+       return longestSteak;
+   }
 
 };
 
@@ -869,5 +917,9 @@ int main(){
     vector<int> array21({1,-1,3,2,-2,-8,1,7,10,23});
     cout<<"Largest sub-array sum zero length: "<<ob.LargestSubArraySum0(array21)<<endl;
 
+    //22. Longest consecutive sequence
+    vector<int> array22({102,4,100,1,101,3,2});
+    cout<<"Longest sequence length: "<<ob.longestConsecutive(array22);
+   
     return 0;
 }
