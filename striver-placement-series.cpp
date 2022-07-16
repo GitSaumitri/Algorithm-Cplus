@@ -332,6 +332,15 @@ class placement{
            if(sum < 0) sum=0;
        }
        return maxs;
+       /*
+       int sum=0;
+       int maxs=0;
+       for(auto it: arr){
+            sum = max(arr[i], sum+arr[i]);
+            maxs = max(maxs, sum);
+       }
+       return maxs;
+       */
    }
 
     /* 9. Merge Intervals
@@ -757,6 +766,48 @@ class placement{
        return longestSteak;
    }
 
+    /* 23. Count the number of subarrays having a given XOR as K
+    Given an array of integers and a number m, count the number of subarrays having XOR
+    of their elements as m.
+        - find out all subarrays then xOR - O(n*n*n) optimise it to-> O(n*n)
+        - Use the same method as prefix sum in problem#21
+        -
+    */  
+   int countSubarrayXOR(vector<int> arr, int M){
+       map<int, int> freq;
+       int cnt = 0;
+       int xorr = 0;
+       for(auto it: arr){
+            xorr = xorr ^ it;
+            if(xorr == M){
+                cnt++;
+            }
+
+            if(freq.find(xorr ^ M) != freq.end()){
+                cnt += freq[xorr ^ M];
+            }
+
+            freq[xorr] += 1;
+       }
+       return cnt;
+   }
+
+   //24. Longest sub string without repeat character
+   int lengthOfLongestSubstring(string s){
+       vector<int> mpp(256,-1);
+       int left = 0, right=0;
+       int n = s.size();
+       int len = 0;
+       while(right < n){
+           if(mpp[s[right]] != -1)
+               left = max(mpp[s[right]]+1, left);
+            mpp[s[right]] = right;
+            len = max(len, right - left + 1);
+            right++;
+       }
+       return len;
+   }
+
 };
 
 int main(){
@@ -919,7 +970,17 @@ int main(){
 
     //22. Longest consecutive sequence
     vector<int> array22({102,4,100,1,101,3,2});
-    cout<<"Longest sequence length: "<<ob.longestConsecutive(array22);
+    cout<<"Longest sequence length: "<<ob.longestConsecutive(array22)<<endl;
+   
+    //23. Count the number of subarrays having a given XOR as K
+    vector<int> array23({4,2,2,6,4});
+    int var23 = 6;
+    cout<<"Number of subarray with XOR as "<<var23<<" is: ";
+    cout<<ob.countSubarrayXOR(array23,var23)<<endl;
+
+    //24. Longest substring withour repeating characters
+    string str24="abcaabcdba";
+    cout<<"Length of longest substring: "<<ob.lengthOfLongestSubstring(str24)<<endl;
    
     return 0;
 }
