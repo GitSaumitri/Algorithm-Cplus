@@ -829,6 +829,70 @@ class placement{
         return temp;
     }
 
+    /* 26. Middle of the linked list
+        if there are two middle nodes, return the second middle node
+            1. count the number of nodes
+            2. tortoise method
+    */
+   ListNode * listMiddleNode(ListNode *head){
+       ListNode *slow = head;
+       ListNode *fast = head;
+       while(fast!=nullptr && fast->next!=nullptr){
+           slow = slow->next;
+           fast = fast->next->next;
+       }
+       return slow;
+   }
+
+    /* Merge two sorted linked list
+            - inplace.
+    */
+   ListNode * mergeTwoSortedList(ListNode *l1, ListNode *l2){
+       if(l1==nullptr) return l2;
+       if(l2==nullptr) return l1;
+       if(l1->val > l2->val){
+           ListNode *temp=l2;
+           l2 = l1;
+           l1 = temp;
+       }
+       ListNode *res = l1;
+       while(l1!=nullptr && l2!=nullptr){
+           ListNode *temp = nullptr;
+           while(l1!=nullptr && l1->val <= l2->val){
+               temp = l1;
+               l1 = l1->next;
+           }
+           temp->next = l2;
+
+           //swap
+           ListNode * tmp=l1;
+           l1 = l2;
+           l2 = tmp;
+       }
+       return res;
+       /*
+       ListNode result;
+       ListNode *res = &result;
+       while(l1!=nullptr && l2!=nullptr){
+           if(l1->val < l2->val){
+               res->next = l1;
+               l1 = l1->next;
+           }else{
+               res->next = l2;
+               l2 = l2->next;
+           }
+           res = res->next;
+       }
+       if(l1!=nullptr){
+           res->next = l1;
+       }
+       if(l2!=nullptr){
+           res->next = l2;
+       }
+       return result.next;
+       */
+   }
+
     //helper functions.
     /* create a linked list */
     ListNode * createAlist(vector<int> nums){
@@ -1026,11 +1090,22 @@ int main(){
     cout<<"Length of longest substring: "<<ob.lengthOfLongestSubstring(str24)<<endl;
    
     // 25. Reverse the linked list
-    vector<int> arr25({1,2,3,4,5});
+    vector<int> arr25({1,2,3,4,5,6});
     ListNode *head = ob.createAlist(arr25);
     ob.displayList(head);
     head = ob.reverseList(head);
     cout<<"Reversed linked list: "<<endl;
+    ob.displayList(head);
+
+    // 26. Find the middle of the list
+    ListNode * node = ob.listMiddleNode(head);
+    cout<<"Middle node of the list: "<<node->val<<endl;
+
+    // 27. Merge of the two sorted list
+    vector<int> arr27({7,8,9});
+    ListNode *head1 = ob.createAlist(arr25);
+    ListNode *head2 = ob.createAlist(arr27);
+    head = ob.mergeTwoSortedList(head1,head2);
     ob.displayList(head);
 
     return 0;
