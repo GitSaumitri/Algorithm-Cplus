@@ -919,6 +919,47 @@ class placement{
         return start->next;
     }
 
+    /* 29. Delete node in a linked list
+       it is guarnteed that the node to be deleted is not a tail node in the list.
+        - O(1)
+    */
+    void deleteThisNode(ListNode *node){
+        ListNode *d = node->next;
+        node->val = node->next->val;
+        node->next = node->next->next;
+        free(d);
+        return;
+    }
+
+    /* 30. Add two numbers as linked list
+       You are given two non-empty linked lists represting two non-negative integers.
+       The digits are stored in reverse order and each of their nodes contains a single 
+       digit. Add the two numbers and return the sum as a linked list.
+       You may assume the two numbers do not contain any leading zero, 
+       except the number 0 itself. 
+    */
+    ListNode * addTwoNumbersList(ListNode *l1, ListNode *l2){
+        ListNode *head=nullptr,*node,*temp;
+        int sum=0, carry=0;
+        while(l1!=nullptr || l2!=nullptr || carry==1){
+            sum = (l1!=nullptr?l1->val:0) +
+                        (l2!=nullptr?l2->val:0) + carry;
+            if(l1) l1=l1->next;
+            if(l2) l2=l2->next;
+            carry = sum/10;
+            sum = sum%10;
+            node = new ListNode(sum);
+            if(head==nullptr){
+                head = node;
+                temp = node;
+            }else{
+                temp->next = node;
+                temp=temp->next;
+            }
+        }
+        return head;
+    }
+
     //helper functions.
     /* create a linked list */
     ListNode * createAlist(vector<int> nums){
@@ -1138,6 +1179,26 @@ int main(){
     head = ob.removeNthNode(head, 1);
     cout<<"After removing nth node: "<<endl;
     ob.displayList(head);
+
+    // 29. Delete this node
+    ListNode* del29 = head->next->next;
+    cout<<"After deleting this "<<del29->val<<" node:"<<endl;
+    ob.deleteThisNode(del29);
+    ob.displayList(head);
+
+    // 30. Add two numbers given in linked list
+    ListNode* node1 = new ListNode(2);
+    node1->next = new ListNode(4);
+    node1->next->next = new ListNode(3);
+    ListNode* node2 = new ListNode(5);
+    node2->next = new ListNode(6);
+    node2->next->next = new ListNode(7);
+    node2->next->next->next = new ListNode(9);
+    ob.displayList(node1);
+    ob.displayList(node2);
+    cout<<"After Adding this two numbers:"<<endl;
+    ListNode * node3 = ob.addTwoNumbersList(node1,node2);
+    ob.displayList(node3);
 
     return 0;
 }
