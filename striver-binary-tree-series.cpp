@@ -20,6 +20,34 @@
     /* 23. Bottom view of Binary tree */
     /* 24. Right/Left view of Binary tree */
     /* 25. Check for Symmetrical Binary tree */
+    /* 26. Print Root to node path in binary tree */
+    /* 27. Lowest Common Ancestor in binary tree */
+    /* 28. Maximum width of Binary tree */
+    /* 29. Children sum property in Binary tree */
+    /* 30. Print all nodes to a distance K in Binary tree */
+    /* 31. Minimum time taken to Burn the binary tree from root to node */
+    /* 32. Count total nodes in a complete binary tree */
+    /* 33. Requirement needed to construct a unique binary tree */
+    /* 34. Construct a binary tree from preorder and inorder */
+    /* 35. Construct a binary tree from postorder and inorder */
+    /* 36. Serialize and de-serialize binary tree */
+    /* 37. Morris traversal - preorder - inorder */
+    /* 38. Flatterened a binary tree to linked list */
+    /* 39. Introduction to binary search tree */
+    /* 40. Search in a Binary search tree */
+    /* 41. Ceil in a binary search tree */
+    /* 42. Floor in a binary search tree */
+    /* 43. Insert a given node in binary search tree */
+    /* 44. Delete a node in binary search tree */
+    /* 45. K-th smallest/largest element in a BST */
+    /* 46. Check if a tree is a BST */
+    /* 47. LCA in BST */
+    /* 48. Construct a BST from a preorder traversal */
+    /* 49. Inorder successor/predecessor in BST */
+    /* 50. Binary search tree iterator */
+    /* 51. Two SUM in BST */
+    /* 52. Correct BST with two nodes swapped */
+    /* 53. Largest BST in Binary tree */ 
 
 #include<iostream>
 using namespace std;
@@ -116,6 +144,35 @@ class BinaryTreeSeries{
     void addLeavesBoundary(BinaryTree *root, vector<int>& res);
     vector<int> printBoundary(BinaryTree *root);
 
+#define TreeNode BinaryTree
+    /* 21. Vertical order traversal */
+    vector<vector<int>> verticalTraversal(TreeNode *root){
+        map<int, map<int, multiset<int>>> nodes;
+        queue<pair<TreeNode *, pair<int, int>>> todo;
+        todo.push({root,{0,0}});
+        while(!todo.empty()){
+            auto p = todo.front();
+            todo.pop();
+            TreeNode* node = p.first;
+            int x = p.second.first, y=p.second.second;
+            nodes[x][y].insert(node->data);
+            if(node->left){
+                todo.push({node->left,{x-1,y+1}});
+            }
+            if(node->right){
+                todo.push({node->right,{x+1,y+1}});
+            }
+        }
+        vector<vector<int>> ans;
+        for(auto p:nodes){
+            vector<int> col;
+            for(auto q: p.second){
+                col.insert(col.end(),q.second.begin(),q.second.end());
+            }
+            ans.push_back(col);
+        }
+        return ans;
+    }
 };
 
 /* 5. recurssive preorder traversal */
@@ -518,6 +575,18 @@ int main(){
     res20 = ob.printBoundary(ob.root);
     for(auto value: res20){
         cout<<value<<" ";
+    }
+    cout<<endl;
+
+    /* 21. Vertical order traversal */
+    vector<vector<int>> res21;
+    res21 = ob.verticalTraversal(ob.root);
+    cout<<"Vertical traversal:";
+    for(int i=0; i<res21.size(); i++){
+        for(int j=0; j<res21[i].size(); j++){
+            cout<<res21[i][j]<<" ";
+        }
+        cout<<"--";
     }
     cout<<endl;
 
