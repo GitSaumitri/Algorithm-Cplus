@@ -844,7 +844,7 @@ class placement{
        return slow;
    }
 
-    /* Merge two sorted linked list
+    /* 27. Merge two sorted linked list
             - inplace.
     */
    ListNode * mergeTwoSortedList(ListNode *l1, ListNode *l2){
@@ -892,6 +892,32 @@ class placement{
        return result.next;
        */
    }
+
+    /* 28.Remove nth node from end of the linked list 
+            - O(n) 
+    */
+    ListNode * removeNthNode(ListNode *head, int n){
+        ListNode *start = new ListNode();
+        start->next = head;
+        ListNode *fast = start;
+        ListNode *slow = start;
+
+        for(int i=1; i<=n; i++){
+            fast = fast->next;
+        }
+
+        while(fast->next!=nullptr){
+            fast = fast->next;
+            slow = slow->next;
+        }
+        //ListNode * del=slow->next;
+        slow->next = slow->next->next;
+        //delete(del);
+        //head = start->next;
+        //delete(start);
+        //return head;
+        return start->next;
+    }
 
     //helper functions.
     /* create a linked list */
@@ -1106,6 +1132,11 @@ int main(){
     ListNode *head1 = ob.createAlist(arr25);
     ListNode *head2 = ob.createAlist(arr27);
     head = ob.mergeTwoSortedList(head1,head2);
+    ob.displayList(head);
+
+    // 28. Remove nth node
+    head = ob.removeNthNode(head, 1);
+    cout<<"After removing nth node: "<<endl;
     ob.displayList(head);
 
     return 0;
