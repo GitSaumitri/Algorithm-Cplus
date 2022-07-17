@@ -57,6 +57,14 @@ using namespace std;
 #include<bits/stdc++.h>
 #include <stdlib.h>
 
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
 class placement{
     //2. Reverse pairs (appl: find inversion)
     int merge(vector<int>& nums, int low, int mid, int high){
@@ -808,6 +816,41 @@ class placement{
        return len;
    }
 
+    //25. Reverse a linked list
+    ListNode * reverseList(ListNode * head){
+        ListNode *temp = nullptr;
+        ListNode *next = head;
+        while(head!=nullptr){
+            next = head->next;
+            head->next = temp;
+            temp = head;
+            head = next;
+        }
+        return temp;
+    }
+
+    //helper functions.
+    /* create a linked list */
+    ListNode * createAlist(vector<int> nums){
+        ListNode *head = new ListNode(nums[0]);
+        int len = nums.size();
+        ListNode *node = head;
+        for(int i=1; i<len; i++){
+            node->next = new ListNode(nums[i]);
+            node=node->next;
+        }
+        return head;
+    }
+
+    /* display linked list */
+    void displayList(ListNode *head){
+        while(head){
+            cout<<head->val<<"->";
+            head=head->next;
+        }
+        cout<<"null";
+        cout<<endl;
+    }
 };
 
 int main(){
@@ -982,5 +1025,13 @@ int main(){
     string str24="abcaabcdba";
     cout<<"Length of longest substring: "<<ob.lengthOfLongestSubstring(str24)<<endl;
    
+    // 25. Reverse the linked list
+    vector<int> arr25({1,2,3,4,5});
+    ListNode *head = ob.createAlist(arr25);
+    ob.displayList(head);
+    head = ob.reverseList(head);
+    cout<<"Reversed linked list: "<<endl;
+    ob.displayList(head);
+
     return 0;
 }
