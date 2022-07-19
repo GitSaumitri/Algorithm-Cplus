@@ -16,8 +16,18 @@
       - maintain order of elements / otherwise it's a subarray
       - alternative way is through powerset
     7. Printing subsequences whose sum is K
-    8. Combination SUM
-
+    8. Combination SUM 
+    9. Combination SUM - unique combinations
+    10. Subset SUM
+    11. Subset SUM
+    12. Print all permutations of a string or array
+    13. Print all permutations of a string or array
+    14. N-Queens
+    15. Sudoku solver
+    16. M coloring problem
+    17. Palindrome partitioning 
+    18. Rat in a Maze
+    19. Kth permutation sequence
 */
 
 #include<iostream>
@@ -41,7 +51,14 @@ class recursionSeries{
     void findCombinations(int ind, int target, vector<int>& arr, vector<vector<int>>& ans, vector<int>& ds);
     vector<vector<int>> combinationSum(vector<int>& candidates, int target);
 
-    //9.
+    //9. Combination SUM
+    void findCombinations2(int ind, int target, vector<int>& arr, vector<vector<int>>& ans, vector<int>& ds);
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target);
+
+    //10. Subset SUM
+    void subsetSumUtils(int ind, int sum, vector<int>&arr, int len, vector<int>& sumSubset);
+    vector<int> subsetSum(vector<int> arr, int len);
+
 };
 
 int main(){
@@ -72,6 +89,28 @@ int main(){
             cout<<res8[i][j]<<" ";
         }
         cout<<"} ";
+    }
+    cout<<endl;
+
+    //9. Combination SUM
+    vector<int> arr9({2,5,2,1,2}); n = 5, sum=5; vector<int> ds9; vector<vector<int>> res9;
+    res9 = ob.combinationSum2(arr9, sum);
+    cout<<"Combination SUM of "<<sum<<" "<<endl;
+    for(int i=0; i<res9.size(); i++){
+        cout<<"{ ";
+        for(int j=0; j<res9[i].size(); j++){
+            cout<<res9[i][j]<<" ";
+        }
+        cout<<"} ";
+    }
+    cout<<endl;
+
+    //10. Subset SUM
+    vector<int> arr10({1,2,5}); n = 3; vector<int> res10;
+    res10 = ob.subsetSum(arr10, n);
+    cout<<"Subset sum "<<endl;
+    for(int i=0; i<res10.size(); i++){
+        cout<<res10[i]<<" ";
     }
     cout<<endl;
 
@@ -243,4 +282,56 @@ vector<vector<int>> recursionSeries::combinationSum(vector<int>& candidates, int
     vector<int> ds;
     findCombinations(0, target, candidates, ans, ds);
     return ans;
+}
+
+/* 9. Combination SUM
+   Given a collection of candidate numbers and a target number, find all unique combinations
+   where the candidate number sum to target.
+   Each number in candidates may only be used once in the combination.
+   Note: solution set must not cotain duplicate numbers.
+    - O(2^n)
+*/
+void recursionSeries::findCombinations2(int ind, int target, vector<int>& arr, vector<vector<int>>& ans, vector<int>& ds){
+    if(target==0){
+        ans.push_back(ds);
+        return;
+    }
+    for(int i = ind; i<arr.size(); i++){
+        if(i>ind && arr[i]==arr[i-1]) continue;
+        if(arr[i] > target) break;
+        ds.push_back(arr[i]);
+        findCombinations2(i+1, target-arr[i], arr, ans, ds);
+        ds.pop_back();
+    }
+}
+
+vector<vector<int>> recursionSeries::combinationSum2(vector<int>& candidates, int target){
+    sort(candidates.begin(), candidates.end());
+    vector<vector<int>> ans;
+    vector<int> ds;
+    findCombinations2(0, target, candidates, ans, ds);
+    return ans;
+}
+
+/* 10. Subset SUM
+   Given a list of N integers, print sums of all subsets in it, output should be printed in 
+   increasing order of sums.
+
+*/
+void recursionSeries::subsetSumUtils(int ind, int sum, vector<int>&arr, int len, vector<int>& sumSubset){
+    if(ind==len){
+        sumSubset.push_back(sum);
+        return;
+    }
+    //pick the element
+    subsetSumUtils(ind+1, sum+arr[ind], arr, len, sumSubset);
+
+    //do-not pick the element
+    subsetSumUtils(ind+1, sum, arr, len, sumSubset);
+}
+vector<int> recursionSeries::subsetSum(vector<int> arr, int len){
+    vector<int> sumSubset;
+    subsetSumUtils(0,0,arr,len,sumSubset);
+    sort(sumSubset.begin(),sumSubset.end());
+    return sumSubset;
 }
