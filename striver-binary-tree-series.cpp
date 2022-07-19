@@ -146,33 +146,10 @@ class BinaryTreeSeries{
 
 #define TreeNode BinaryTree
     /* 21. Vertical order traversal */
-    vector<vector<int>> verticalTraversal(TreeNode *root){
-        map<int, map<int, multiset<int>>> nodes;
-        queue<pair<TreeNode *, pair<int, int>>> todo;
-        todo.push({root,{0,0}});
-        while(!todo.empty()){
-            auto p = todo.front();
-            todo.pop();
-            TreeNode* node = p.first;
-            int x = p.second.first, y=p.second.second;
-            nodes[x][y].insert(node->data);
-            if(node->left){
-                todo.push({node->left,{x-1,y+1}});
-            }
-            if(node->right){
-                todo.push({node->right,{x+1,y+1}});
-            }
-        }
-        vector<vector<int>> ans;
-        for(auto p:nodes){
-            vector<int> col;
-            for(auto q: p.second){
-                col.insert(col.end(),q.second.begin(),q.second.end());
-            }
-            ans.push_back(col);
-        }
-        return ans;
-    }
+    vector<vector<int>> verticalTraversal(TreeNode *root);
+
+    /* 22. top view traversal */
+    vector<int> topViewTraversal(TreeNode *root);
 };
 
 /* 5. recurssive preorder traversal */
@@ -490,6 +467,62 @@ vector<int> BinaryTreeSeries::printBoundary(BinaryTree *root){
 }
 
 
+/* 21. Vertical order traversal */
+vector<vector<int>> BinaryTreeSeries::verticalTraversal(TreeNode *root){
+    map<int, map<int, multiset<int>>> nodes;
+    queue<pair<TreeNode *, pair<int, int>>> todo;
+    todo.push({root,{0,0}});
+    while(!todo.empty()){
+        auto p = todo.front();
+        todo.pop();
+        TreeNode* node = p.first;
+        int x = p.second.first, y=p.second.second;
+        nodes[x][y].insert(node->data);
+        if(node->left){
+            todo.push({node->left,{x-1,y+1}});
+        }
+        if(node->right){
+            todo.push({node->right,{x+1,y+1}});
+        }
+    }
+    vector<vector<int>> ans;
+    for(auto p:nodes){
+        vector<int> col;
+        for(auto q: p.second){
+            col.insert(col.end(),q.second.begin(),q.second.end());
+        }
+        ans.push_back(col);
+    }
+    return ans;
+}
+
+/* 22. Top view traversal 
+*/
+vector<int> BinaryTreeSeries::topViewTraversal(TreeNode *root){
+    vector<int> ans;
+    if(root == nullptr) 
+        return ans;
+    map<int,int> mpp;
+    queue<pair<TreeNode *,int>> q;
+    q.push({root,0});
+    while(!q.empty()){
+        auto it = q.front();
+        q.pop();
+        TreeNode *node = it.first;
+        int line = it.second;
+        if(mpp.find(line) == mpp.end())
+            mpp[line] = node->data;
+        if(node->left)
+            q.push({node->left, line-1});
+        if(node->right)
+            q.push({node->right, line+1});
+    }
+    for(auto it: mpp){
+        ans.push_back(it.second);
+    }
+    return ans;
+}
+
 int main(){
 
     BinaryTreeSeries ob;
@@ -587,6 +620,15 @@ int main(){
             cout<<res21[i][j]<<" ";
         }
         cout<<"--";
+    }
+    cout<<endl;
+
+    /* 22. Top view of a binary tree */
+    vector<int> res22;
+    res22 = ob.topViewTraversal(ob.root);
+    cout<<"Top view of the binary tree: ";
+    for(int i=0; i<res22.size(); i++){
+        cout<<res22[i]<<" ";
     }
     cout<<endl;
 
