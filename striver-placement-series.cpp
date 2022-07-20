@@ -960,6 +960,29 @@ class placement{
         return head;
     }
 
+    /* Intersection of two linked list
+       Find the node at which the intersection of two singly linked list begins.
+        1. each one ll and compare with all nodes of other - O(n*n)
+        2. use a hash - store all node adds - O(n+n) - assuming hasing works with O(1)
+        3. find both ll length - find diff - longer travel the diff - then travel till it collide
+        4. just like above, but traverse till end, then go to next ll till collide
+    */
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB){
+        if(headA == nullptr || headB == nullptr)
+            return nullptr;
+        ListNode *a = headA;
+        ListNode *b = headB;
+
+        //if a and b have different length, then we will stop the loop after second iteration
+        while( a != b ){
+            //for the end of first iteration, we just reset the pointer to the head of another ll
+            a = (a == nullptr? headB : a->next);
+            b = (b == nullptr? headA : b->next);
+        }
+        return a;
+    }
+
+
     //helper functions.
     /* create a linked list */
     ListNode * createAlist(vector<int> nums){
@@ -1199,6 +1222,16 @@ int main(){
     cout<<"After Adding this two numbers:"<<endl;
     ListNode * node3 = ob.addTwoNumbersList(node1,node2);
     ob.displayList(node3);
+
+    // 31. Intersection node of two linkedlist
+    node1 = new ListNode(1);
+    node2 = new ListNode(11);
+    node1->next = new ListNode(2);
+    node2->next = node1->next;
+    node2->next->next = new ListNode(3);
+    node3 = ob.getIntersectionNode(node1, node2);
+    cout<<"Intersection node "<<node3->val<<endl;
+
 
     return 0;
 }
