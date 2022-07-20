@@ -960,7 +960,7 @@ class placement{
         return head;
     }
 
-    /* Intersection of two linked list
+    /* 31. Intersection of two linked list
        Find the node at which the intersection of two singly linked list begins.
         1. each one ll and compare with all nodes of other - O(n*n)
         2. use a hash - store all node adds - O(n+n) - assuming hasing works with O(1)
@@ -982,6 +982,26 @@ class placement{
         return a;
     }
 
+    /* 32. Deletct a cycle in a linked list
+            1. put all nodes in hash while travelling - O(n)
+            2. tortoise method
+    */
+    bool isCycle(ListNode *head){
+        if(head==nullptr || head->next==nullptr)
+            return false;
+
+        ListNode* fast = head;
+        ListNode* slow = head;
+
+        while(fast!=nullptr && fast->next!=nullptr){
+            slow = slow->next;
+            fast = fast->next->next;
+            if(fast == slow){
+                return true;
+            }
+        } 
+        return false;
+    }
 
     //helper functions.
     /* create a linked list */
@@ -1232,6 +1252,11 @@ int main(){
     node3 = ob.getIntersectionNode(node1, node2);
     cout<<"Intersection node "<<node3->val<<endl;
 
-
+    // 32. detect a cycle in a linkedlist
+    node1 = new ListNode(1);
+    node1->next = new ListNode(2);
+    node1->next->next = new ListNode(3);
+    node1->next->next->next = node1->next;
+    cout<<"Is cycle "<<ob.isCycle(node1)<<endl;
     return 0;
 }
