@@ -153,6 +153,13 @@ class BinaryTreeSeries{
 
     /* 23. Bottom view traversal */
     vector<int> bottomViewTraversal(TreeNode *root);
+
+    /* 24. Right/Left view traversal */
+    void tree_traversal(TreeNode *root, int level, vector<int>& res);
+    vector<int> rightSideView(TreeNode *root);
+    void tree_traversal1(TreeNode *root, int level, vector<int>& res);
+    vector<int> leftSideView(TreeNode *root);
+
 };
 
 /* 5. recurssive preorder traversal */
@@ -552,6 +559,32 @@ vector<int> BinaryTreeSeries::bottomViewTraversal(TreeNode *root){
     return ans;
 }
 
+/* 24. Right/Left view of Binary tree
+    - iterative - avoid level order traversall - space more
+    - recursive - RLR - latest take as Root -> Right -> Left
+*/
+void BinaryTreeSeries::tree_traversal(TreeNode *root, int level, vector<int>& res){
+    if(root==nullptr) return;
+    if(res.size()==level) res.push_back(root->data);
+    tree_traversal(root->right,level+1,res);
+    tree_traversal(root->left,level-1,res);
+}
+vector<int> BinaryTreeSeries::rightSideView(TreeNode *root){
+    vector<int> res;
+    tree_traversal(root, 0, res);
+    return res;
+}
+void BinaryTreeSeries::tree_traversal1(TreeNode *root, int level, vector<int>& res){
+    if(root==nullptr) return;
+    if(res.size()==level) res.push_back(root->data);
+    tree_traversal(root->left,level+1,res);
+    tree_traversal(root->right,level-1,res);
+}
+vector<int> BinaryTreeSeries::leftSideView(TreeNode *root){
+    vector<int> res;
+    tree_traversal1(root, 0, res);
+    return res;
+}
 
 int main(){
 
@@ -668,6 +701,21 @@ int main(){
     cout<<"Bottom view of the binary tree: ";
     for(int i=0; i<res23.size(); i++){
         cout<<res23[i]<<" ";
+    }
+    cout<<endl;
+
+    /* 24. Right/left view of a binary tree */
+    vector<int> res24;
+    res24 = ob.rightSideView(ob.root);
+    cout<<"Right view of the binary tree: ";
+    for(int i=0; i<res24.size(); i++){
+        cout<<res24[i]<<" ";
+    }
+    cout<<endl;
+    res24 = ob.leftSideView(ob.root);
+    cout<<"Left view of the binary tree: ";
+    for(int i=0; i<res24.size(); i++){
+        cout<<res24[i]<<" ";
     }
     cout<<endl;
 
