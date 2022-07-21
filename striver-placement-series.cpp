@@ -1034,6 +1034,31 @@ class placement{
         return dummy->next;
     }
 
+    /* 34. check if linkedlist is palindrom
+        - find values in list and check palindrom
+        - reverse the right half of the ll
+    */
+    bool isPalindrom(ListNode* head){
+        if(head==nullptr || head->next==nullptr)
+            return true;
+        ListNode *slow = head;
+        ListNode *fast = head;
+
+        while(fast->next!=nullptr && fast->next->next!=nullptr){
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        slow->next = reverseList(slow->next);
+        slow=slow->next;
+
+        while(slow!=nullptr){
+            if(head->val!=slow->val)
+                return false;
+            head = head->next;
+            slow = slow->next;
+        }
+        return true;
+    }
 
     //helper functions.
     /* create a linked list */
@@ -1304,6 +1329,14 @@ int main(){
     cout<<"Reverse K groups "<<endl;
     head = ob.reverseKGroup(node1,3);
     ob.displayList(head);
+
+    //34. is palindrom
+    node1 = new ListNode(1);
+    node1->next = new ListNode(2);
+    node1->next->next = new ListNode(3);
+    node1->next->next->next = new ListNode(2);
+    node1->next->next->next->next = new ListNode(1);
+    cout<<"Is Palindrom "<<ob.isPalindrom(node1)<<endl;
 
     return 0;
 }
