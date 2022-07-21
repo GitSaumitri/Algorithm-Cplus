@@ -1003,6 +1003,38 @@ class placement{
         return false;
     }
 
+    /* 33. Reverse nodes in K groups
+        - O(n) + O(n) - space - O(1)
+    */
+    ListNode * reverseKGroup(ListNode *head, int k){
+        if(head == nullptr || k==1) return head;
+
+        ListNode *dummy = new ListNode(0);
+        dummy->next = head;
+        ListNode *curr = dummy, *next = dummy, *pre = dummy;
+        int count=0;
+
+        while(curr->next!=nullptr){
+            curr = curr->next;
+            count++;
+        }
+
+        while(count >= k){
+            curr = pre->next;
+            next = curr->next;
+            for(int i=1; i<k ; i++){
+                curr->next = next->next;
+                next->next = pre->next;
+                pre->next = next;
+                next = curr->next;
+            }
+            pre = curr;
+            count -= k;
+        }
+        return dummy->next;
+    }
+
+
     //helper functions.
     /* create a linked list */
     ListNode * createAlist(vector<int> nums){
@@ -1018,6 +1050,10 @@ class placement{
 
     /* display linked list */
     void displayList(ListNode *head){
+        if(head==nullptr){
+            cout<<"No elements in the list"<<endl;
+            return;
+        }
         while(head){
             cout<<head->val<<"->";
             head=head->next;
@@ -1258,5 +1294,16 @@ int main(){
     node1->next->next = new ListNode(3);
     node1->next->next->next = node1->next;
     cout<<"Is cycle "<<ob.isCycle(node1)<<endl;
+
+    //33. Reverse a linkedlist in groups of size K
+    node1 = new ListNode(1);
+    node1->next = new ListNode(2);
+    node1->next->next = new ListNode(3);
+    node1->next->next->next = new ListNode(4);
+    node1->next->next->next->next = new ListNode(5);
+    cout<<"Reverse K groups "<<endl;
+    head = ob.reverseKGroup(node1,3);
+    ob.displayList(head);
+
     return 0;
 }
