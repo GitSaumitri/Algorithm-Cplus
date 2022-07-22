@@ -1060,6 +1060,34 @@ class placement{
         return true;
     }
 
+    /* 35. Find the stating point of the cycle
+        - bruit force - hash
+        - find the collision point - then starting point
+        - intuition - 2 (L1 + L2) = L1 + L2 + Nc 
+                    -> L1 = Nc - L2 
+    */
+    ListNode* detectCycle(ListNode *head){
+        if(head==nullptr || head->next==nullptr)
+            return nullptr;
+        ListNode *slow = head;
+        ListNode *fast = head;
+        ListNode *entry = head;
+
+        while(fast->next && fast->next->next){
+            slow = slow->next;
+            fast = fast->next->next;
+            if(slow==fast){ //there is a cycle
+                while(entry!=slow){ //find the entry location
+                    entry=entry->next;
+                    slow=slow->next;
+                }
+                return entry;
+            }
+        }
+        return nullptr;
+    }
+
+
     //helper functions.
     /* create a linked list */
     ListNode * createAlist(vector<int> nums){
@@ -1338,5 +1366,12 @@ int main(){
     node1->next->next->next->next = new ListNode(1);
     cout<<"Is Palindrom "<<ob.isPalindrom(node1)<<endl;
 
+    //35. find the starting point
+    node1 = new ListNode(1);
+    node1->next = new ListNode(2);
+    node1->next->next = new ListNode(3);
+    node1->next->next->next = node1->next;
+    cout<<"Cycle starting point "<<ob.detectCycle(node1)->val<<endl;
+   
     return 0;
 }
