@@ -59,6 +59,10 @@ class recursionSeries{
     void subsetSumUtils(int ind, int sum, vector<int>&arr, int len, vector<int>& sumSubset);
     vector<int> subsetSum(vector<int> arr, int len);
 
+    //11. unique subsets
+    void subsetUniqueUtils(int ind, vector<int>&nums, vector<int>& ds, vector<vector<int>>& subsets);
+    vector<vector<int>> subsetUnique(vector<int> arr);
+
 };
 
 int main(){
@@ -114,6 +118,19 @@ int main(){
     }
     cout<<endl;
 
+    //11. Subset SUM
+    vector<int> arr11({1,2,2}); vector<vector<int>> res11;
+    res11 = ob.subsetUnique(arr11);
+    cout<<"Unique Subsets "<<endl;
+    for(int i=0; i<res11.size(); i++){
+        cout<<"{ ";
+        for(int j=0; j<res11[i].size(); j++){
+            cout<<res11[i][j]<<" ";
+        }
+        cout<<"}";
+    }
+    cout<<endl;
+ 
 
     return 0;
 }
@@ -334,4 +351,26 @@ vector<int> recursionSeries::subsetSum(vector<int> arr, int len){
     subsetSumUtils(0,0,arr,len,sumSubset);
     sort(sumSubset.begin(),sumSubset.end());
     return sumSubset;
+}
+
+
+/* 11. Subset SUM
+   Given a list of N integers, that may contain duplicates, 
+   return all possible subsets, no duplicate subset
+*/
+void recursionSeries::subsetUniqueUtils(int ind, vector<int>&nums, vector<int>& ds, vector<vector<int>>& subsets){
+    subsets.push_back(ds);   //pick the element
+    for(int i=ind; i<nums.size(); i++){
+        if(i!=ind && nums[i]==nums[i-1]) continue;
+        ds.push_back(nums[i]);
+        subsetUniqueUtils(i+1, nums, ds, subsets);
+        ds.pop_back();
+    }
+}
+vector<vector<int>> recursionSeries::subsetUnique(vector<int> arr){
+    vector<vector<int>> subsets;
+    vector<int> ds;
+    sort(arr.begin(),arr.end());
+    subsetUniqueUtils(0,arr,ds,subsets);
+    return subsets;
 }
