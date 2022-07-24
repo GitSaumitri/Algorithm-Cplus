@@ -63,9 +63,14 @@ class recursionSeries{
     void subsetUniqueUtils(int ind, vector<int>&nums, vector<int>& ds, vector<vector<int>>& subsets);
     vector<vector<int>> subsetUnique(vector<int> arr);
 
-    //12. permutation
+    //12. permutation - extra track space
     void recurPermute(vector<int>& ds, vector<int> &nums, vector<vector<int>>& ans, int freq[]);
     vector<vector<int>> permute(vector<int>& nums);
+
+    //13 permutation - no exta space
+    void recurPermute1(int index, vector<int> &nums, vector<vector<int>>& ans);
+    vector<vector<int>> permute1(vector<int>& nums);
+
 };
 
 int main(){
@@ -142,6 +147,19 @@ int main(){
         cout<<"{ ";
         for(int j=0; j<res12[i].size(); j++){
             cout<<res12[i][j]<<" ";
+        }
+        cout<<"}";
+    }
+    cout<<endl;
+ 
+    //13. permutation
+    vector<int> arr13({1,2,2}); vector<vector<int>> res13;
+    res13 = ob.permute1(arr13);
+    cout<<"Permutations  "<<endl;
+    for(int i=0; i<res13.size(); i++){
+        cout<<"{ ";
+        for(int j=0; j<res13[i].size(); j++){
+            cout<<res13[i][j]<<" ";
         }
         cout<<"}";
     }
@@ -392,7 +410,10 @@ vector<vector<int>> recursionSeries::subsetUnique(vector<int> arr){
     return subsets;
 }
 
-//12. permutation
+/* 12. permutation
+ track for each element
+    - O(n!)
+*/ 
 void recursionSeries::recurPermute(vector<int>& ds, vector<int> &nums, vector<vector<int>>& ans, int freq[]){
     if(ds.size() == nums.size()){
         ans.push_back(ds);
@@ -416,3 +437,26 @@ vector<vector<int>> recursionSeries::permute(vector<int>& nums){
     recurPermute(ds, nums, ans, freq);
     return ans;
 }
+
+/* 13. permutation - space optimized
+    swap each element
+        - O(n!)*O(n)
+    space is saved a lot as compared to previous approach
+*/
+void recursionSeries::recurPermute1(int index, vector<int> &nums, vector<vector<int>>& ans){
+    if(index == nums.size()){
+        ans.push_back(nums);
+        return;
+    }
+    for(int i=index; i<nums.size(); i++){
+        swap(nums[index],nums[i]);
+        recurPermute1(index+1, nums, ans);
+        swap(nums[index],nums[i]);
+    }
+}
+vector<vector<int>> recursionSeries::permute1(vector<int>& nums){
+    vector<vector<int>> ans;
+    recurPermute1(0, nums, ans);
+    return ans;
+}
+
