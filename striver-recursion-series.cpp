@@ -76,6 +76,12 @@ class recursionSeries{
     void solve(int col, vector<string>& board, vector<vector<string>>& ans, int n);
     vector<vector<string>> solveQueens(int n);
 
+    //15. soduko solver
+    bool isValid(vector<vector<char>>& board, int row, int col, char ch);
+    bool solveSudoku(vector<vector<char>>& board);
+    void sudokuSolver(vector<vector<char>>& board);
+
+
 };
 
 int main(){
@@ -183,7 +189,24 @@ int main(){
     }
     cout<<endl;
  
-
+    //15. sudoku solver
+    vector<vector<char>> board = {{'5','3','.','.','7','.','.','.','.'},
+                                    {'6','.','.','1','9','5','.','.','.'},
+                                    {'.','9','8','.','.','.','.','6','.'},
+                                    {'8','.','.','.','6','.','.','.','3'},
+                                    {'4','.','.','8','.','3','.','.','1'},
+                                    {'7','.','.','.','2','.','.','.','6'},
+                                    {'.','6','.','.','.','.','2','8','.'},
+                                    {'.','.','.','4','1','9','.','.','5'},
+                                    {'.','.','.','.','8','.','.','7','9'}};
+    cout<<"Solve sudoku "<<endl;
+    ob.sudokuSolver(board);
+    for(int i=0; i<board.size(); i++){
+        for(int j=0; j<board[i].size(); j++){
+            cout<<board[i][j]<<" ";
+        }
+        cout<<endl;
+    }
     return 0;
 }
 
@@ -525,7 +548,7 @@ void recursionSeries::solve(int col, vector<string>& board, vector<vector<string
     }
 }
 
-vector<vector<string>> recursionSeries::solveQueens(int n){
+vector<vector<string>> recursionSeries::recursionSeries::solveQueens(int n){
     vector<vector<string>> ans;
     vector<string> board(n);
     string s(n, '.');
@@ -534,4 +557,45 @@ vector<vector<string>> recursionSeries::solveQueens(int n){
     }
     solve(0, board, ans, n);
     return ans;
+}
+
+/*
+    Sudoko solver
+        - check row cons col changes - entire row 
+        - check col cons row changes - entire col
+        - [3*(row/3)+i/3][3*(col/3)+i%3] - first divide/second modulo - in that cubical  
+*/
+bool recursionSeries::isValid(vector<vector<char>>& board, int row, int col, char ch){
+    for(int i=0; i<9; i++){
+        if(board[i][col]==ch)
+            return false;
+        if(board[row][i]==ch)
+            return false;
+        if(board[3*(row/3)+ i/3][3*(col/3)+ i%3]==ch)
+            return false;
+    }
+    return true;
+}
+bool recursionSeries::solveSudoku(vector<vector<char>>& board){
+    for(int i=0; i<board.size(); i++){
+        for(int j=0; j<board[0].size(); j++){
+            if(board[i][j] == '.'){
+                for(char c='1'; c <= '9'; c++){
+                    if(isValid(board,i,j,c)){
+                        board[i][j]=c;
+                        if(solveSudoku(board)==true)
+                            return true;
+                        else
+                            board[i][j]='.';
+                    }
+                }
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void recursionSeries::sudokuSolver(vector<vector<char>>& board){
+    solveSudoku(board);
 }
