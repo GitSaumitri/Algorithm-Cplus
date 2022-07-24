@@ -81,6 +81,10 @@ class recursionSeries{
     bool solveSudoku(vector<vector<char>>& board);
     void sudokuSolver(vector<vector<char>>& board);
 
+    //16. graph colouring
+    bool isSafeToColor(int node, int color[], bool graph[5][5], int n, int col);
+    bool solveMcolor(int node, int color[], int m, int n, bool graph[5][5]);
+    bool graphColoring(bool graph[5][5], int m, int n);
 
 };
 
@@ -207,6 +211,15 @@ int main(){
         }
         cout<<endl;
     }
+
+    // 16. M-coloring problem
+    //bool graphColoring(bool graph[101][101], int m, int n){
+    bool graph[5][5]={{0,0,0,0,0},
+                    {0,0,1,1,0},
+                    {0,0,0,1,0},
+                    {0,0,0,0,1},
+                    {0,1,0,0,0}}; 
+    cout<<"Graph coloring "<<ob.graphColoring(graph,3,5);   
     return 0;
 }
 
@@ -598,4 +611,40 @@ bool recursionSeries::solveSudoku(vector<vector<char>>& board){
 
 void recursionSeries::sudokuSolver(vector<vector<char>>& board){
     solveSudoku(board);
+}
+
+/*  16. M coloring  //bi-pertite graph is 2-color problem
+    Given an undirected graph and an integer M. Determine if the graph can be colored with
+    at most M colors such that no two adjacent vertices of the graph are colored with the 
+    same color. Here coloring of a graph means assigning of color to all vertices. Print 1
+    if it is possible to colour vertices and 0 otherwise.
+        - N nodes m colors - O(N to the power m) - space O(m)
+*/
+bool recursionSeries::isSafeToColor(int node, int color[], bool graph[5][5], int n, int col){
+    for(int k=0; k<n; k++){
+        if(k!=node && graph[k][node]==1 && color[k]==col){
+            return false;
+        }
+    }
+    return true;
+}
+bool recursionSeries::solveMcolor(int node, int color[], int m, int n, bool graph[5][5]){
+    if(node==n)
+        return true;
+    for(int i=1; i<=m; i++){
+        if(isSafeToColor(node, color, graph, n, i)){
+            color[node]=i;
+            if(solveMcolor(node+1,color,m,n,graph))
+                return true;
+            color[node]=0;
+        }
+    }
+    return false;
+}
+
+bool recursionSeries::graphColoring(bool graph[5][5], int m, int n){
+    int color[n] = {0};
+    if(solveMcolor(0,color,m,n,graph))
+        return true;
+    return false;
 }
