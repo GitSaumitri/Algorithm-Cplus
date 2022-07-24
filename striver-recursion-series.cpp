@@ -19,7 +19,7 @@
     8. Combination SUM 
     9. Combination SUM - unique combinations
     10. Subset SUM
-    11. Subset SUM
+    11. Unique Subsets
     12. Print all permutations of a string or array
     13. Print all permutations of a string or array
     14. N-Queens
@@ -63,6 +63,9 @@ class recursionSeries{
     void subsetUniqueUtils(int ind, vector<int>&nums, vector<int>& ds, vector<vector<int>>& subsets);
     vector<vector<int>> subsetUnique(vector<int> arr);
 
+    //12. permutation
+    void recurPermute(vector<int>& ds, vector<int> &nums, vector<vector<int>>& ans, int freq[]);
+    vector<vector<int>> permute(vector<int>& nums);
 };
 
 int main(){
@@ -130,6 +133,20 @@ int main(){
         cout<<"}";
     }
     cout<<endl;
+ 
+    //12. permutation
+    vector<int> arr12({1,2,2}); vector<vector<int>> res12;
+    res12 = ob.permute(arr12);
+    cout<<"Permutations  "<<endl;
+    for(int i=0; i<res12.size(); i++){
+        cout<<"{ ";
+        for(int j=0; j<res12[i].size(); j++){
+            cout<<res12[i][j]<<" ";
+        }
+        cout<<"}";
+    }
+    cout<<endl;
+ 
  
 
     return 0;
@@ -373,4 +390,29 @@ vector<vector<int>> recursionSeries::subsetUnique(vector<int> arr){
     sort(arr.begin(),arr.end());
     subsetUniqueUtils(0,arr,ds,subsets);
     return subsets;
+}
+
+//12. permutation
+void recursionSeries::recurPermute(vector<int>& ds, vector<int> &nums, vector<vector<int>>& ans, int freq[]){
+    if(ds.size() == nums.size()){
+        ans.push_back(ds);
+        return;
+    }
+    for(int i=0; i<nums.size(); i++){
+        if(!freq[i]){
+            ds.push_back(nums[i]);
+            freq[i]=1;
+            recurPermute(ds, nums, ans, freq);
+            freq[i]=0;
+            ds.pop_back();
+        }
+    }
+}
+vector<vector<int>> recursionSeries::permute(vector<int>& nums){
+    vector<int> ds;
+    vector<vector<int>> ans;
+    int freq[nums.size()]={0};
+    for(int i=0; i<nums.size();i++) freq[i]=0;
+    recurPermute(ds, nums, ans, freq);
+    return ans;
 }
