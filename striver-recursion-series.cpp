@@ -92,7 +92,11 @@ class recursionSeries{
                                     vector<vector<string>>& res);
     vector<vector<string>> palindromPartitioning(string s);
 
-
+    //19. Rate in a maze
+    void solveFindPath(int i, int j, vector<vector<int>>& maze,int n,
+                    vector<string>& ans, string move, vector<vector<int>>& vis);
+    vector<string> findPath(vector<vector<int>>& maze, int n);
+ 
 };
 
 int main(){
@@ -239,6 +243,16 @@ int main(){
             cout<<res17[i][j]<<" ";
         }
         cout<<"} ";
+    }
+    cout<<endl;
+
+    // 19. Rate in a maze
+    vector<vector<int>> maze = {{1,0,0,0},{1,1,0,1},{1,1,0,0},{0,1,1,1}};
+    vector<string> res19;
+    res19 = ob.findPath(maze, maze.size());
+    cout<<"Rate in a Maze paths:"<<endl;
+    for(int i=0; i<res19.size(); i++){
+        cout<<res19[i]<<" ";
     }
     cout<<endl;
 
@@ -703,3 +717,72 @@ vector<vector<string>> recursionSeries::palindromPartitioning(string s){
     palindromPartitioningUtil(0,s,path,res);
     return res;
 }
+
+/* 19. Rate in a Maze - Backtracking
+    A rat is placed at (0,0) in a square matrix of order n x n. It has to reach the 
+    destination at (n-1,n-1). Find all possible paths that the rat can take to reach
+    from source to destination. The directions the rate can move are U(up), D(Down)
+    L(Left) and R (right). Value 0 at a cell in the matrix, represents that it is 
+    blocked and rat can't move to it, while 1 at a cell in the matrix represents that
+    rat can be travel through it. In a path, no cell can be visited more than one time.
+        - lexicographicall - DLRU
+        - all 4 direction - O(4^(nXm)) - space is auxillay space of recurssion - O(n*m)
+*/
+
+void recursionSeries::solveFindPath(int i, int j, vector<vector<int>>& maze,int n,
+                    vector<string>& ans, string move, vector<vector<int>>& vis){
+    
+    if(i==n-1 && j==n-1){
+        ans.push_back(move);
+        return;
+    }
+    ///*
+    string dir="DLRU";
+    int di[4][2]={{1,0},{0,-1},{0,1},{-1,0}};
+    for(int ind=0; ind<4; ind++){
+        int nexti = i + di[ind][0];
+        int nextj = j + di[ind][1];
+        //cout<<"i "<<i<<"j "<<j<<" nexti "<<nexti<<" nextj"<<nextj<<endl;
+        if(nexti>=0 && nextj>=0 && nexti<n && nextj<n &&
+            !vis[nexti][nextj] && maze[nexti][nextj]==1){
+                vis[i][j]=1;
+                solveFindPath(nexti, nextj, maze, n, ans, move+dir[ind], vis);
+                vis[i][j]=0;
+        }
+    }
+    /*
+    //downward
+    if(i+1<n && !vis[i+1][j] && maze[i+1][j]==1){
+        vis[i][j]=1;
+        solveFindPath(i+1, j, maze, n, ans, move + 'D', vis);
+        vis[i][j]=0;
+    }
+    //left
+    if(j-1>=0 && !vis[i][j-1] && maze[i][j-1]==1){
+        vis[i][j]=1;
+        solveFindPath(i, j-1, maze, n, ans, move + 'L', vis);
+        vis[i][j]=0;
+    }
+    //right
+    if(j+1<n && !vis[i][j+1] && maze[i][j+1]==1){
+        vis[i][j]=1;
+        solveFindPath(i, j+1, maze, n, ans, move + 'R', vis);
+        vis[i][j]=0;
+    }
+    //upward
+    if(i-1>=0 && !vis[i-1][j] && maze[i-1][j]==1){
+        vis[i][j]=1;
+        solveFindPath(i-1, j, maze, n, ans, move + 'U', vis);
+        vis[i][j]=0;
+    }
+    */
+}
+
+vector<string> recursionSeries::findPath(vector<vector<int>>& maze, int n){
+    vector<string> ans;
+    vector<vector<int>> vis(n, vector<int>(n,0));
+    if(maze[0][0]==1) // you can't start if (0,0) is 0
+        solveFindPath(0, 0, maze, n, ans, "", vis);
+    return ans;
+}
+
