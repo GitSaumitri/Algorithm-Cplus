@@ -65,6 +65,16 @@ struct ListNode {
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
+struct ListNode1 {
+    int val;
+    ListNode1 *next;
+    ListNode1 *bottom;
+    ListNode1() : val(0), next(NULL), bottom(NULL) {}
+    ListNode1(int x) : val(x), next(NULL), bottom(NULL) {}
+    //ListNode1(int x, ListNode1 *next) : val(x), next(next) {}
+    //ListNode1(int x, ListNode1 *bottom) : val(x), bottom(bottom) {}
+};
+
 class placement{
     //2. Reverse pairs (appl: find inversion)
     int merge(vector<int>& nums, int low, int mid, int high){
@@ -1087,6 +1097,45 @@ class placement{
         return nullptr;
     }
 
+    /* 36. Flattening a linked list
+        Given a linked list of size N, where everynode represents a linkedlist and 
+        two pointer of it's type
+        (i) a new pointer to the next node
+        (ii) a bottom pointer to the linked list where this node is head
+        The flattened list will be printed using the bottom pointer instead of next pointer.
+    */
+    ListNode1* mergeTwoLinkedlists(ListNode1 *a, ListNode1 *b){
+        ListNode1 *temp = new ListNode1(0);
+        ListNode1 *res = temp;
+        while(a!=NULL && b!=NULL){
+            if(a->val < b->val){
+                temp->bottom = a;
+                temp=temp->bottom;
+                a=a->bottom;
+            } else {
+                temp->bottom = b;
+                temp=temp->bottom;
+                b=b->bottom;
+            }
+        }
+        if(a) temp->bottom=a;
+        else temp->bottom=b;
+        
+        return res->bottom;
+    }
+    ListNode1* flatten(ListNode1* root){
+        if(root==NULL || root->next==NULL)
+            return root;
+        // recur for list on right
+        root->next = flatten(root->next);
+        //now merge
+        root = mergeTwoLinkedlists(root,root->next);
+        //return the root, it is merged with the left
+        return root;
+    }
+
+    /* 37. Rotate a linkedlist
+    */
 
     //helper functions.
     /* create a linked list */
@@ -1373,5 +1422,17 @@ int main(){
     node1->next->next->next = node1->next;
     cout<<"Cycle starting point "<<ob.detectCycle(node1)->val<<endl;
    
+    // 36. Flattening a ll
+    ListNode1* node36 = new ListNode1(1);
+    node36->bottom = new ListNode1(18);
+    node36->next = new ListNode1(5);
+    node36->next->bottom = new ListNode1(12);
+    ListNode1* res36 = ob.flatten(node36);
+    cout<<"Flatten a list with two pointers"<<endl;
+    while(res36!=NULL){
+        cout<<res36->val<<" "; 
+        res36 = res36->bottom;
+    }
+    cout<<endl;
     return 0;
 }
