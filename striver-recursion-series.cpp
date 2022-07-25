@@ -86,6 +86,13 @@ class recursionSeries{
     bool solveMcolor(int node, int color[], int m, int n, bool graph[5][5]);
     bool graphColoring(bool graph[5][5], int m, int n);
 
+    //17. palindrome partitioning
+    bool isPalindrom(string s, int start, int end);
+    void palindromPartitioningUtil(int index, string s, vector<string>& path, 
+                                    vector<vector<string>>& res);
+    vector<vector<string>> palindromPartitioning(string s);
+
+
 };
 
 int main(){
@@ -219,7 +226,22 @@ int main(){
                     {0,0,0,1,0},
                     {0,0,0,0,1},
                     {0,1,0,0,0}}; 
-    cout<<"Graph coloring "<<ob.graphColoring(graph,3,5);   
+    cout<<"Graph coloring "<<ob.graphColoring(graph,3,5);  
+
+    //17. palindrome partitioning
+    string s("aab");
+    vector<vector<string>> res17;
+    res17 = ob.palindromPartitioning(s);
+    cout<<"Palindome partitioning: "<<endl;
+    for(int i=0; i<res17.size(); i++){
+        cout<<"{ ";
+        for(int j=0; j<res17[i].size(); j++){
+            cout<<res17[i][j]<<" ";
+        }
+        cout<<"} ";
+    }
+    cout<<endl;
+
     return 0;
 }
 
@@ -647,4 +669,37 @@ bool recursionSeries::graphColoring(bool graph[5][5], int m, int n){
     if(solveMcolor(0,color,m,n,graph))
         return true;
     return false;
+}
+
+/* 17. Palindrome partitioning
+    Given a string a, partition s such that every substring of the partition is 
+    a palindrom, return all possible palindrom partiotioning of s.
+    A palindrom string is a string, that reads the same backward as forward.
+*/ 
+bool recursionSeries::isPalindrom(string s, int start, int end){
+    while(start <= end){
+        if(s[start++] !=s [end--])
+            return false;
+    }
+    return true;
+}
+void recursionSeries::palindromPartitioningUtil(int index, string s, vector<string>& path, 
+                                    vector<vector<string>>& res){
+    if(index == s.size()){
+        res.push_back(path);
+        return;
+    }
+    for(int i=index; i<s.size(); ++i){
+        if(isPalindrom(s, index, i)){
+            path.push_back(s.substr(index, i-index+1));
+            palindromPartitioningUtil(i+1, s, path, res);
+            path.pop_back();
+        }
+    }
+}
+vector<vector<string>> recursionSeries::palindromPartitioning(string s){
+    vector<vector<string>> res;
+    vector<string> path;
+    palindromPartitioningUtil(0,s,path,res);
+    return res;
 }
