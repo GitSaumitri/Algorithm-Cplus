@@ -97,6 +97,9 @@ class recursionSeries{
                     vector<string>& ans, string move, vector<vector<int>>& vis);
     vector<string> findPath(vector<vector<int>>& maze, int n);
  
+    // 18. Kth permutation
+    string getPermutation(int n, int k);
+
 };
 
 int main(){
@@ -255,6 +258,12 @@ int main(){
         cout<<res19[i]<<" ";
     }
     cout<<endl;
+
+    // 18. Kth permutation
+    n = 4; 
+    int k=17;
+    string res18 = ob.getPermutation(n, k);
+    cout<<"Kth permutation "<<res18;
 
     return 0;
 }
@@ -786,3 +795,32 @@ vector<string> recursionSeries::findPath(vector<vector<int>>& maze, int n){
     return ans;
 }
 
+/* Kth permutation sequence
+   The set {1,2,3,4,5,..n} contains a total of n! unique permutations.
+   By listing and labeling all of the permuations in order, we get the following sequence 
+   for n=3 -> "123" "132" "213" "231" "312" "321".
+   Given n and k, return the kth permutation sequence.
+        - recursion - find all then return k-1th - O(n!) * O(n) 
+        - since we need only one number - so findout the position then calculate it
+            - 4! = 4 * 3!
+*/
+string recursionSeries::getPermutation(int n, int k){
+    int fact=1;
+    vector<int> numbers;
+    for(int i=1; i<n; i++){
+        fact = fact * i;
+        numbers.push_back(i);
+    }
+    numbers.push_back(n);
+    string ans="";
+    k = k-1;
+    while(true){
+        ans = ans + to_string(numbers[k/fact]);
+        numbers.erase(numbers.begin()+k/fact);
+        if(numbers.size()==0)
+            break;
+        k = k % fact;
+        fact = fact/ numbers.size();
+    }
+    return ans;
+}
