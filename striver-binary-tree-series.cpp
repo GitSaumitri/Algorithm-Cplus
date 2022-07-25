@@ -160,6 +160,9 @@ class BinaryTreeSeries{
     void tree_traversal1(TreeNode *root, int level, vector<int>& res);
     vector<int> leftSideView(TreeNode *root);
 
+    /* 25. Check for symmetrical binary tree */
+    bool checkSymmetrical(TreeNode *left, TreeNode *right);
+    bool isSymmetrical(TreeNode *root);  
 };
 
 /* 5. recurssive preorder traversal */
@@ -586,6 +589,22 @@ vector<int> BinaryTreeSeries::leftSideView(TreeNode *root){
     return res;
 }
 
+/* 25. Check for symmetrical binary tree */
+bool BinaryTreeSeries::checkSymmetrical(TreeNode *left, TreeNode *right){
+    if(left == NULL || right == NULL)
+        return left == right;
+    if(left->data != right->data)
+        return false;
+    return checkSymmetrical(left->left, right->right) && 
+        checkSymmetrical(left->right, right->left);
+}
+
+bool BinaryTreeSeries::isSymmetrical(TreeNode *root){
+    if(root==nullptr)
+        return true;
+    return checkSymmetrical(root->left, root->right);
+}
+
 int main(){
 
     BinaryTreeSeries ob;
@@ -718,6 +737,9 @@ int main(){
         cout<<res24[i]<<" ";
     }
     cout<<endl;
+
+    /* 25. check symmetrical */
+    cout<<"check symmetrical tree "<< ob.isSymmetrical(ob.root);
 
     return 0;
 }
