@@ -163,6 +163,10 @@ class BinaryTreeSeries{
     /* 25. Check for symmetrical binary tree */
     bool checkSymmetrical(TreeNode *left, TreeNode *right);
     bool isSymmetrical(TreeNode *root);  
+
+    /* 26. Print node to root path */
+    bool getRootToNodePath(TreeNode *root, vector<int> &arr, int x);
+    vector<int> rootToNodePath(TreeNode *root, int value);
 };
 
 /* 5. recurssive preorder traversal */
@@ -605,6 +609,35 @@ bool BinaryTreeSeries::isSymmetrical(TreeNode *root){
     return checkSymmetrical(root->left, root->right);
 }
 
+/* 26. Print node to root path 
+    - the given node can be a pointer or a value
+*/
+bool BinaryTreeSeries::getRootToNodePath(TreeNode *root, vector<int>& arr, int x){
+    if(!root)
+        return false;
+    arr.push_back(root->data);
+    /* got the value so return true */
+    if(root->data==x)
+        return true;
+
+    /* if any of the path returns true then return true */
+    if(getRootToNodePath(root->left,arr,x) || getRootToNodePath(root->right,arr,x))
+        return true;
+
+    /* node x is not present in left or right of this node so 
+        pop back the value inserted and return false */    
+    arr.pop_back();
+    return false;    
+}
+
+vector<int> BinaryTreeSeries::rootToNodePath(TreeNode *root, int value){
+    vector<int> arr;
+    if(root==NULL)
+        return arr;
+    getRootToNodePath(root, arr, value);
+    return arr;
+}
+
 int main(){
 
     BinaryTreeSeries ob;
@@ -739,7 +772,15 @@ int main(){
     cout<<endl;
 
     /* 25. check symmetrical */
-    cout<<"check symmetrical tree "<< ob.isSymmetrical(ob.root);
+    cout<<"check symmetrical tree "<< ob.isSymmetrical(ob.root)<<endl;
+
+    /* 26. Root to node path */
+    cout<<"Root to node path: ";
+    vector<int> res26 = ob.rootToNodePath(ob.root,5);
+    for(int i=0; i<res26.size(); i++){
+        cout<<res26[i]<<" ";
+    }
+    cout<<endl;
 
     return 0;
 }
