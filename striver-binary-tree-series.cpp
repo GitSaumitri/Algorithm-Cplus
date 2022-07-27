@@ -167,6 +167,12 @@ class BinaryTreeSeries{
     /* 26. Print node to root path */
     bool getRootToNodePath(TreeNode *root, vector<int> &arr, int x);
     vector<int> rootToNodePath(TreeNode *root, int value);
+
+    /* 27. LCA */
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q);
+
+    /* 28. Maximum width of a binary tree */
+    int widthOfBinaryTree(TreeNode* root);
 };
 
 /* 5. recurssive preorder traversal */
@@ -611,6 +617,7 @@ bool BinaryTreeSeries::isSymmetrical(TreeNode *root){
 
 /* 26. Print node to root path 
     - the given node can be a pointer or a value
+    - time O(n)  space - O(h)
 */
 bool BinaryTreeSeries::getRootToNodePath(TreeNode *root, vector<int>& arr, int x){
     if(!root)
@@ -636,6 +643,59 @@ vector<int> BinaryTreeSeries::rootToNodePath(TreeNode *root, int value){
         return arr;
     getRootToNodePath(root, arr, value);
     return arr;
+}
+
+/* 27. Lowest common ancestor in binary tree 
+        - traverl from root to first node, travel from root to second node
+        then check where both path differs that the lca
+        - 
+*/
+TreeNode* BinaryTreeSeries::lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q){
+    if(root==NULL || root==p || root==q){
+        return root;
+    }
+    TreeNode* left = lowestCommonAncestor(root->left, p, q);
+    TreeNode* right = lowestCommonAncestor(root->right, p, q);
+    if(left==NULL)
+        return right;
+    else if(right==NULL)
+        return left;
+    else //both left and right are not null, found our result
+        return root;
+}
+
+/* 28. Maximum width of a binary tree 
+    Width is the maximum number of nodes in a level bewteen any two nodes.
+    - if root is ith -> left node = 2*i+1 - right node = 2*i+2
+    - in the last level we can find the difference of right and left node to get the result
+    - since we need only the difference 
+
+*/
+int BinaryTreeSeries::widthOfBinaryTree(TreeNode* root){
+    if(!root)
+        return 0;
+    int ans = 0;
+    queue<pair<TreeNode*,int>> q;
+    q.push({root,0});
+    while(!q.empty()){
+        int len = q.size();
+        // to make the id starting from 0
+        int mmin = q.front().second;
+        int first, last;
+        for(int i=0; i<len; i++){
+            int cur_id = q.front().second - mmin;
+            TreeNode * curr = q.front().first;
+            q.pop();
+            if(i==0)    first = cur_id;
+            if(i==len-1)    last = cur_id;
+            if(curr->left)
+                q.push({curr->left, cur_id*2+1});
+            if(curr->right)
+                q.push({curr->right, cur_id*2+2});
+        }
+        ans = max(ans, last-first+1);
+    }
+    return ans;
 }
 
 int main(){
@@ -781,6 +841,15 @@ int main(){
         cout<<res26[i]<<" ";
     }
     cout<<endl;
+
+    /* 27. LCA */
+    TreeNode *p = ob.root->left->left; //= ob.getNewBNode(4);
+    TreeNode *q = ob.root->right->left; // = ob.getNewBNode(6);
+    TreeNode* res27 = ob.lowestCommonAncestor(ob.root, p, q);
+    cout<<"LCA "<<res27->data<<endl;
+
+    /* 28. Width of BT */
+    cout<<"Width of binary tree: "<<ob.widthOfBinaryTree(ob.root)<<endl;
 
     return 0;
 }
