@@ -1134,8 +1134,36 @@ class placement{
         return root;
     }
 
-    /* 37. Rotate a linkedlist
+    /* 37. Rotate a linkedlist K times
+        - k can be more than the length of linkedlist
+        - put the last one in first - O(k*n)
+        - One k is n it rotate to itself, k = n%k
+        - point the last node to first then number of rotated node first first points to null
+        - O(n) + O(n-n%k) = O(n)
     */
+    ListNode * rotateRight(ListNode* head, int k){
+        //edge case
+        if(!head || !head->next || k==0)
+            return head;
+        //compute the length
+        ListNode *curr = head;
+        int len = 1;
+        while(curr->next && ++len)
+            curr = curr->next;
+        
+        //go till that node
+        curr->next = head;
+        k = k % len;
+        k = len - k;
+        while(k--) curr=curr->next;
+
+        //make the node head and break connection
+        head = curr->next;
+        curr->next=NULL;
+
+        return head;
+    }
+
 
     //helper functions.
     /* create a linked list */
@@ -1434,5 +1462,19 @@ int main(){
         res36 = res36->bottom;
     }
     cout<<endl;
+
+    // 37. Rotate a ll
+    node1 = new ListNode(1);
+    node1->next = new ListNode(2);
+    node1->next->next = new ListNode(3);
+    node1->next->next->next = new ListNode(4);
+    node1 = ob.rotateRight(node1, 2);
+    cout<<"Rotate list 2 times: ";
+    while(node1!=nullptr){
+        cout<<node1->val<<" ";
+        node1=node1->next; 
+    }
+    cout<<endl;
+
     return 0;
 }
