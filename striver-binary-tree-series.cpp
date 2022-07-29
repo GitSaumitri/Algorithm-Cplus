@@ -173,6 +173,9 @@ class BinaryTreeSeries{
 
     /* 28. Maximum width of a binary tree */
     int widthOfBinaryTree(TreeNode* root);
+
+    /* 29. Children sum property */
+    void childrenSumProperty(BinaryTree* root);
 };
 
 /* 5. recurssive preorder traversal */
@@ -698,6 +701,40 @@ int BinaryTreeSeries::widthOfBinaryTree(TreeNode* root){
     return ans;
 }
 
+/* 28. Children sum property
+    - each node should be sum of it's left and right child
+    - while going down - make sure to take the root value down 
+                       - while coming back to root - add the node values to get the root value
+*/
+void BinaryTreeSeries::childrenSumProperty(BinaryTree* root){
+    if(root==nullptr) return;
+    int child = 0;
+    if(root->left){
+        child += root->left->data;
+    }
+    if(root->right){
+        child += root->right->data;
+    }
+
+    if(child >= root->data)
+        root->data = child;
+    else {
+        if(root->left)
+            root->left->data = root->data;
+        else if(root->right)
+            root->right->data = root->data;
+    }
+
+    childrenSumProperty(root->left);
+    childrenSumProperty(root->right);
+    
+    int total=0;
+    if(root->left) total += root->left->data;
+    if(root->right) total += root->right->data;
+    if(root->left or root->right) root->data = total;
+}
+
+
 int main(){
 
     BinaryTreeSeries ob;
@@ -850,6 +887,11 @@ int main(){
 
     /* 28. Width of BT */
     cout<<"Width of binary tree: "<<ob.widthOfBinaryTree(ob.root)<<endl;
+
+    /* 29. Children sum property */
+    ob.childrenSumProperty(ob.root); 
+    ob.iterative_preorder(ob.root);
+    cout<<endl;
 
     return 0;
 }
