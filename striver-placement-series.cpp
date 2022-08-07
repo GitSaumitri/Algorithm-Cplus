@@ -52,11 +52,12 @@
     48. 
 */
 
-#include<iostream>
 using namespace std;
+#include<iostream>
 #include<bits/stdc++.h>
 #include <stdlib.h>
 
+/* typical linklist node */
 struct ListNode {
     int val;
     ListNode *next;
@@ -65,6 +66,7 @@ struct ListNode {
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
+/* linklist node with a bottom pointer */
 struct ListNode1 {
     int val;
     ListNode1 *next;
@@ -73,6 +75,17 @@ struct ListNode1 {
     ListNode1(int x) : val(x), next(NULL), bottom(NULL) {}
     //ListNode1(int x, ListNode1 *next) : val(x), next(next) {}
     //ListNode1(int x, ListNode1 *bottom) : val(x), bottom(bottom) {}
+};
+
+/* linklist node with random pointer can point to any of the node */
+struct ListNode2 {
+    int val;
+    ListNode2 *next;
+    ListNode2 *random;
+    ListNode2() : val(0), next(NULL), random(NULL) {}
+    ListNode2(int x) : val(x), next(NULL), random(NULL) {}
+    //ListNode2(int x, ListNode1 *next) : val(x), next(next) {}
+    //ListNode2(int x, ListNode1 *random) : val(x), random(bottom) {}
 };
 
 class placement{
@@ -1164,6 +1177,54 @@ class placement{
         return head;
     }
 
+    /* 38. Clone a linkedlist with next and random pointer
+        - hash - for each node create a deep copy = {original node, deepcopy}
+        - than travel the node and copy the deepcopy based on originla node - O(N) - space - O(N)
+        - two pointer approach -  
+    */
+    ListNode2* copyRandomList(ListNode2* head){
+        ListNode2* iter = head;
+        ListNode2* front = head;
+
+        /* First round: make copy of each node, and link them 
+        together side by side in a single list */
+        while(iter != NULL){
+            front = iter->next;
+            ListNode2* copy = new ListNode2(iter->val);
+            iter->next = copy;
+            copy->next = front;
+            iter = front;
+        }
+
+        // second round: assign random pointer for the copy node
+        iter = head;
+        while(iter != NULL){
+            if(iter->random != NULL){
+                iter->next->random = iter->random->next;
+            }
+            iter = iter->next->next;
+        }
+
+        /* third round: restore the original list and 
+            extract the copy list */
+        iter = head;
+        ListNode2 * newhead = new ListNode2(0);
+        ListNode2 * copy = newhead;
+
+        while(iter!=NULL){
+            front = iter->next->next;
+
+            //extract the copy 
+            copy->next = iter->next;
+
+            //restore the original list
+            iter->next = front;
+
+            copy = copy->next;
+            iter = front;
+        }
+        return newhead->next;
+    }
 
     //helper functions.
     /* create a linked list */
@@ -1191,6 +1252,21 @@ class placement{
         cout<<"null";
         cout<<endl;
     }
+
+    /* display random list */
+    void displayRandomList(ListNode2 *head){
+        ListNode2* iter = head;
+        while(iter != NULL){
+            cout<<iter->val<<"R(";
+            if(iter->random!=NULL)
+                cout<<iter->random->val<<")"<<"->";
+            else
+                cout<<"null)->";
+            iter = iter->next;
+        }
+        cout<<"null"<<endl;
+    }
+    
 };
 
 int main(){
@@ -1396,13 +1472,19 @@ int main(){
     ob.displayList(head);
 
     // 30. Add two numbers given in linked list
+    vector<int> arr301({2,4,3});
+    ListNode *node1 = ob.createAlist(arr301);
+    vector<int> arr302({5,6,7,9});
+    ListNode *node2 = ob.createAlist(arr302);
+    /*
     ListNode* node1 = new ListNode(2);
     node1->next = new ListNode(4);
     node1->next->next = new ListNode(3);
     ListNode* node2 = new ListNode(5);
     node2->next = new ListNode(6);
     node2->next->next = new ListNode(7);
-    node2->next->next->next = new ListNode(9);
+    node2->next->next->next = new ListNode(9); 
+    */
     ob.displayList(node1);
     ob.displayList(node2);
     cout<<"After Adding this two numbers:"<<endl;
@@ -1426,21 +1508,30 @@ int main(){
     cout<<"Is cycle "<<ob.isCycle(node1)<<endl;
 
     //33. Reverse a linkedlist in groups of size K
+    vector<int> arr33({1,2,3,4,5});
+    node1 = ob.createAlist(arr33);
+    ob.displayList(node1);
+    /*
     node1 = new ListNode(1);
     node1->next = new ListNode(2);
     node1->next->next = new ListNode(3);
     node1->next->next->next = new ListNode(4);
-    node1->next->next->next->next = new ListNode(5);
+    node1->next->next->next->next = new ListNode(5); */
     cout<<"Reverse K groups "<<endl;
     head = ob.reverseKGroup(node1,3);
     ob.displayList(head);
 
     //34. is palindrom
+    vector<int> arr34({1,2,3,2,1});
+    node1 = ob.createAlist(arr34);
+    ob.displayList(node1);
+    /*
     node1 = new ListNode(1);
     node1->next = new ListNode(2);
     node1->next->next = new ListNode(3);
     node1->next->next->next = new ListNode(2);
     node1->next->next->next->next = new ListNode(1);
+    */
     cout<<"Is Palindrom "<<ob.isPalindrom(node1)<<endl;
 
     //35. find the starting point
@@ -1464,17 +1555,26 @@ int main(){
     cout<<endl;
 
     // 37. Rotate a ll
-    node1 = new ListNode(1);
-    node1->next = new ListNode(2);
-    node1->next->next = new ListNode(3);
-    node1->next->next->next = new ListNode(4);
+    vector<int> arr37({1,2,3,4});
+    node1 = ob.createAlist(arr37);
+    ob.displayList(node1);
     node1 = ob.rotateRight(node1, 2);
     cout<<"Rotate list 2 times: ";
-    while(node1!=nullptr){
-        cout<<node1->val<<" ";
-        node1=node1->next; 
-    }
-    cout<<endl;
+    ob.displayList(node1);
+
+    // 38. random ll copy
+    ListNode2 * node38 = new ListNode2(1);
+    node38->next = new ListNode2(2);
+    node38->next->next = new ListNode2(3);
+    node38->next->next->next = new ListNode2(4);
+    node38->random = node38->next->next->next;
+    node38->next->random = node38;
+    node38->next->next->random = NULL;
+    node38->next->next->next->random = node38->next;   
+    ob.displayRandomList(node38);
+    cout<<"Copy random list:";
+    ListNode2* copy = ob.copyRandomList(node38);
+    ob.displayRandomList(copy);
 
     return 0;
 }
