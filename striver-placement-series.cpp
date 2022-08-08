@@ -1226,6 +1226,47 @@ class placement{
         return newhead->next;
     }
 
+    /* 39. 3SUM
+       Given an array nums of n integers, are there elements a,b,c in nums
+       such that a+b+c=0? Find all unique triplets in the array which gives
+       the sum of 0.
+        - three loops - O(n3logn)
+        - optimised - O(n*n)
+    */
+    vector<vector<int>> threeSum(vector<int>& nums){
+
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> res;
+
+        for(int i=0; i<nums.size()-2; i++){
+
+            if(i==0 || (i>0 && nums[i]!=nums[i-1])){
+
+                int lo = i+1, hi = nums.size()-1, sum=0-nums[i];
+
+                while(lo < hi){
+                    if(nums[lo]+nums[hi]==sum){
+                        vector<int> temp;
+                        temp.push_back(nums[lo]);
+                        temp.push_back(nums[hi]);
+                        temp.push_back(nums[i]);
+                        res.push_back(temp);
+
+                        while(lo<hi && nums[lo] == nums[hi]) lo++;
+                        while(lo<hi && nums[hi] == nums[hi-1]) hi--;
+
+                        lo++;hi--;
+                    }
+                    else if(nums[lo]+nums[hi] < sum) lo++;
+                    else    hi--;
+                }
+            }
+        }
+        return res;
+    }
+
+
+
     //helper functions.
     /* create a linked list */
     ListNode * createAlist(vector<int> nums){
@@ -1266,7 +1307,15 @@ class placement{
         }
         cout<<"null"<<endl;
     }
-    
+
+    void displayArr(vector<int> arr){
+        cout<<"{";
+        for(int i=0; i<arr.size(); i++){
+            cout<<arr[i]<<" ";
+        }
+        cout<<"}";
+        cout<<endl;
+    }  
 };
 
 int main(){
@@ -1575,6 +1624,14 @@ int main(){
     cout<<"Copy random list:";
     ListNode2* copy = ob.copyRandomList(node38);
     ob.displayRandomList(copy);
+
+    // 39. 3SUM
+    vector<int> arr39({-1,0,1,2,-1,-1});
+    vector<vector<int>> res39 = ob.threeSum(arr39);
+    cout<<"Three SUM"<<endl;
+    for(auto a: res39){
+        ob.displayArr(a);
+    }
 
     return 0;
 }
