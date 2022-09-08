@@ -188,7 +188,8 @@ class BinaryTreeSeries{
     /* 38. Flatterened a binary tree to linked list */
     
     /* 39. Introduction to binary search tree */
-    
+    TreeNode * searchBST(TreeNode* root, int val);
+
     /* 40. Search in a Binary search tree */
     /* 41. Ceil in a binary search tree */
     /* 42. Floor in a binary search tree */
@@ -763,6 +764,13 @@ void BinaryTreeSeries::childrenSumProperty(BinaryTree* root){
     if(root->left or root->right) root->data = total;
 }
 
+/* 40. Search in a binary search tree */
+TreeNode * searchBST(TreeNode* root, int val){
+    while(root!=NULL and root->data != val){
+        root = val < root->data ? root->left : root->right;
+    }
+    return root;
+}
 
 int main(){
 
@@ -921,6 +929,9 @@ int main(){
     ob.childrenSumProperty(ob.root); 
     ob.iterative_preorder(ob.root);
     cout<<endl;
+
+    /* 40. Binary search tree */
+    //TreeNode * searchBST(TreeNode* root, int val);
 
     return 0;
 }
