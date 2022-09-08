@@ -176,6 +176,35 @@ class BinaryTreeSeries{
 
     /* 29. Children sum property */
     void childrenSumProperty(BinaryTree* root);
+
+    /* 30. Print all nodes to a distance K in Binary tree */
+    /* 31. Minimum time taken to Burn the binary tree from root to node */
+    /* 32. Count total nodes in a complete binary tree */
+    /* 33. Requirement needed to construct a unique binary tree */
+    /* 34. Construct a binary tree from preorder and inorder */
+    /* 35. Construct a binary tree from postorder and inorder */
+    /* 36. Serialize and de-serialize binary tree */
+    /* 37. Morris traversal - preorder - inorder */
+    /* 38. Flatterened a binary tree to linked list */
+    
+    /* 39. Introduction to binary search tree */
+    
+    /* 40. Search in a Binary search tree */
+    /* 41. Ceil in a binary search tree */
+    /* 42. Floor in a binary search tree */
+    /* 43. Insert a given node in binary search tree */
+    /* 44. Delete a node in binary search tree */
+    /* 45. K-th smallest/largest element in a BST */
+    /* 46. Check if a tree is a BST */
+    /* 47. LCA in BST */
+    /* 48. Construct a BST from a preorder traversal */
+    /* 49. Inorder successor/predecessor in BST */
+    /* 50. Binary search tree iterator */
+    /* 51. Two SUM in BST */
+    /* 52. Correct BST with two nodes swapped */
+    /* 53. Largest BST in Binary tree */ 
+
+
 };
 
 /* 5. recurssive preorder traversal */
