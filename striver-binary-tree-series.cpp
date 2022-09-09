@@ -192,8 +192,9 @@ class BinaryTreeSeries{
     TreeNode * searchBST(TreeNode* root, int val);
     /* 41. Ceil in a binary search tree */
     int findCeilinBST(TreeNode* root, int val);
-
     /* 42. Floor in a binary search tree */
+    int findFloorBST(TreeNode* root, int val);
+
     /* 43. Insert a given node in binary search tree */
     /* 44. Delete a node in binary search tree */
     /* 45. K-th smallest/largest element in a BST */
@@ -797,6 +798,23 @@ int BinaryTreeSeries::findCeilinBST(TreeNode* root, int key){
     return ceil;
 }
 
+/* 42. Find Floor in a BST */
+int BinaryTreeSeries::findFloorBST(TreeNode* root, int key){
+    int floor=-1;
+    while(root){
+        if(root->data == key){
+            floor = root->data;
+            break;
+        }
+        if(root->data > key){
+            root = root->left;
+        }else{
+            floor = root->data;
+            root = root->right;
+        }
+    }
+    return floor;
+}
 
 int main(){
 
@@ -966,8 +984,14 @@ int main(){
     TreeNode * bs40 =  ob.searchBST(bstroot, 5);
     cout<<"Binary Tree Search result:"<<bs40->data<<endl;
 
-    int ceil = ob.findCeilinBST(bstroot, 4);
+    /* 41. Ceil in Binary search tree */
+    int ceil = ob.findCeilinBST(bstroot, 5);
     cout<<"Ceil of the value in BST:"<<ceil<<endl;
+
+    /* 42. Floor in Binary search tree */
+    int floor = ob.findFloorBST(bstroot, 9);
+    cout<<"Floor of the value in BST:"<<floor<<endl;
+
 
 
     return 0;
