@@ -194,8 +194,9 @@ class BinaryTreeSeries{
     int findCeilinBST(TreeNode* root, int val);
     /* 42. Floor in a binary search tree */
     int findFloorBST(TreeNode* root, int val);
-
     /* 43. Insert a given node in binary search tree */
+    TreeNode * insertIntoBST(TreeNode *bst, int val);
+
     /* 44. Delete a node in binary search tree */
     /* 45. K-th smallest/largest element in a BST */
     /* 46. Check if a tree is a BST */
@@ -816,6 +817,33 @@ int BinaryTreeSeries::findFloorBST(TreeNode* root, int key){
     return floor;
 }
 
+/* 43. Insert a node in an bst */
+/* Find where it can be and insert */
+TreeNode * BinaryTreeSeries::insertIntoBST(TreeNode *bst, int val){
+    if(bst == NULL)
+        return new TreeNode(val);
+    TreeNode *curr = bst;
+    while(true){
+        if(curr->data > val){
+            if(curr->left == NULL){
+                curr->left = new TreeNode(val);
+                break;
+            }else{
+                curr = curr->left;
+            }
+        } else {
+            if(curr->right == NULL){
+                curr->right = new TreeNode(val);
+                break;
+            } else {
+                curr = curr->right;
+            }
+        }
+    }
+    return bst;
+}
+
+
 int main(){
 
     BinaryTreeSeries ob;
@@ -992,7 +1020,9 @@ int main(){
     int floor = ob.findFloorBST(bstroot, 9);
     cout<<"Floor of the value in BST:"<<floor<<endl;
 
-
+    /* 43. insert in bst */
+    TreeNode * bs43 = ob.insertIntoBST(bstroot, 13);
+    ob.levelorder_traversal(bstroot);
 
     return 0;
 }
