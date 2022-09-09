@@ -53,6 +53,7 @@
 using namespace std;
 #include<bits/stdc++.h>
 
+#define TreeNode BinaryTree
 struct BinaryTree {
     int data;
     struct BinaryTree *left;
@@ -144,7 +145,6 @@ class BinaryTreeSeries{
     void addLeavesBoundary(BinaryTree *root, vector<int>& res);
     vector<int> printBoundary(BinaryTree *root);
 
-#define TreeNode BinaryTree
     /* 21. Vertical order traversal */
     vector<vector<int>> verticalTraversal(TreeNode *root);
 
@@ -186,12 +186,13 @@ class BinaryTreeSeries{
     /* 36. Serialize and de-serialize binary tree */
     /* 37. Morris traversal - preorder - inorder */
     /* 38. Flatterened a binary tree to linked list */
-    
     /* 39. Introduction to binary search tree */
-    TreeNode * searchBST(TreeNode* root, int val);
 
     /* 40. Search in a Binary search tree */
+    TreeNode * searchBST(TreeNode* root, int val);
     /* 41. Ceil in a binary search tree */
+    int findCeilinBST(TreeNode* root, int val);
+
     /* 42. Floor in a binary search tree */
     /* 43. Insert a given node in binary search tree */
     /* 44. Delete a node in binary search tree */
@@ -765,12 +766,37 @@ void BinaryTreeSeries::childrenSumProperty(BinaryTree* root){
 }
 
 /* 40. Search in a binary search tree */
-TreeNode * searchBST(TreeNode* root, int val){
+TreeNode * BinaryTreeSeries::searchBST(TreeNode* root, int val){
     while(root!=NULL and root->data != val){
         root = val < root->data ? root->left : root->right;
     }
     return root;
 }
+
+/* 41. Find ceil in a binary search tree */
+/* find the minimum value which is greater than the input val
+    that means from root go to right until you get the number 
+    greater than the input then come to left until you get a 
+    number less than the input then keep on going to right 
+    to get the result. */
+
+int BinaryTreeSeries::findCeilinBST(TreeNode* root, int key){
+    int ceil = -1;
+    while(root){
+        if(root->data == key){
+            ceil = root->data;
+            break;
+        }
+        if(key > root->data){
+            root = root->right;
+        }else{
+            ceil = root->data;
+            root = root->left;
+        }
+    }
+    return ceil;
+}
+
 
 int main(){
 
@@ -931,7 +957,18 @@ int main(){
     cout<<endl;
 
     /* 40. Binary search tree */
-    //TreeNode * searchBST(TreeNode* root, int val);
+    TreeNode *bstroot = new TreeNode(12);
+    bstroot->left = new TreeNode(8);
+    bstroot->right = new TreeNode(15);
+    bstroot->left->left = new TreeNode(5);
+    bstroot->left->right = new TreeNode(10);
+
+    TreeNode * bs40 =  ob.searchBST(bstroot, 5);
+    cout<<"Binary Tree Search result:"<<bs40->data<<endl;
+
+    int ceil = ob.findCeilinBST(bstroot, 4);
+    cout<<"Ceil of the value in BST:"<<ceil<<endl;
+
 
     return 0;
 }
