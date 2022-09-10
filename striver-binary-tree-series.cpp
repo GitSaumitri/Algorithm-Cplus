@@ -1185,9 +1185,9 @@ int main(){
     /* 48. bst from preOrder */
     vector<int> arr48({8,5,1,7,10,12});
     TreeNode* bst48r = ob.bstFromPreorder(arr48);
-    cout<<"New BST from preorder:"
+    cout<<"New BST from preorder:";
     ob.recurssive_inorder(bst48r);
     cout<<endl;
-    
+
     return 0;
 }
