@@ -49,7 +49,41 @@
     45. Job sequencing problem
     46. Minimum coins
     47. Fractional knapsack
-    48. 
+    48. Subset sum -1
+    49. Subset sum -2
+    50. Print all permutation of a string/array - 1 
+    51. Print all permutation of a string/array - 2
+    52. Combination sum
+    53. Combination sum-2
+    54. Palindrom partitioning
+    55. Kth permuation sequence
+    56. N queen
+    57. Sudoku solver
+    58. M coloring problem
+    59. Rate in a Maze
+    60. Nth root of a number using binary search
+    61. find element appear once in a sorted array (all other twice)
+    62. search element in a rotated array
+    63. Median of row wise sorted matrix (nested binary search)
+    64. Median of two sorted array (binary search)
+    65. kth element of two sorted array
+    66. Power set - Print all subsequences
+    67. Implenetation stack using array
+    68. Allocate minimum number of pages - binary search
+    69. Aggressive cows - binary search
+    70. Queue implementation using array
+    71. Stack imeplentation using single queue
+    72. Queue implemenation using stack
+    73. Valid parentheses
+    74. Next greater element
+    75. Implement LRU cache
+    76. Implement LRU cache
+    77. Implement LFU cache
+    78. Implement LFU cache
+    79. Largest rectange in histogram
+    80. Largest rectange in histogram
+    81. Sliding window maximum
+    82. Rottange Oranges
 */
 
 using namespace std;

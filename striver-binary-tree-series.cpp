@@ -967,6 +967,9 @@ TreeNode* BinaryTreeSeries::lcaBST(TreeNode* root, int a, int b){
 }
 
 /* 48. bst from preorder */
+/* bst nodes are always between a range - make use of upper bound here 
+   left node will always smaller than the root node - otherwise return null 
+   right node will be always be smaller than its smaller than the roots parent */
 TreeNode* BinaryTreeSeries::bstBuild(vector<int>& arr, int& i, int bound){
     if( i == arr.size() || arr[i] > bound)
         return NULL;
