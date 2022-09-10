@@ -206,9 +206,19 @@ class BinaryTreeSeries{
     TreeNode * deleteNodeBST(TreeNode *bst, int val);
 
     /* 45. K-th smallest/largest element in a BST */
+    TreeNode* kthLargest(TreeNode* root, int &k);
+    TreeNode* kthSmallest(TreeNode* root, int &k);
+
     /* 46. Check if a tree is a BST */
+    bool validateBST(TreeNode *root, TreeNode *low, TreeNode *high);
+
     /* 47. LCA in BST */
+    TreeNode * lcaBST(TreeNode* root, int a, int b);
+
     /* 48. Construct a BST from a preorder traversal */
+    TreeNode* bstFromPreorder(vector<int>& arr);
+    TreeNode* bstBuild(vector<int>& arr, int& i, int bound);
+
     /* 49. Inorder successor/predecessor in BST */
     /* 50. Binary search tree iterator */
     /* 51. Two SUM in BST */
@@ -851,6 +861,12 @@ TreeNode * BinaryTreeSeries::insertIntoBST(TreeNode *bst, int val){
 }
 
 /* 44. delete a node in BST */
+/* it can be done in two ways
+    1a.left of deleted node will point to root of the deleted node
+    1b.right of delete node will be pointing to the last right of the left tree
+    2a. right of deleted node will point to the root of the deleted node
+    22b. left of deleted node will be pointing to the last left of the right tree
+*/
 TreeNode * BinaryTreeSeries::findlastRight(TreeNode *root){
     if(root->right==NULL)
         return root;
@@ -891,6 +907,78 @@ TreeNode * BinaryTreeSeries::deleteNodeBST(TreeNode *root, int key){
         } 
     }
     return dummy;
+}
+
+/* 45. kth smallest element in bst */
+/*  inorder of every bst is in sorted order (increasing)
+    reverse of inorder of bst is in sorted order (decreasing)
+*/
+TreeNode* BinaryTreeSeries::kthSmallest(TreeNode* root, int &k){
+    if(root==NULL)
+        return NULL;
+
+    TreeNode * left = kthSmallest(root->left, k);
+    if(left)
+        return left;
+    k--;
+    if(k == 0)
+        return root;
+    return kthSmallest(root->right, k);
+}
+
+TreeNode* BinaryTreeSeries::kthLargest(TreeNode* root, int &k){
+    if(root == NULL)
+        return NULL;
+    
+    TreeNode * right = kthLargest(root->right, k);
+    if(right)
+        return right;
+
+    k--;
+    if(k == 0)
+        return root;
+
+    return kthLargest(root->left, k);
+}
+
+/* 46. Validate BST */
+bool BinaryTreeSeries::validateBST(TreeNode *root, TreeNode *low, TreeNode *high){
+    if(root==NULL)
+        return true;
+
+    if(low!=NULL && root->data < low->data)
+        return false;
+    if(high!=NULL && root->data > high->data)
+        return false;
+
+    return (validateBST(root->left, NULL, root) && 
+            validateBST(root->right, root, NULL));
+}
+
+/* 47. LCA of BST */
+TreeNode* BinaryTreeSeries::lcaBST(TreeNode* root, int a, int b){
+    if(root==NULL)
+        return NULL;
+    if(root->data > a && root->data > b)
+        return lcaBST(root->left, a, b);
+    if(root->data < a && root->data < b)
+        return lcaBST(root->right, a, b);
+    return root;
+}
+
+/* 48. bst from preorder */
+TreeNode* BinaryTreeSeries::bstBuild(vector<int>& arr, int& i, int bound){
+    if( i == arr.size() || arr[i] > bound)
+        return NULL;
+    TreeNode* root = new TreeNode(arr[i++]);
+    root->left = bstBuild(arr, i, root->data);
+    root->right = bstBuild(arr, i, bound);
+    return root;
+}
+
+TreeNode* BinaryTreeSeries::bstFromPreorder(vector<int>& arr){
+    int i = 0;
+    return bstBuild(arr, i, INT_MAX);
 }
 
 int main(){
@@ -1079,5 +1167,27 @@ int main(){
     cout<<endl;
     ob.levelorder_traversal(bst44);
 
+    /* 45. kth smallest and largest in bst */
+    int k = 3;
+    TreeNode* bst45 = ob.kthLargest(bstroot, k);
+    cout<<endl<<"Find 3rd Largest "<<bst45->data;
+    k = 3;
+    bst45 = ob.kthSmallest(bstroot, k);
+    cout<<endl<<"Find 3rd smallest "<<bst45->data<<endl;
+
+    /* 46. Validate BST */
+    cout<<"isBST "<<ob.validateBST(bstroot, NULL, NULL)<<endl;
+
+    /* 47. LCA of bst */
+    TreeNode* bst47 = ob.lcaBST(bstroot, 8,15);
+    cout<<"lca of 8 and 15 is "<<bst47->data<<endl;
+
+    /* 48. bst from preOrder */
+    vector<int> arr48({8,5,1,7,10,12});
+    TreeNode* bst48r = ob.bstFromPreorder(arr48);
+    cout<<"New BST from preorder:"
+    ob.recurssive_inorder(bst48r);
+    cout<<endl;
+    
     return 0;
 }
