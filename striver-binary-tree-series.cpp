@@ -190,14 +190,21 @@ class BinaryTreeSeries{
 
     /* 40. Search in a Binary search tree */
     TreeNode * searchBST(TreeNode* root, int val);
+
     /* 41. Ceil in a binary search tree */
     int findCeilinBST(TreeNode* root, int val);
+    
     /* 42. Floor in a binary search tree */
     int findFloorBST(TreeNode* root, int val);
+    
     /* 43. Insert a given node in binary search tree */
     TreeNode * insertIntoBST(TreeNode *bst, int val);
-
+    
     /* 44. Delete a node in binary search tree */
+    TreeNode * findlastRight(TreeNode *root);
+    TreeNode * deleteHelper(TreeNode *root);
+    TreeNode * deleteNodeBST(TreeNode *bst, int val);
+
     /* 45. K-th smallest/largest element in a BST */
     /* 46. Check if a tree is a BST */
     /* 47. LCA in BST */
@@ -843,6 +850,48 @@ TreeNode * BinaryTreeSeries::insertIntoBST(TreeNode *bst, int val){
     return bst;
 }
 
+/* 44. delete a node in BST */
+TreeNode * BinaryTreeSeries::findlastRight(TreeNode *root){
+    if(root->right==NULL)
+        return root;
+    return findlastRight(root->right);
+}
+TreeNode * BinaryTreeSeries::deleteHelper(TreeNode *root){
+    if(root->left==NULL){
+        return root->right;
+    }else if(root->right==NULL){
+        return root->left;
+    }
+    TreeNode *rightChild = root->right;
+    TreeNode *lastRight = findlastRight(root->left);
+    lastRight->right = rightChild;
+    return root->left;
+}
+TreeNode * BinaryTreeSeries::deleteNodeBST(TreeNode *root, int key){
+    if(root==NULL)
+        return root;
+    if(root->data==key)
+        return deleteHelper(root);
+    TreeNode *dummy = root;
+    while(root!=NULL){
+        if(root->data>key){
+            if(root->left!=NULL && root->left->data==key){
+                root->left = deleteHelper(root->left);
+                break;
+            } else {
+                root = root->left;
+            }
+        } else {
+            if(root->right!=NULL && root->right->data==key){
+                root->right = deleteHelper(root->right);
+                break;
+            }else{
+                root = root->right;
+            }
+        } 
+    }
+    return dummy;
+}
 
 int main(){
 
@@ -1021,8 +1070,14 @@ int main(){
     cout<<"Floor of the value in BST:"<<floor<<endl;
 
     /* 43. insert in bst */
-    TreeNode * bs43 = ob.insertIntoBST(bstroot, 13);
-    ob.levelorder_traversal(bstroot);
+    TreeNode * bst43 = ob.insertIntoBST(bstroot, 13);
+    cout<<endl;
+    ob.levelorder_traversal(bst43);
+
+    /* 44. delete a node in bst */
+    TreeNode * bst44 = ob.deleteNodeBST(bstroot, 13);
+    cout<<endl;
+    ob.levelorder_traversal(bst44);
 
     return 0;
 }
