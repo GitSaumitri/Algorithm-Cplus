@@ -1,6 +1,35 @@
 /* Strivers Graph series */
     /*  1. Introduction to Graphs
-        2. 
+        2. Graph representation in C++
+        3. Grpah representation in Java
+        4. What are connected components
+        5. BFS
+        6. DFS
+        7. Number of Provinces
+        8. Number of Islands
+        9. Flood Fill Algorithm
+        10. Rotten Oranges
+        11. Detect a cycle in an undirected graph - BFS
+        12. Detect a cycle in an undirected graph - DFS
+        13. Distance of nearest cell having 1 - 0/1 matrix
+        14. Surrounded Regions - replace 0's with X's
+        15. Number of Enclaves - Multi-source BFS
+        16. Number of distinct Islands
+        17. Bipartite Graph - BFS
+        18. Bipartite Graph - DFS
+        19. Detect cycles in a directed graph using DFS
+        20. Find eventual safe states - DFS
+        21. Topological sort - DFS
+        22. Kahn's algorithm
+        23. Detect a cycle in directed graph
+        24. Course schedule - I, II - topological sort
+        25. Find eventual safe state - BFS - topological sort
+        26. Alien dictionary - topological sort
+        27. Shortest part in directed cyclic graph - topological sort
+        28. Shortest part in undirected graph 
+        29. Word ladder - 1 - shortest paths
+        30. Word ladder - 2 - shortest paths
+        31. Word ladder - 2 - optimised approach 
     */
 #include<iostream>
 using namespace std;
@@ -127,6 +156,9 @@ vector<int> dfsOfGraph(int v, vector<int> adj[]){
     return ls;
 }
 
+/* Number of Provinces.
+
+*/
 
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;
