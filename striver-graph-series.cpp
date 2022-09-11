@@ -72,11 +72,12 @@ class BinaryTreeSeries{
     - while queue is not empty - (take the element taken out from the queue)   
         - push all the neighbors into queue (if it's not visited)
         - mark the nodes as visited (visited arrat)
+    - based on starting node - the result traversal will be different
     space complexity - O(3N) ~ O(N)
     time complexity - O(N) + O(2E)
 */
-vector<int> bfsOfGraph(int V, vector<int> adj[]) {
-    int vis[n] = {0};
+vector<int> bfsOfGraph(int v, vector<int> adj[]) {
+    int vis[v] = {0};
     vis[0] = 1;
     queue<int> q;
     q.push(0);
@@ -84,7 +85,7 @@ vector<int> bfsOfGraph(int V, vector<int> adj[]) {
     while(!q.empty()){
         int node = q.front();
         q.pop();
-        bfs.push(node);
+        bfs.push_back(node);
         for(auto it: adj[node]) {
             if(!vis[it]){
                 vis[it] = 1;
@@ -94,6 +95,38 @@ vector<int> bfsOfGraph(int V, vector<int> adj[]) {
     }
     return bfs;
 }
+
+/* 5. Depth First Search (DFS)
+    - before traversing all neighbor(libe BFS) - traversal one node in depth first
+    - goes in depth before going to next neighbor
+    - based on the starting node - traversal will be different
+    - start with the root 
+        - recurssively call the node
+        - mark them visited for the recurssive visited nodes
+        - once return from above recurssive call the same for next node
+    space complexity - O(3N) ~ O(N)
+    time complexity - O(N) + O(2E) 
+                    - calling recurssion once + degree of graph (number of times each node will be called)
+*/
+void dfs(int node, vector<int> adj[], int vis[], vector<int> &ls){
+    vis[node] = 1;
+    ls.push_back(node);
+    //traverse all its neighbor
+    for(auto it: adj[node]){
+        if(!vis[it]){
+            dfs(it, adj, vis, ls);
+        }
+    }
+}
+
+vector<int> dfsOfGraph(int v, vector<int> adj[]){
+    int vis[v] = {0};
+    int start = 0;
+    vector<int> ls;
+    dfs(start, adj, vis, ls);
+    return ls;
+}
+
 
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;
