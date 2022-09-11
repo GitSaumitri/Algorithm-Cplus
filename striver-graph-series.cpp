@@ -5,8 +5,8 @@
         4. What are connected components
         5. BFS
         6. DFS
-        7. Number of Provinces
-        8. Number of Islands
+        7. Number of Provinces - connected components
+        8. Number of Islands - connected components
         9. Flood Fill Algorithm
         10. Rotten Oranges
         11. Detect a cycle in an undirected graph - BFS
@@ -156,9 +156,82 @@ vector<int> dfsOfGraph(int v, vector<int> adj[]){
     return ls;
 }
 
-/* Number of Provinces.
-
+/* 7. Number of Provinces - connected components
+    - find out number of connected components
+    - any traversal can be used - BFS or DFS
+    - traverse till the nodes are not visited 
+    space complexity - O(N) for visited array - O(N) recurssion stack space
+    time complexity - O(N) + O(v + 2E)
 */
+void dfs1(int node, vector<int> adj[], int vis[]){
+    vis[node]=1;
+    for(auto it: adj[node]){
+        if(!vis[it]){
+            dfs1(it, adj, vis);
+        }
+    }
+}
+
+int numProvinces(int v, vector<int> adj[]){
+    int vis[v] = {0};
+    int cnt = 0;
+    for(int i=0; i<v; i++){
+        if(!vis[i]){
+            cnt++;
+            dfs1(i, adj, vis);
+        }
+    }
+    return cnt;
+}
+
+/*  8. Number of Islands
+    - same as above, here instead of adj list - this is a matrix
+    - space complex - O(N*N) - visiting the matrix
+    - time complex - O(N*N) + 9 rows - O(N*N)
+*/
+void bfs(int i, int j, vector<vector<int>>& vis, vector<vector<char>>& grid){
+    int n = grid.size();
+    int m = grid[0].size();
+    vis[i][j] = 1;
+    queue<pair<int,int>> q;
+    q.push({i,j});
+
+    while(!q.empty()){
+        int row = q.front().first;
+        int col = q.front().second;
+
+        //traverse its neighbors and mark them as visited
+        for(int row=-1; row<=1; row++){
+            for(int col=-1; col<=1; col++){
+                int nrow = i + row;
+                int ncol = i + col;
+                if(nrow >=0 && nrow < n && ncol >=0 && ncol < m 
+                    && grid[nrow][ncol] == '1' && !vis[nrow][ncol]){
+                        vis[nrow][ncol] = 1;
+                        q.push({nrow, ncol});
+                    }
+            }
+        }
+    }
+    
+}
+
+int numsIslands(vector<vector<char>>& grid){
+    int n = grid.size();
+    int m = grid[0].size();
+    vector<vector<int>> vis(n, vector<int>(m,0));
+    int cnt = 0;
+    for(int row=0; row<n; row++){
+        for(int col=0; col<m; col++){
+            if(!vis[row][col] && grid[row][col]=='1'){
+                cnt++;
+                bfs(row, col, vis, grid);
+            }
+        }
+    }
+    return cnt;
+}
+
 
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;

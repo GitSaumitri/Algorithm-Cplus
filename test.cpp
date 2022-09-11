@@ -35,6 +35,12 @@ void mergesort(vector<int>& nums, int low, int high){
     merge(nums,low,mid,high);
 }
 
+void printBacktracking(int i, int n){
+    if(i > n)
+        return;
+    printBacktracking(i+1,n);
+    cout<<i;
+}
 int main(){
     vector<int> arr;
     arr.push_back(3);
@@ -48,5 +54,8 @@ int main(){
     for(int i=0; i<arr.size(); i++){
         cout<<arr[i]<<" ";
     }
+    cout<<endl;
+    
+    printBacktracking(1,3);
     return 0;
 }

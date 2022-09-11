@@ -220,6 +220,8 @@ class BinaryTreeSeries{
     TreeNode* bstBuild(vector<int>& arr, int& i, int bound);
 
     /* 49. Inorder successor/predecessor in BST */
+    TreeNode* inorderSuccessorBST(TreeNode *root, int val);
+
     /* 50. Binary search tree iterator */
     /* 51. Two SUM in BST */
     /* 52. Correct BST with two nodes swapped */
@@ -984,6 +986,26 @@ TreeNode* BinaryTreeSeries::bstFromPreorder(vector<int>& arr){
     return bstBuild(arr, i, INT_MAX);
 }
 
+/* 49. Inorder successor/predecessor on bst */
+/*
+    - in order traversal - store in a list and find the next element
+    - while traversing inorder, stop at the next greater element to given element 
+    - logic - successor is always greater than the element   
+    Note the inout val can be a node as well.   
+*/
+TreeNode* BinaryTreeSeries::inorderSuccessorBST(TreeNode *root, int val){
+    TreeNode * successor = NULL;
+    while( root != NULL ){
+        if(root->data <= val){
+            root = root->right;
+        } else {
+            successor = root;
+            root = root->left;
+        }
+    }
+    return successor;
+}
+
 int main(){
 
     BinaryTreeSeries ob;
@@ -1191,6 +1213,10 @@ int main(){
     cout<<"New BST from preorder:";
     ob.recurssive_inorder(bst48r);
     cout<<endl;
+
+    /* 49. inorder successor */
+    TreeNode* bst49 = ob.inorderSuccessorBST(bst48r, 1);
+    cout<<"Inorder successor of 1 is "<<bst49->data<<endl;
 
     return 0;
 }
