@@ -6,8 +6,8 @@
         5. BFS
         6. DFS
         7. Number of Provinces - connected components
-        8. Number of Islands - connected components
-        9. Flood Fill Algorithm
+        8. Number of Islands - connected components - BFS or DFS
+        9. Flood Fill Algorithm - DFS or BFS
         10. Rotten Oranges
         11. Detect a cycle in an undirected graph - BFS
         12. Detect a cycle in an undirected graph - DFS
@@ -230,6 +230,101 @@ int numsIslands(vector<vector<char>>& grid){
         }
     }
     return cnt;
+}
+
+/* 9. Floodfill algorithm
+    - can be done in DFS or BFS
+    space complexity - O(n*m) + O(n*m)
+    time complexity - every node traverse in 4 directions
+                    -   x nodes with 4 direction - O(x) + 4 * O(x) = O(x)
+                    - O(n*m)
+*/
+void dfs(int row, int col, 
+        vector<vector<int>>&dimage, 
+        vector<vector<int>>&simage, 
+        int initColor, int newColor){
+    dimage[row][col] = newColor;
+    int n = simage.size();
+    int m = simage[0].size();
+    vector<vector<int>> dir({{-1,0},{0,1},{1,0},{0,-1}});
+    for(int i=0; i<4; i++){
+        int nrow = row + dir[i][0];
+        int ncol = col + dir[i][1];
+        if(nrow>=0 && nrow<n && ncol>=0 && ncol<m &&
+            simage[nrow][ncol] == initColor && dimage[nrow][ncol] != newColor){
+                dfs(nrow, ncol, dimage, simage, initColor, newColor);
+            }
+    }
+}
+
+vector<vector<int>> floodFill(vector<vector<int>> &image, 
+                                int sr, int sc, int newColor ){
+    int initColor = image[sr][sc];
+    vector<vector<int>> ans = image;
+    dfs(sr,sc,ans,image, initColor, newColor);
+    return ans;
+}
+
+/* 10. Rotten Oranges 
+    - each orange rotten all it's neighbor 
+    - all fresh oranges in the same level - BFS
+    - if we would have taken DFS - it will take more time to reach all it's neighbors
+    - since we want to rotten then simultaniously so BFS
+*/
+int orangeRotting(vector<vector<int>>& grid){
+    int n = grid.size();
+    int m = grid[0].size();
+
+    //{{r,c},t}
+    queue<pair<pair<int,int>,int>> q;
+    int vis[n][m]={{0}};
+    int cntFresh = 0;
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            if(grid[i][j]==2){
+                q.push({{i,j},0});
+                vis[i][j] = 2;
+            } else {
+                vis[i][j] = 0;
+            }
+            if(grid[i][j]==1)
+                cntFresh++;
+        }
+    }
+
+    int tm = 0;
+    int cnt = 0;
+    vector<vector<int>> dir({{-1,0},{0,1},{1,0},{0,1}});
+    while(!q.empty()){
+        int r = q.front().first.first;
+        int c = q.front().first.second;
+        int t = q.front().second;
+        tm = max(tm, t);
+        q.pop();
+        for(int i=0; i<4; i++){
+            int nrow = r + dir[i][0];
+            int ncol = c + dir[i][1];
+            if(nrow>=0 && nrow<n && ncol >= 0 && ncol < m &&
+                grid[nrow][ncol] == 1 && vis[nrow][ncol] != 2){
+                    vis[nrow][ncol] = 2;
+                    q.push({{nrow,ncol}, t+1});
+                    cnt++;
+                }
+        }
+    }
+
+    /* check all orange are rotten
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            if(vis[i][j]!=2 && grid[i][j]==1)
+                return -1;
+        }
+    } 
+    */
+    if(cnt != cntFresh)
+        return -1;
+
+    return tm;
 }
 
 
