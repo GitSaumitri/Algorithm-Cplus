@@ -1300,6 +1300,72 @@ class placement{
     }
 
 
+    /* 40. Trapping rainwater
+        - double loop
+        - use prefix sum from left right and right side
+        - two pointer approach
+    */    
+    int trap(vector<int>& height){
+        int n = height.size();
+        int left = 0;
+        int right = n-1;
+        int res = 0;
+        int maxleft = 0, maxright=0;
+
+        while(left <= right){
+            if(height[left] <= height[right]){
+                if(height[left]>=maxleft)
+                    maxleft = height[left];
+                else    
+                    res += maxleft-height[left];
+                left++;
+            } else {
+                if(height[right]>=maxright)
+                    maxright = height[right];
+                else    
+                    res += maxright-height[right];
+                right--;
+            }
+        }
+        return res;
+    }
+
+    /* 41. remove duplicates from sorted array and 
+        return the size of result array */
+    /*  - can use a hash set - O(n)
+        - two pointer 
+    */
+    int removeDuplicates(vector<int>& nums){
+        if(nums.size()==0)
+            return 0;
+        int i=0;
+        for(int j=1; j < nums.size(); j++){
+            if(nums[j] != nums[i]){
+                i++;
+                nums[i] = nums[j];
+            }
+        }
+
+        return i+1;
+    }
+
+    /* 42. Max consecutive 1's */
+    int findMaxConsecutiveOnes(vector<int>& nums){
+        int cnt=0;
+        int maxi=0;
+        for(int i=0; i<nums.size(); i++){
+            if(nums[i]==1)
+                cnt++;
+            else
+                cnt=0;
+            maxi = max(maxi, cnt);
+        }
+        return maxi;
+    }
+
+    /* 43. N meeting in one Room */
+
+
 
     //helper functions.
     /* create a linked list */
@@ -1666,6 +1732,8 @@ int main(){
     for(auto a: res39){
         ob.displayArr(a);
     }
+
+    //40. Trapping rainwater
 
     return 0;
 }
