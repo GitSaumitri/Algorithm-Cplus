@@ -295,10 +295,75 @@ https://practice.geeksforgeeks.org/problems/find-whether-path-exist5238/1?page=2
         return false;
     }
 
+/* Next greater element 
+Given an array arr[ ] of size N having elements, the task is to find the next greater element for each element of the array in order of their appearance in the array.
+Next greater element of an element in the array is the nearest element on the right which is greater than the current element.
+If there does not exist next greater of current element, then next greater element for current element is -1. For example, next greater of the last element is always -1.
+https://practice.geeksforgeeks.org/problems/next-larger-element-1587115620/1?page=3&difficulty[]=1&company[]=Amazon&curated[]=1&sortBy=submissions
+*/
+   //Function to find the next greater element for each element of the array.
+    vector<long long> nextLargerElement(vector<long long> arr, int n){
+        // Your code here
+        //int n = arr.size();
+        vector<long long> result(n, -1);
+        // create an empty stack
+        stack<int> s;
+ 
+        // do for each element
+        for (int i = 0; i < n; i++){
+        // loop till we have a greater element on top or stack becomes empty.
+ 
+            // Keep popping elements from the stack smaller than the current
+            // element, and set their next greater element to the current element
+            while (!s.empty() && arr[s.top()] < arr[i]){
+                result[s.top()] = arr[i];
+                s.pop();
+            }
+ 
+            // push current "index" into the stack
+            s.push(i);
+        }
+        return result;
+    }
+
+/* Rate in a maze
+Consider a rat placed at (0, 0) in a square matrix of order N * N. It has to reach the destination at (N - 1, N - 1). Find all possible paths that the rat can take to reach from source to destination. The directions in which the rat can move are 'U'(up), 'D'(down), 'L' (left), 'R' (right). Value 0 at a cell in the matrix represents that it is blocked and rat cannot move to it while value 1 at a cell in the matrix represents that rat can be travel through it.
+Note: In a path, no cell can be visited more than one time. If the source cell is 0, the rat cannot move to any other cell.
+https://practice.geeksforgeeks.org/problems/rat-in-a-maze-problem/1?page=2&difficulty[]=1&company[]=Amazon&curated[]=1&sortBy=submissions
+*/    
+    void solve(int i, int j, 
+        vector<vector<int>>& a, int n, 
+        vector <string>& ans, string move,
+        vector<vector<int>>& vis, int di[], int dj[]) {
+    
+        if (i == n-1 && j == n-1) {
+            ans.push_back(move);
+            return;
+        }
+        string dir = "DLRU";
+        for (int ind = 0; ind < 4; ind++) {
+        int nexti = i + di[ind];
+        int nextj = j + dj[ind];
+            if (nexti >= 0 && nextj >= 0 && nexti < n && nextj < n 
+                && !vis[nexti][nextj] && a[nexti][nextj] == 1) {
+                vis[i][j] = 1;
+                solve(nexti, nextj, a, n, ans, move + dir[ind], vis, di, dj);
+                vis[i][j] = 0;
+            }
+        }
+    }
+  //public:
+    vector<string> findPath(vector < vector < int >> & m, int n) {
+      vector<string> ans;
+      vector<vector<int>> vis(n, vector<int> (n, 0));
+      int di[] = {+1,0,0,-1};
+      int dj[] = { 0,-1,1,0};
+      if (m[0][0] == 1) 
+        solve(0, 0, m, n, ans, "", vis, di, dj);
+      return ans;
+    }
+
 };
-
-
-
 
 
 int main(){
