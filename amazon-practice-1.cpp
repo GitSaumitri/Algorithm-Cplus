@@ -205,6 +205,96 @@ https://practice.geeksforgeeks.org/problems/rotten-oranges2536/1?page=2&difficul
         return tm;
     }
 
+/* Trapping rain water 
+Given an array arr[] of N non-negative integers representing the height of blocks. If width of each block is 1, compute how much water can be trapped between the blocks during the rainy season. 
+https://practice.geeksforgeeks.org/problems/trapping-rain-water-1587115621/1?page=1&difficulty[]=1&company[]=Amazon&curated[]=1&sortBy=submissions
+*/
+    long long trappingWater(int arr[], int n){
+        // code here
+        int left = 0;
+        long long maxleft=0, maxright=0;
+        int right = n-1;
+        long long count=0;
+        
+        while(left <= right){
+            if(arr[left] <= arr[right]){
+                if(arr[left] >= maxleft){
+                    maxleft = arr[left];
+                }else{
+                    count += maxleft - arr[left];
+                }
+                left++;
+            }else{
+                if(arr[right] >= maxright){
+                    maxright = arr[right];   
+                }else{
+                    count += maxright - arr[right];
+                }
+                right--;
+            }
+        }
+        return count;
+    }
+
+    /* Find whether path exist
+    Given a grid of size n*n filled with 0, 1, 2, 3. Check whether there is a path possible from the source to destination. You can traverse up, down, right and left.
+The description of cells is as follows:
+
+A value of cell 1 means Source.
+A value of cell 2 means Destination.
+A value of cell 3 means Blank cell.
+A value of cell 0 means Wall.
+Note: There are only a single source and a single destination.
+https://practice.geeksforgeeks.org/problems/find-whether-path-exist5238/1?page=2&difficulty[]=1&company[]=Amazon&curated[]=1&sortBy=submissions
+    */
+    bool bfs(vector<vector<int>>&grid, int i, int j){
+        int n = grid.size();
+        int m = grid[0].size();
+        queue<pair<int,int>> q;
+        vector<vector<int>> dir({{-1,0},{0,-1},{0,1},{1,0}});
+        q.push({i,j}); //cout<<"i "<<i<<" j "<<j<<endl;
+        while(!q.empty()){
+            int r = q.front().first;
+            int c = q.front().second;
+            q.pop();
+            for(int i=0; i<4; i++){
+                int nr = r + dir[i][0];
+                int nc = c + dir[i][1];
+                if(nr>=0 && nr<n && nc>=0 && nc<m){
+                    if(grid[nr][nc]==2)
+                        return true;
+                    if(grid[nr][nc]==3){
+                        grid[nr][nc] = 0;
+                        q.push({nr,nc});
+                        //cout<<"i "<<nr<<" j "<<nc<<endl;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    //public:
+    //Function to find whether a path exists from the source to destination.
+    bool is_Possible(vector<vector<int>>& grid) 
+    {
+        //code here
+        int n = grid.size();
+        int m = grid[0].size();
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(grid[i][j]==1){
+                    //start from the source
+                    grid[i][j]=0;
+                    if(bfs(grid,i,j))
+                        return true;
+                    else
+                        return false;
+                }
+            }
+        }
+        return false;
+    }
+
 };
 
 
