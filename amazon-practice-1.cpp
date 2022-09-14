@@ -83,11 +83,14 @@ https://practice.geeksforgeeks.org/problems/minimum-number-of-jumps-1587115620/1
 Given an array Arr[] of N integers. Find the contiguous sub-array(containing at least one number) which has the maximum sum and return its sum.
 https://practice.geeksforgeeks.org/problems/kadanes-algorithm-1587115620/1?page=1&difficulty[]=1&company[]=Amazon&curated[]=1&sortBy=submissions
 */
+    /*
     long long max(long long a, long long b){
         if(a > b)
             return a;
         return b;
     }
+    */
+    
     // arr: input array
     // n: size of array
     //Function to find the sum of contiguous subarray with maximum sum.
@@ -371,7 +374,7 @@ https://practice.geeksforgeeks.org/problems/rat-in-a-maze-problem/1?page=2&diffi
 */    
     void solve(int i, int j, 
         vector<vector<int>>& a, int n, 
-        vector <string>& ans, string move,
+        vector<string>& ans, string move,
         vector<vector<int>>& vis, int di[], int dj[]) {
     
         if (i == n-1 && j == n-1) {
@@ -399,6 +402,39 @@ https://practice.geeksforgeeks.org/problems/rat-in-a-maze-problem/1?page=2&diffi
       if (m[0][0] == 1) 
         solve(0, 0, m, n, ans, "", vis, di, dj);
       return ans;
+    }
+
+/* Detect cycle in a directed Graph 
+Given a Directed Graph with V vertices (Numbered from 0 to V-1) and E edges, check whether it contains any cycle or not.
+https://practice.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1?page=4&difficulty[]=1&company[]=Amazon&curated[]=1&sortBy=submissions
+*/
+     bool isCycleUtils(int v, vector<bool>& vis, 
+                vector<bool>& rec, vector<int> adj[] ){
+        if(vis[v]==false){
+            vis[v] = true;
+            rec[v] = true;
+            for(int i=0; i<adj[v].size(); i++){
+                if(!vis[adj[v][i]] && isCycleUtils(adj[v][i], vis, rec, adj))
+                    return true;
+                else if(rec[adj[v][i]])
+                    return true;
+            }
+        }   
+        rec[v] = false;
+        return false;
+    }
+  //public:
+    // Function to detect cycle in a directed graph.
+    bool isCyclic(int V, vector<int> adj[]) {
+        // code here
+       vector<bool> vis(V,false);
+       vector<bool> rec(V,false);
+       
+       for(int i=0; i<V; i++){
+           if(!vis[i] && isCycleUtils(i, vis, rec, adj))    
+            return true;
+       }
+       return false;
     }
 
 };
