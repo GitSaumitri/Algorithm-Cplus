@@ -199,10 +199,10 @@ void bfs(int i, int j, vector<vector<int>>& vis, vector<vector<char>>& grid){
     while(!q.empty()){
         int row = q.front().first;
         int col = q.front().second;
-
+        q.pop();
         //traverse its neighbors and mark them as visited
-        for(int row=-1; row<=1; row++){
-            for(int col=-1; col<=1; col++){
+        for(int i=-1; i<=1; i++){
+            for(int j=-1; j<=1; j++){
                 int nrow = i + row;
                 int ncol = i + col;
                 if(nrow >=0 && nrow < n && ncol >=0 && ncol < m 
@@ -213,7 +213,6 @@ void bfs(int i, int j, vector<vector<int>>& vis, vector<vector<char>>& grid){
             }
         }
     }
-    
 }
 
 int numsIslands(vector<vector<char>>& grid){

@@ -90,7 +90,7 @@ https://practice.geeksforgeeks.org/problems/kadanes-algorithm-1587115620/1?page=
         return b;
     }
     */
-    
+
     // arr: input array
     // n: size of array
     //Function to find the sum of contiguous subarray with maximum sum.
@@ -404,17 +404,61 @@ https://practice.geeksforgeeks.org/problems/rat-in-a-maze-problem/1?page=2&diffi
       return ans;
     }
 
+/* Detect cycle in an undirected Graph
+*/ 
+bool isCycleUtils(int v, vector<bool>& vis, 
+        vector<int> adj[], int parent ){
+        vis[v] = true;            
+        for(int i=0; i<adj[v].size(); i++){
+            //- be careful about below condition - after if there is a ifelse
+            // so don't combine the first if's vis and isCycle.
+            //if adjacent vertex is not visited
+            if(!vis[adj[v][i]]) {
+                if(isCycleUtils(adj[v][i], vis, adj, v))
+                    return true;  
+            } 
+            // If an adjacent vertex is visited and
+            // is not parent of current vertex,
+            // then there exists a cycle in the graph.    
+            else if(adj[v][i] != parent)
+                return true;
+        }
+        return false;
+    }
+  public:
+    // Function to detect cycle in an undirected graph.
+    bool isCycle(int V, vector<int> adj[]) {
+        // Code here
+       vector<bool> vis(V,false);  
+       for(int i=0; i<V; i++){
+            // not visited if there is a cycle
+           if(!vis[i] && isCycleUtils(i, vis, adj, -1))    
+                return true;
+       }
+       return false;
+    }
+/*
+We can't use the same algorithm: The algorithm above simply explores all connected components of the graph. If you encounter an already marked vertex, there must be two different paths to reach it, and in an undirected graph there must be a cycle. 
+If not, you can continue with the next connected component - no need to clean up the component you just finished.
+On the other hand, if you have a directed graph, two different paths to the same vertex don't make a cycle. So you need a different algorithm (for example, you may need to clean up any steps you back track.)
+*/
+
 /* Detect cycle in a directed Graph 
 Given a Directed Graph with V vertices (Numbered from 0 to V-1) and E edges, check whether it contains any cycle or not.
 https://practice.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1?page=4&difficulty[]=1&company[]=Amazon&curated[]=1&sortBy=submissions
+Depth First Traversal can be used to detect a cycle in a Graph. 
+DFS for a connected graph produces a tree. There is a cycle in 
+a graph only if there is a back edge present in the graph. 
+A back edge is an edge that is from a node to itself (self-loop) 
+or one of its ancestors in the tree produced by DFS.
 */
-     bool isCycleUtils(int v, vector<bool>& vis, 
+     bool isCycleUtils1(int v, vector<bool>& vis, 
                 vector<bool>& rec, vector<int> adj[] ){
         if(vis[v]==false){
             vis[v] = true;
             rec[v] = true;
             for(int i=0; i<adj[v].size(); i++){
-                if(!vis[adj[v][i]] && isCycleUtils(adj[v][i], vis, rec, adj))
+                if(!vis[adj[v][i]] && isCycleUtils1(adj[v][i], vis, rec, adj))
                     return true;
                 else if(rec[adj[v][i]])
                     return true;
@@ -425,19 +469,72 @@ https://practice.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1?p
     }
   //public:
     // Function to detect cycle in a directed graph.
-    bool isCyclic(int V, vector<int> adj[]) {
+    bool isCyclic1(int V, vector<int> adj[]) {
         // code here
        vector<bool> vis(V,false);
        vector<bool> rec(V,false);
        
        for(int i=0; i<V; i++){
-           if(!vis[i] && isCycleUtils(i, vis, rec, adj))    
+           if(!vis[i] && isCycleUtils1(i, vis, rec, adj))    
             return true;
        }
        return false;
     }
 
 };
+
+
+/* Find the number of Islands
+Given a grid of size n*m (n is the number of rows and m is the number of columns in the grid) consisting of '0's (Water) and '1's(Land). Find the number of islands.
+Note: An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically or diagonally i.e., in all 8 directions.
+
+https://practice.geeksforgeeks.org/problems/find-the-number-of-islands/1?page=4&difficulty[]=1&company[]=Amazon&curated[]=1&sortBy=submissions
+*/
+    void bfs(int r, int c, vector<vector<char>>& grid,
+        vector<vector<int>>& vis){
+            int n = grid.size();
+            int m = grid[0].size();
+            queue<pair<int,int>> q;
+            vis[r][c]=1;
+            q.push({r,c});
+            while(!q.empty()){
+                int row = q.front().first;
+                int col = q.front().second;
+                q.pop();
+                //search in all directions
+                for(int i=-1; i<=1; i++){
+                    for(int j=-1; j<=1; j++){
+                        int nr = row + i;
+                        int nc = col + j;
+                        if(nr>=0 && nr<n && nc>=0 && nc<m &&
+                            grid[nr][nc]=='1' && !vis[nr][nc]){
+                                vis[nr][nc]=1;
+                                q.push({nr,nc});
+                        }
+                    }
+                }
+            }
+        }
+  public:
+    // Function to find the number of islands.
+    int numIslands(vector<vector<char>>& grid) {
+        // Code here
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<vector<int>> vis(n, vector<int>(m,0));
+        int cnt=0;
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                //not visied and it's land
+                if(!vis[i][j] && grid[i][j]=='1'){
+                    cnt++;
+                    bfs(i,j,grid,vis);
+                }
+            }
+        }
+        return cnt;
+    }
+
 
 
 int main(){
