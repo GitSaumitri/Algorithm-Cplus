@@ -481,9 +481,6 @@ or one of its ancestors in the tree produced by DFS.
        return false;
     }
 
-};
-
-
 /* Find the number of Islands
 Given a grid of size n*m (n is the number of rows and m is the number of columns in the grid) consisting of '0's (Water) and '1's(Land). Find the number of islands.
 Note: An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically or diagonally i.e., in all 8 directions.
@@ -515,7 +512,7 @@ https://practice.geeksforgeeks.org/problems/find-the-number-of-islands/1?page=4&
                 }
             }
         }
-  public:
+  //public:
     // Function to find the number of islands.
     int numIslands(vector<vector<char>>& grid) {
         // Code here
@@ -535,6 +532,86 @@ https://practice.geeksforgeeks.org/problems/find-the-number-of-islands/1?page=4&
         return cnt;
     }
 
+/*
+Given an array of integers. Find the Inversion Count in the array. 
+
+Inversion Count: For an array, inversion count indicates how far (or close) the array is from being sorted. If array is already sorted then the inversion count is 0. If an array is sorted in the reverse order then the inversion count is the maximum. 
+Formally, two elements a[i] and a[j] form an inversion if a[i] > a[j] and i < j.
+
+https://practice.geeksforgeeks.org/problems/inversion-of-array-1587115620/1?page=1&difficulty[]=1&company[]=Amazon&curated[]=1&sortBy=submissions
+*/
+//take extra care about the return types and what you are passing - took 5 times to check this
+    long long int merge(long long arr[], long long start, long long mid, long long end){
+        long long left = start;
+        long long  right = mid+1;
+        vector<long long> temp;
+        long long int inv=0;
+        while(left <= mid && right <= end){
+            if(arr[left] <= arr[right]){
+                temp.push_back(arr[left++]);
+            }else{
+                temp.push_back(arr[right++]);
+                inv += (mid-left+1);
+            }
+        }
+        while(left <= mid){
+            temp.push_back(arr[left++]);
+        }
+        while(right <= end){
+            temp.push_back(arr[right++]);
+        }
+        for(int i=start; i<=end; i++){
+            arr[i] = temp[i-start];
+        }
+        return inv;
+    }
+    
+    long long int mergesort(long long arr[], long long start, long long end){
+        long long int inv=0;
+        long long mid;
+        if(end > start){
+            mid = (start+end)/2;
+            inv += mergesort(arr,start,mid);
+            inv += mergesort(arr,mid+1,end);
+            inv += merge(arr,start,mid,end);
+        }
+        return inv;
+    }
+  //public:
+    // arr[]: Input Array
+    // N : Size of the Array arr[]
+    // Function to count inversions in the array.
+    long long int inversionCount(long long arr[], long long N)
+    {
+        // Your Code Here
+        return mergesort(arr,0,N-1);
+    }
+
+/* merge intervals
+   make sure and be careful on how you handle the 2d vector
+*/
+vector<vector<int>> overlappedInterval(vector<vector<int>>& intervals) {
+         // Code here
+       vector<vector<int>> result;
+       if(intervals.size()==0){
+           return result;
+       }
+       
+       sort(intervals.begin(), intervals.end());
+       vector<int> interval = intervals[0];
+
+       for(auto it: intervals){
+           if(it[0] <= interval[1]){
+               interval[1] = max(interval[1],it[1]);
+           }else{
+               result.push_back(interval);
+               interval = it;
+           }
+       }
+       result.push_back(interval);
+       return result;
+    }
+};
 
 
 int main(){
