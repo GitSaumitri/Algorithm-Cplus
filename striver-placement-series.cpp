@@ -1363,8 +1363,93 @@ class placement{
         return maxi;
     }
 
-    /* 43. N meeting in one Room */
+    /* 43. N meeting in one Room  - Greedy - GFG
+       There is one meeting room in a firm. There are n meeting in the form of (S[i],F[i]) where S[i] is start time of meeting and F[i] is finish time of meeting i.
+       What is the maximum number of meetings that can be accomodated in the meeting room? 
+       Also note that start time of one choosen meeting can't be equal to the end time of the other chosen meeting. 
+        
+        - first meeting start time should be greater than the last meeting end time
+        - sort based on end time the start from beginning - O(nlogn)
+    */
+#if 0   
+    struct meeting {
+        int start;
+        int end;
+        int pos;
+    };
 
+    bool comparator1(struct meeting m1, struct meeting m2){
+        if(m1.end < m2.end)
+            return true;
+        else if(m1.end > m2.end)
+            return false;
+        else if(m1.pos < m2.pos)
+            return true;
+        else    
+            return false;
+    }
+
+    void maxMeetings(int s[], int e[], int n){
+        struct meeting meet[n];
+        for(int i=0; i<n; i++){
+            meet[i].start = s[i]; meet[i].end = e[i]; meet[i].pos = i+1;
+        }
+
+        sort(meet, meet+n, comparator1);
+
+        vector<int> ans;
+        int limit = meet[0].end;
+        ans.push_back(meet[0].pos);
+
+        for(int i=1; i<n; i++){
+            if(meet[i].start >= limit){
+                limit = meet[i].end;
+                ans.push_back(meet[i].pos);
+            }
+        }
+        for(int i=0; i<ans.size(); i++){
+            cout<< ans[i] << " "; 
+        }
+    }
+#endif
+    /* 44. Minimum number of platforms required for a railway station - Greedy - GFG
+       Given arrival and departure times of all trains that reach a railway station. Find the minimum number of platforms required for the railway station so that no train is kept waiting.
+       Consider that all trains arrive on the same day and leave on the same day. Arrival and departure time can never be the same for a train but
+       we can have arrival time of one train equal to departure time of other. At any given instance of time, same platform can't be used for both
+       departure of a train and arrival of another train. In such cases,  we need different platform. 
+       - two pointer approach
+    */
+    int findPlatform(int arr[], int dep[], int n){
+        
+        sort(arr,arr+n);
+        sort(dep,dep+n);
+
+        int plat_needed = 1, result = 1;
+        int i=1, j=0;
+
+        while(i < n && j < n){
+            if(arr[i] <= dep[j]){
+                plat_needed++;
+                i++;
+            }
+            else if(arr[i] > dep[j]){
+                plat_needed--;
+                j++;
+            }
+            if(plat_needed > result){
+                result = plat_needed;
+            }
+        }
+        return result;
+    }
+
+    /* Job sequencing Problem - Greedy - GFG
+       Given a set of N jobs where each job i has a deadline and profit associated to it.
+       Each job takes 1 unit of time to complete and only one job can be scheduled at at time.
+       We earn the profit if and only if the job is completed by its deadline. 
+       The task is to find the maximum profit and the number of jobs done.
+       Job will be given in the form (Jobid, deadline, Profit) assiciated to that job. 
+    */
 
 
     //helper functions.
