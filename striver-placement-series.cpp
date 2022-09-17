@@ -1443,12 +1443,86 @@ class placement{
         return result;
     }
 
-    /* Job sequencing Problem - Greedy - GFG
+    /* 45. Job sequencing Problem - Greedy - GFG
        Given a set of N jobs where each job i has a deadline and profit associated to it.
        Each job takes 1 unit of time to complete and only one job can be scheduled at at time.
        We earn the profit if and only if the job is completed by its deadline. 
        The task is to find the maximum profit and the number of jobs done.
        Job will be given in the form (Jobid, deadline, Profit) assiciated to that job. 
+    */
+#if 0
+    typedef struct job{
+        int profit;
+        int dead;
+    }Job;
+    
+    bool comparison(Job a, Job b){
+        return (a.profit > b.profit);
+    }
+
+    pair<int,int> JobScheduling(Job arr[], int n){
+
+        sort(arr, arr+n, comparison);
+        int maxi = arr[0].dead;
+        
+        for(int i=1; i<n; i++){
+            maxi = max(maxi, arr[i].dead);
+        }
+
+        vector<int>slot(maxi + 1,-1);
+        int countJobs = 0;
+        int jobProfits = 0;
+
+        for(int i=0; i<n; i++){
+            for(int j=arr[i].dead; j>0; j--){
+    /*
+    We can use disjoint set to remove the check from last day to first day. 
+    However we can solve CoLORFUL ARRAY from SPOJ to understand how to solve this in O(NlongN) 
+    */
+
+                if(slot[j]==-1){
+                    slot[j]=i;
+                    countJobs++;
+                    jobProfits += arr[i].profit;
+                    break;
+                }
+            }
+        }
+        return make_pair(countJobs, jobProfits);
+    }
+#endif
+    /* 46. Minimum Coins - Greedy - GFG
+    Given a value V, if we want to make a change for V Rs and we have an infinite supply
+    of each of the denominations in {1,2,5,10,20,50,100,500,1000} valued coins. 
+    What is the minimum number of coins and/or notes to be added to make the change?
+    */
+    /*
+    Greedy works here as the any two coint sum is less than the other coin present in the set.
+    however for a example - {1,5,6,9} - greedy won't work - for 11 with below method - 9 + 1 +
+                                                            but actual answer - 5 + 6
+    */
+    void findMin(int V){
+        int deno[]={1, 2, 5, 10, 20, 50, 100, 500, 1000};
+        int n = 9;
+        vector<int> ans;
+
+        for(int i = n-1; i >= 0; i--){
+            //find denominaiton
+            while(V >= deno[i]){
+                V -= deno[i];
+                ans.push_back(deno[i]);
+            }
+        }
+
+        for(int i=0; i<ans.size(); i++){
+            cout << ans[i] << " ";
+        }
+    }
+
+    /* 47. Fractional knapsack - Greedy - GFG 
+    Given weights and values of N items, we need to put these items in a knapsack of capacity
+    W to get the maximum total value in the kanpsack.
+    
     */
 
 
