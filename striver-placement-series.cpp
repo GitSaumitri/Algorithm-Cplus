@@ -1371,14 +1371,15 @@ class placement{
         - first meeting start time should be greater than the last meeting end time
         - sort based on end time the start from beginning - O(nlogn)
     */
-#if 0   
+    
+// WHY comparator function passed to sort STL has to be static ?????
     struct meeting {
         int start;
         int end;
         int pos;
     };
 
-    bool comparator1(struct meeting m1, struct meeting m2){
+    static bool comparator1(struct meeting m1, struct meeting m2){
         if(m1.end < m2.end)
             return true;
         else if(m1.end > m2.end)
@@ -1411,7 +1412,7 @@ class placement{
             cout<< ans[i] << " "; 
         }
     }
-#endif
+
     /* 44. Minimum number of platforms required for a railway station - Greedy - GFG
        Given arrival and departure times of all trains that reach a railway station. Find the minimum number of platforms required for the railway station so that no train is kept waiting.
        Consider that all trains arrive on the same day and leave on the same day. Arrival and departure time can never be the same for a train but
@@ -1450,13 +1451,13 @@ class placement{
        The task is to find the maximum profit and the number of jobs done.
        Job will be given in the form (Jobid, deadline, Profit) assiciated to that job. 
     */
-#if 0
+
     typedef struct job{
         int profit;
         int dead;
     }Job;
     
-    bool comparison(Job a, Job b){
+    static bool comparison(Job a, Job b){
         return (a.profit > b.profit);
     }
 
@@ -1490,7 +1491,7 @@ class placement{
         }
         return make_pair(countJobs, jobProfits);
     }
-#endif
+
     /* 46. Minimum Coins - Greedy - GFG
     Given a value V, if we want to make a change for V Rs and we have an infinite supply
     of each of the denominations in {1,2,5,10,20,50,100,500,1000} valued coins. 
@@ -1522,8 +1523,40 @@ class placement{
     /* 47. Fractional knapsack - Greedy - GFG 
     Given weights and values of N items, we need to put these items in a knapsack of capacity
     W to get the maximum total value in the kanpsack.
-    
+        - make sure to use double to make use of fraction  
+        - sort the item on value
+        - pick if can be taken full - oterwise fraction 
     */
+    typedef struct item{
+        int value;
+        int weight;
+    }Item;
+
+    static bool comp(Item a, Item b){
+        double r1 = (double)a.value / (double)a.weight;
+        double r2 = (double)b.value / (double)b.weight;
+        return r1 > r2;
+    };
+    double fractionalKnapsack(int W, Item arr[], int n){
+        
+        sort(arr, arr+n, comp);
+
+        int currWeight = 0;
+        double finalvalue = 0.0;
+        for(int i=0; i<n; i++){
+            if(currWeight + arr[i].weight <= W){
+                currWeight += arr[i].weight;
+                finalvalue += arr[i].value;
+            } else {
+                int remain = W - currWeight;
+                finalvalue += (arr[i].value / (double)arr[i].weight) * (double)remain;
+                break;
+            }
+        }
+
+        return finalvalue;
+    }
+
 
 
     //helper functions.
