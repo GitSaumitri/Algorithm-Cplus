@@ -1616,12 +1616,38 @@ class placement{
         return nums[low];
     }
 
-    /* 66. leetcode 33. Search in rotated sorted array
+    /* 62. leetcode 33. Search in rotated sorted array
         Given the array nums after the rotation and an integer target, if it is nums, or -1 if it is not in nums.
         - O(log) time.
     */
+    int rotateSearch(vector<int>&a, int target){
+        int low = 0, high = a.size()-1;
+        while(low <= high){
+            int mid = (low + high) >> 1;
+            if(a[mid] == target) 
+                return mid;
+            //the left side sorted
+            if(a[low] <= a[mid]){
+                if(target >= a[low] && target <= a[mid]){
+                    high = mid-1;
+                } else {
+                    low = mid+1;
+                }
+            } else {
+                //right half is sorted
+                if(target >= a[mid] && target <= a[high]){
+                    low = mid+1;
+                } else {
+                    high = mid-1;
+                }
+            }
+        }
+        return -1;
+    }
 
-
+    /* 63. Median of row wise sorted matrix
+     
+    */
 
     //helper functions.
     /* create a linked list */
