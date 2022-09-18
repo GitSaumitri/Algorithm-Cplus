@@ -49,18 +49,18 @@
     45. Job sequencing problem
     46. Minimum coins
     47. Fractional knapsack
-    48. Subset sum -1
-    49. Subset sum -2
-    50. Print all permutation of a string/array - 1 
-    51. Print all permutation of a string/array - 2
-    52. Combination sum
-    53. Combination sum-2
-    54. Palindrom partitioning
-    55. Kth permuation sequence
-    56. N queen
-    57. Sudoku solver
-    58. M coloring problem
-    59. Rate in a Maze
+    48. Subset sum -1  (recursion series)
+    49. Subset sum -2  (recursion series)
+    50. Print all permutation of a string/array - 1 (recursion series)
+    51. Print all permutation of a string/array - 2 (recursion series)
+    52. Combination sum (recursion series)
+    53. Combination sum-2 (recursion series)
+    54. Palindrom partitioning (recursion series)
+    55. Kth permuation sequence (recursion series)
+    56. N queen (recursion series)
+    57. Sudoku solver (recursion series)
+    58. M coloring problem (recursion series)
+    59. Rate in a Maze (recursion series)
     60. Nth root of a number using binary search
     61. find element appear once in a sorted array (all other twice)
     62. search element in a rotated array
@@ -1371,7 +1371,7 @@ class placement{
         - first meeting start time should be greater than the last meeting end time
         - sort based on end time the start from beginning - O(nlogn)
     */
-    
+
 // WHY comparator function passed to sort STL has to be static ?????
     struct meeting {
         int start;
@@ -1556,6 +1556,70 @@ class placement{
 
         return finalvalue;
     }
+
+    /* 48-59 check in recursion series */
+
+    /* 60. Nth root of a number 
+        - binary search can be used for any monotonically increasing sequence
+        - search space - log2(Mx10 to the power d)
+        - time - N * log2(M*10 to the power d)
+    */
+    double multiply(double number, int n){
+        double ans = 1.0;
+        for(int i=1; i<=n; i++){
+            ans = ans * number;
+        }
+        return ans;
+    }
+
+    double getNthRoot(int n, int m){
+        double low = 1;
+        double high = m;
+        double eps = 1e-6;
+
+        while((high-low) > eps){
+            double mid = (low + high)/2.0;
+            if(multiply(mid,n) < m){
+                low = mid;
+            } else {
+                high = mid;
+            }
+        }
+
+        cout<< low << " "<< high << endl;
+
+        //just to check
+        cout<< pow(m, (double)(1.0/(double)n));
+    }
+
+    /* 61. Single element in an sorted array - leetcode
+        - xor of the same number gives zero so zeroing at the end will give the element
+        - optimization  - if elements are present twice and only one element present once
+                        - that means if initially two elements are present start odd then even
+                        - once the one element comes, start will be in even then odd
+                        - as the one lement will be must be in odd index
+    */
+    // in order to check for the left half
+    // 1st instance - even index
+    // 2nd instance - odd index, check on the left if the instance of that number is there or not
+    int singleNonDuplicate(vector<int>&nums){
+        int low =  0;
+        int high = nums.size()-2; // the one elemt can be at the end
+        while( low <= high){
+            int mid = (low + high) >> 1;
+            if(nums[mid] == nums[mid^1]){ //get immediate left index 
+                low = mid+1;
+            }else {
+                high = mid-1;
+            }
+        }
+        return nums[low];
+    }
+
+    /* 66. leetcode 33. Search in rotated sorted array
+        Given the array nums after the rotation and an integer target, if it is nums, or -1 if it is not in nums.
+        - O(log) time.
+    */
 
 
 
