@@ -1646,8 +1646,70 @@ class placement{
     }
 
     /* 63. Median of row wise sorted matrix
-     
+        - middle index is median of matrix
+        - brute force is to convert it into an array and sort it - O(m*nlog(m*n)) find the middle
+        - effiecint - binary search - can assume the numbers in the matrix are between 1 to 10 to the power 9.
+        -  e.g -    1,  3,  6
+                    2,  6,  9
+                    3,  6,  9
+        1 ) Why we are taking no of elements  <= mid ? 
+                Because if no of elements <= mid is equal to reqd count then 
+                it is sure that this mid is not going to be the answer. 
+                becoz either that mid is not part of matrix or 
+                that mid is part of matrix but has only 3 elements lesser than it 
+                (acc to this problem). So to discard this mid we consider count to be <= mid.
+        2 ) Why we take last low as answer?  becoz for the element at that low position , 
+            we have made sure that no of elements lesser than it are greater than reqd count. 
+            We can n't take any element greater than that because obviously 
+            it will have greater count. But there is chance that if we eliminate count of elements 
+            equal to it from that count,  we can have count = required count. 
+            for ex in this case 6 was answer for which we got count =7 and 
+            if we elminate all 6's from that 7 no's we will get exactly  4 no's less than 6.
+        3) We can even set the low = min value in matrix, high = max value in matrix
+            but we needn't waste O(n) time for that - 0th and m-1 the index row contains them.
+
     */
+    int countSmallerThanEqualToMid(vector<int> row, int mid){
+        int l=0, h = row.size() - 1;
+        while(l <= h){
+            int md = (l + h) >> 1;
+            if(row[md] <= mid){
+                l = md + 1;
+            } else {
+                h = md - 1;        
+            }
+        }
+        return l;
+    }
+
+    int findMedian(vector<vector<int>>& A){
+        int low = 1;
+        int high = 1e9;
+        int n = A.size();
+        int m = A[0].size();
+        while(low <= high){
+            int mid = (low + high) >> 1;
+            int cnt = 0;
+            for(int i=0; i<n; i++){
+                cnt += countSmallerThanEqualToMid(A[i], mid);
+                /* int l=0, h = A[i].size() - 1;
+                while(l <= h){
+                    int md = (l + h) >> 1;
+                    if(A[i][md] <= mid){
+                        l = md + 1;
+                    } else {
+                        h = md - 1;   
+                    }     
+                }
+                cnt += l; */
+            }
+            if(cnt <= (n*m)/2) 
+                low = mid + 1;
+            else 
+                high = mid - 1;
+        }
+        return low;
+    }
 
     //helper functions.
     /* create a linked list */
