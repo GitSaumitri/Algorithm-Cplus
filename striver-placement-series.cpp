@@ -1718,6 +1718,7 @@ class placement{
     */
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2){
         if(nums2.size() < nums1.size())
+            // binary search on smaller search space
             return findMedianSortedArrays(nums2,nums1);
         int n1 = nums1.size();
         int n2 = nums2.size();
@@ -1753,6 +1754,7 @@ class placement{
     */
     int kthElement(int arr1[], int arr2[], int n, int m, int k){
         if(n > m)
+            //binary search on smaller search space
             return kthElement(arr2, arr1, m, n, k);
         
         int low = max(0,k-m), high = min(k,n);
@@ -1776,6 +1778,30 @@ class placement{
         }
         return 1;
     }
+
+    /* 66. Power set - Print all subsequences 
+        https://takeuforward.org/data-structure/power-set-print-all-the-possible-subsequences-of-the-string/
+        - O(2 to the powe n * n)
+    */
+    vector<string> AllPossibleStrings(string s) {
+	    int n = s.length();
+	    vector<string>ans;
+	    for (int num = 0; num < (1 << n); num++) {
+		    string sub = "";
+		    for (int i = 0; i < n; i++) {
+			    //check if the ith bit is set or not
+			    if (num & (1 << i)) {
+				    sub += s[i];
+			    }
+		    }
+		    if (sub.length() > 0) {
+			    ans.push_back(sub);
+		    }
+	    }
+	    sort(ans.begin(), ans.end());
+	    return ans;
+    }
+
 
     //helper functions.
     /* create a linked list */
