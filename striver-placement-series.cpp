@@ -1849,6 +1849,39 @@ class placement{
         return low;
     }
 
+    /* 69. Aggressive cows (SPOJ)
+        - place the cows in such a way that the minimum distance between cows will be largest
+        - longest minimum distance between cows - 
+    */
+    bool isPossibleCows(vector<int>& A, int n, int cows, int mind){
+        int cntCows = 1;
+        int lastPlacedCow = A[0];
+        for(int i=1; i<n; i++){
+            if(A[i] - lastPlacedCow >= mind){
+                cntCows++;
+                lastPlacedCow = A[i];
+            }
+        }
+        if(cntCows >= cows)
+            return true;
+        return false;
+    }
+    int aggressiveCows(vector<int>& A, int cows){
+        int n = A.size();
+        sort(A.begin(), A.end());
+        int low = 1;
+        int high = A[n-1] - A[0];
+        while(low <= high){
+            int mid = (low + high) >> 1;
+            if(isPossibleCows(A, n, cows, mid)){
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+        return high;
+    }
+
     //helper functions.
     /* create a linked list */
     ListNode * createAlist(vector<int> nums){
