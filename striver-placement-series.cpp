@@ -1882,6 +1882,71 @@ class placement{
         return high;
     }
 
+    /* 73. Valid parenthesis - three type of brackets [{()}]
+        - O(n) - space O(n) for stack
+    */
+    bool isValidParenthesis(vector<char>& A){
+        stack<char> s;
+        for(char ch: A){
+            if(ch == '(' || ch == '[' || ch == '{'){
+                s.push(ch);
+            } else {
+                if(s.empty())
+                    return false;
+                if((s.top()=='(' && ch==')')||
+                    (s.top()=='[' && ch==']') ||
+                    (s.top()=='{' && ch=='}')){
+                        s.pop();
+                } else {
+                    return false;
+                }
+            }
+            if(!s.empty())
+                return false;
+            return true;
+        }
+    }
+
+    /* 74. Next Greater element
+
+    */
+    vector<int> nextGreaterElement(vector<int> arr){
+        int n = arr.size();
+        vector<int> ans(n,-1);
+        stack<int> s;
+        if(n <= 1)
+            return ans;
+
+        s.push(0);
+        for(int i=1; i < n; i++){
+            while(!s.empty() && (arr[i] > arr[s.top()])){
+                ans[s.top()] = arr[i];
+                s.pop();
+            }
+            s.push(i);
+        }
+        return ans;
+    }
+
+    /* variation of above question if it is a circular array - that means for last search from beginning */
+    vector<int> nextGreaterElements(vector<int>& nums){
+        int n = nums.size();
+        vector<int> ans(n, -1);
+        stack<int> st;
+        for(int i=2*n-1; i>=0; i++){
+            while(!st.empty() && st.top() <= nums[i%n]){
+                st.pop();
+            }
+            if(i < n){
+                if(!st.empty()){
+                    ans[i] = st.top();
+                }
+            }
+            st.push(nums[i%n]);
+        }
+        return ans;
+    }
+
     //helper functions.
     /* create a linked list */
     ListNode * createAlist(vector<int> nums){
