@@ -1802,6 +1802,52 @@ class placement{
 	    return ans;
     }
 
+    /* 68. Allocate minimum number of pages  - recursion/dp - binary search
+        - A book will be allocated to one student 
+        - Each student must get a minimum of 1 book
+        - Allotment should be in contiguous order
+        - Maximum number of pages allocated is minimum 
+        - logn*O(n)
+    */
+    int isPossible(vector<int>&A, int pages, int students){
+        // check allocation of books among given students is possible
+        int cnt = 0;
+        int sumAllocated = 0;
+        for(int i=0; i<A.size(); i++){
+            if(sumAllocated + A[i] > pages){
+                cnt++;
+                sumAllocated = A[i];
+                if(sumAllocated > pages)
+                    return false;
+            } else {
+                sumAllocated += A[i];
+            }
+        }
+        if( cnt < students)
+            return true;
+        return false;
+    }
+    int allocateMinPages(vector<int>& A, int B){
+        if(B > A.size())
+            return -1;
+        int low = A[0];
+        int high = 0;
+        //minimize the search space 
+        for(int i=0; i<A.size(); i++){
+            high = high + A[i];
+            low = min(A[i],low);
+        }
+        //binary search
+        while(low <= high){
+            int mid = (low + high) >> 1;
+            if(isPossible(A, mid, B)){
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return low;
+    }
 
     //helper functions.
     /* create a linked list */
