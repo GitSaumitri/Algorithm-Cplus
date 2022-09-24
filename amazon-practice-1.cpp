@@ -1,6 +1,17 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+
+//Definition for a binary tree node.
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+
 class Solution{
   public:
 
@@ -589,6 +600,7 @@ https://practice.geeksforgeeks.org/problems/inversion-of-array-1587115620/1?page
 
 /* merge intervals
    make sure and be careful on how you handle the 2d vector
+   https://practice.geeksforgeeks.org/problems/8a644e94faaa94968d8665ba9e0a80d1ae3e0a2d/1?page=1&difficulty[]=1&company[]=Amazon&curated[]=1&sortBy=submissions
 */
 vector<vector<int>> overlappedInterval(vector<vector<int>>& intervals) {
          // Code here
@@ -611,8 +623,133 @@ vector<vector<int>> overlappedInterval(vector<vector<int>>& intervals) {
        result.push_back(interval);
        return result;
     }
-};
+/*
+Given the root of a binary tree, calculate the vertical order traversal of the binary tree.
+For each node at position (row, col), its left and right children will be at positions (row + 1, col - 1) and (row + 1, col + 1) respectively. The root of the tree is at (0, 0).
+The vertical order traversal of a binary tree is a list of top-to-bottom orderings for each column index starting from the leftmost column and ending on the rightmost column. There may be multiple nodes in the same row and same column. In such a case, sort these nodes by their values.
+Return the vertical order traversal of the binary tree.
+https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/  (987. Vertical Order Traversal of a Binary Tree)
+*/
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        vector<vector<int>> res;
+        queue<pair<TreeNode*,pair<int,int>>> q;
+        map<int, map<int, multiset<int>>> ms;
+        
+        q.push({root,{0,0}});
+        while(!q.empty()){
+            auto e = q.front();
+            q.pop();
+            TreeNode * node = e.first;
+            int x = e.second.first;
+            int y = e.second.second;
+            ms[x][y].insert(node->val);
+            if(node->left){
+                q.push({node->left,{x-1,y+1}});
+            }
+            if(node->right){
+                q.push({node->right,{x+1,y+1}});
+            }
+        }
+        
+        for(auto p: ms){
+            vector<int> a;
+            for(auto q: p.second){
+                a.insert(a.end(),q.second.begin(),q.second.end());
+            }
+            res.push_back(a);
+        }
+        
+        return res;
+    }
 
+/* 
+    We are given an array of money in each house A and we need to return the maximum amount we can rob without robbing from any two adjacent houses.
+    nice -> https://leetcode.com/problems/house-robber/discuss/1605797/C%2B%2BPython-4-Simple-Solutions-w-Explanation-or-Optimization-from-Brute-Force-to-DP
+    nice -> https://leetcode.com/problems/house-robber/discuss/156523/From-good-to-great.-How-to-approach-most-of-DP-problems.
+    https://leetcode.com/problems/house-robber/  - 198. House Robber 
+    Find recursive relation
+    Recursive (top-down)
+    Recursive + memo (top-down)
+    Iterative + memo (bottom-up)
+    Iterative + N variables (bottom-up)
+*/
+    //Recursive (top-down)
+    int robHouse(vector<int>&nums, int i){
+        if(i < 0 || i>=nums.size())
+            return 0;
+        return max(robHouse(nums,i+1), nums[i]+robHouse(nums,i+2));
+    }
+    //public:
+    int rob(vector<int>& nums) {
+        return robHouse(nums,0);
+    }
+
+    //Recursive + memo (top-down)
+    int robHouse1(vector<int>&nums, int i, vector<int>&memo){
+        if(i < 0 || i>=nums.size())
+            return 0;
+        if(memo[i]!=-1)
+            return memo[i];
+        return (memo[i] = max(robHouse1(nums, i+1, memo), nums[i]+robHouse1(nums, i+2, memo)));
+    }
+    //public:
+    int rob1(vector<int>& nums) {
+        vector<int>memo(nums.size(),-1);
+        return robHouse1(nums,0,memo);
+    }
+    // Iterative + Memo
+    int rob2(vector<int>& nums) {
+        int len = nums.size(), i;
+        vector<int>memo(len+1,-1);
+        memo[0]=0;
+        memo[1]=nums[0];
+        for(i=1; i < len; i++){
+            memo[i+1] = max(memo[i], memo[i-1]+nums[i]);
+        }
+        return memo[len];
+    }
+    // Iterative + variable
+    // take the maximum of previously calculated and current element or calculate till current  
+    int rob3(vector<int>& nums) {
+        int len = nums.size();
+        int pre = 0, cur = 0;
+        for (int i = 0; i < len; i++) {
+            int temp = max(pre + nums[i], cur); 
+            pre = cur;
+            cur = temp;
+        }
+        return cur;
+    }
+/*
+https://leetcode.com/problems/house-robber-ii/ (213. House Robber II)
+https://leetcode.com/problems/house-robber-ii/discuss/59921/9-lines-0ms-O(1)-Space-C%2B%2B-solution
+*/
+    int robberyHouse(vector<int>&nums, int l, int r){
+        int pre=0, curr=0;
+        for(int i=l; i<=r; i++){
+            int temp = max(pre + nums[i], curr);
+            pre = curr;
+            curr = temp;
+        }
+        return curr;
+    }
+    //public:
+    int robbery(vector<int>& nums) {
+        int n = nums.size();
+        if(n==0)
+            return 0;
+        if(n==1)
+            return nums[0];
+        
+        return max(robberyHouse(nums,0,n-2), robberyHouse(nums,1,n-1));
+    }
+
+/* https://leetcode.com/problems/house-robber-iii/ (337. House Robber III)
+nice - https://leetcode.com/problems/house-robber-iii/discuss/79330/Step-by-step-tackling-of-the-problem
+*/
+    
+
+};
 
 int main(){
     cout<<"Amazon practice in online IDE\n";
