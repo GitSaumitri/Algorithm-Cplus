@@ -747,7 +747,148 @@ https://leetcode.com/problems/house-robber-ii/discuss/59921/9-lines-0ms-O(1)-Spa
 /* https://leetcode.com/problems/house-robber-iii/ (337. House Robber III)
 nice - https://leetcode.com/problems/house-robber-iii/discuss/79330/Step-by-step-tackling-of-the-problem
 */
-    
+
+
+/* Minimum platforms - GFG
+Given arrival and departure times of all trains that reach a railway station. Find the minimum number of platforms required for the railway station so that no train is kept waiting.
+Consider that all the trains arrive on the same day and leave on the same day. Arrival and departure time can never be the same for a train but we can have arrival time of one train equal to departure time of the other. At any given instance of time, same platform can not be used for both departure of a train and arrival of another train. In such cases, we need different platforms.
+https://practice.geeksforgeeks.org/problems/minimum-platforms-1587115620/1?page=1&difficulty[]=1&company[]=Amazon&curated[]=1&sortBy=submissions    
+*/
+    int findPlatform(int arr[], int dep[], int n)
+    {
+    	// Your code here
+    	sort(arr,arr+n);
+    	sort(dep,dep+n);
+    	
+    	int minp = 1;
+    	int res = 1;
+    	int i=1, j=0;
+    	while(i < n && j < n){
+    	    if(arr[i] <= dep[j]){
+    	        minp++;
+    	        i++;
+    	    }
+    	    else if(arr[i] > dep[j]){
+    	        minp--;
+    	        j++;
+    	    }
+    	    if(res < minp){
+    	       res = minp;
+    	    }
+    	}
+    	return res;
+    }
+
+/* Coin change
+    Given an integer array coins[ ] of size N representing different denominations of currency and an integer sum, find the number of ways you can make sum by using different combinations from coins[ ].  
+Note: Assume that you have an infinite supply of each type of coin. 
+https://practice.geeksforgeeks.org/problems/coin-change2448/1?page=1&difficulty[]=1&company[]=Amazon&curated[]=1&sortBy=submissions
+
+*/
+    // either take the nth coin or don't take
+    long long int count(int coins[], int N, int sum) {
+        // code here.
+        if(sum == 0)
+            return 1;
+        
+        if(sum < 0)
+            return 0;
+        
+        if(N <= 0)
+            return 0;
+        
+        return count(coins, N-1, sum) + 
+                count(coins, N, sum-coins[N-1]);
+    }
+
+    //dp
+    long long int coinChange(int coins[], int s, int n, 
+                        vector<vector<long long int>>& dp){
+        if (s == 0)
+            return dp[n][s] = 1;
+        if (n == 0)
+            return 0;
+        if (dp[n][s] != -1)
+            return dp[n][s];
+        if (coins[n - 1] <= s) {
+            // Either Pick this coin or not
+            return dp[n][s] = coinChange(coins, s - coins[n - 1], n, dp)
+                          + coinChange(coins, s, n - 1, dp);
+        }
+        else // We have no option but to leave this coin
+            return dp[n][s] = coinChange(coins, s, n - 1, dp);                        
+    }
+
+  public:
+    long long int count1(int coins[], int n, int s) {
+
+        vector<vector<long long int>>dp(n+1, vector<long long int>(s+1,-1));
+        return coinChange(coins, s, n, dp);
+    }
+
+    // optimise
+    long long int count2(int coins[], int n, int sum) {
+        // table[i] will be storing the number of solutions for
+        // value i. We need sum+1 rows as the table is constructed
+        // in bottom up manner using the base case (sum = 0)
+        long long int table[sum + 1];
+   
+        // Initialize all table values as 0
+        memset(table, 0, sizeof(table));
+   
+        // Base case (If given value is 0)
+        table[0] = 1;
+   
+        // Pick all coins one by one and update the table[]
+        // values after the index greater than or equal to the
+        // value of the picked coin
+        for (int i = 0; i < n; i++)
+            for (int j = coins[i]; j <= sum; j++)
+                table[j] += table[j - coins[i]];
+        return table[sum];
+    }
+
+/* Merge sort
+Given an array arr[], its starting position l and its ending position r. Sort the array using merge sort algorithm.
+https://practice.geeksforgeeks.org/problems/merge-sort/1?page=1&difficulty[]=1&company[]=Amazon&curated[]=1&sortBy=submissions
+*/
+    void merge(int arr[], int l, int m, int r)
+    {
+         // Your code here
+        int temp[r-l+1];
+        int i = l;
+        int j = m+1;
+        int k = 0;
+        while(i <= m && j <= r){
+            if(arr[i] <= arr[j]){
+                temp[k++] = arr[i++];
+            }else{
+                temp[k++] = arr[j++];
+            }
+        }
+        while(i <= m){
+            temp[k++] = arr[i++];
+        }
+        while(j <= r){
+            temp[k++] = arr[j++];
+        }
+        for(k=l; k<=r; k++){
+            arr[k] = temp[k-l];
+        }
+    }
+    //public:
+    void mergeSort(int arr[], int l, int r)
+    {
+        //code here
+        if(l < r){
+            int mid = (r+l)/2;
+            mergeSort(arr, l, mid);
+            mergeSort(arr, mid+1, r);
+            merge(arr, l, mid, r);
+        }
+    }
+
+
 
 };
 
