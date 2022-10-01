@@ -2,6 +2,12 @@
 using namespace std;
 
 //https://www.educative.io/blog/crack-amazon-coding-interview-questions
+//Data structures you should know: 
+//Arrays, Stacks, Queues, Linked lists, Trees, Graphs, Hash tables
+//Algorithms you should know: 
+//Breadth First Search, Depth First Search, Binary Search, Quicksort, Mergesort, Dynamic programming, Divide and Conquer
+//https://www.educative.io/blog/why-amazon-interview-question
+//https://www.educative.io/blog/behavioral-interviews-how-to-prepare-and-ace-interview-questions
 
 //1. Find the missing number in the array
 int FindMissing(const vector<int>& input) {
@@ -147,6 +153,11 @@ LinkedListNode1* deep_copy_arbitrary_pointer(
 //The memory complexity of this solution is constant, O(1).
 
 //5. Level Order Traversal of Binary Tree
+struct BinaryTreeNode {
+  int data;
+  struct BinaryTreeNode *left, *right;
+};
+
 // Using two queues
 void level_order_traversal_1(BinaryTreeNode* root) {
   if (root == nullptr) {
@@ -252,7 +263,7 @@ bool is_bst_tree(BinaryTreeNode* root, BinaryTreeNode* low, BinaryTreeNode* high
         (!is_bst_tree(root->right, root, nullptr)));
 }
 
-bool is_bst(BinaryTreeNode* root) {
+bool is_bst1(BinaryTreeNode* root) {
     return is_bst_tree(root, nullptr, nullptr);
 }
 
@@ -273,8 +284,170 @@ bool can_segment_string(string s, unordered_set <string> & dictonary) {
   }
   return false;
 }
+/* CHEK FOR THE DP SOLUTION
+To achieve memoization, you can store the second string in a new set each time. This will reduce both time and memory complexities.To achieve memoization, you can store the second string in a new set each time. This will reduce both time and memory complexities.
+*/
 
 
+// 8. Reverse Words in a Sentence
+// reverse the string and then reverse each word
+void str_rev(char * str, int len) {
+
+  if (str == nullptr || len < 2) {
+    return;
+  }
+
+  char * start = str;
+  char * end = str + len - 1;
+
+  while (start < end) {
+    if (start != nullptr && end != nullptr) {
+      char temp = * start;
+      * start = * end;
+      * end = temp;
+    }
+    start++;
+    end--;
+  }
+}
+
+void reverse_words(char * sentence) {
+
+  // Here sentence is a null-terminated string ending with char '\0'.
+  if (sentence == nullptr) {
+    return;
+  }
+
+  // To reverse all words in the string, we will first reverse
+  // the string. Now all the words are in the desired location, but
+  // in reverse order: "Hello World" -> "dlroW olleH".
+  int len = strlen(sentence);
+  str_rev(sentence, len);
+
+  // Now, let's iterate the sentence and reverse each word in place.
+  // "dlroW olleH" -> "World Hello"
+  char * start = sentence;
+  char * end;
+  while (true) {
+    // find the  start index of a word while skipping spaces.
+    while (start && *start == ' ') {
+      ++start;
+    }
+
+    if (start == nullptr || *start == '\0') {
+      break;
+    }
+
+    // find the end index of the word.
+    end = start + 1;
+    while (end && *end != '\0' && *end != ' ') {
+      ++end;
+    }
+
+    // let's reverse the word in-place.
+
+    if (end != nullptr) {
+      str_rev(start, (end - start));
+    }
+
+    start = end;
+  }
+}
+
+//The runtime complexity of this solution is linear, O(n).
+//The memory complexity of this solution is constant, O(1).
+
+//9. How many ways can you make change with coins and a total amount
+int solve_coin_change(vector<int>& denominations, int amount) {
+
+  vector<int> solution(amount + 1); 
+  solution[0] = 1;
+
+  for (int den: denominations) {
+    for (int i = den; i < (amount + 1); ++i) {
+      solution[i] += solution[i - den]; 
+    }
+  }
+  
+  return solution.back();
+}
+//The runtime complexity of this solution is quadratic, O(m×n), where m is the number of denominations and n is the total amount.
+//The memory complexity of this solution is linear, O(n), where n is the total amount.
+
+//10. Find Kth permutation
+int factorial(int n) {
+  if (n == 0 || n == 1) return 1;
+  return n * factorial(n -1 );
+}
+
+void find_kth_permutation(
+    vector<char>& v,
+    int k,
+    string& result) {
+  if (v.empty()) {
+    return;
+  }
+  
+  int n = (int)(v.size());
+  // count is number of permutations starting with each digit
+  int count = factorial(n - 1);
+  int selected = (k - 1) / count;
+
+  result += v[selected];
+  v.erase(v.begin() + selected);
+
+  k = k - (count * selected);
+  find_kth_permutation(v, k, result);
+}
+
+string get_permutation(int n, int k) {
+    vector<char> v;
+    for (char i = 1; i <= n; ++i) {
+        v.push_back(i + '0');
+    }
+    
+    string result;
+    find_kth_permutation(v, k, result);
+    return result;
+}
+//Runtime Complexity: Linear, O(n)
+//Memory Complexity: Linear, O(n)
+
+
+//11. Find all subsets of a given set of integers
+//12. Print balanced brace combinations
+//13. Clone a Directed Graph
+//14. Find Low/High Index
+//15. Search Rotated Array
+//16. K largest elements from an array
+//17. Convert a Binary tree to DLL
+//18. Given a binary tree T, find the maximum path sum. The path may start and end at any node in the tree.
+//19. Rotate a matrix by 90 degrees
+//20. Assembly line scheduling with dynamic programming
+//21. Implement a stack with push(), min(), and pop() in O(1) time
+//22. How do you rotate an array by K?
+//23. Design Snake Game using Object Oriented analysis and design technique.
+//24. Print all permutations of a given string using recursion
+//25. Implement a queue using a linked list
+//26. Find the longest increasing subsequence of an array
+//27. Lowest common ancestor in a Binary Search Tree and Binary Tree
+//28. Rotate a given list to the right by k places, which is non-negative.
+//29. Write a function that counts the total of set bits in a 32-bit integer.
+//30. How do you detect a loop in a singly linked list?
+//31. Reverse an array in groups
+//32. Given a binary tree, check if it’s a mirror of itself
+//33. Josephus problem for recursion
+//34. Zero Sum Subarrays
+//35. Huffman Decoding for greedy algorithms
+//36. Egg Dropping Puzzle for dynamic programming
+//37. N-Queen Problem
+//38. Check if strings are rotations of each other
+//39. 0-1 Knapsack Problem
+//40. Unbounded knapsack problem
+//41. Longest palindromic subsequence
+//42. Print nth number in the Fibonacci series
+//43. Longest common substring
+//44. Longest common subsequence
 
 int main(){
     cout<<"Amazon Common Interview Questions\n";

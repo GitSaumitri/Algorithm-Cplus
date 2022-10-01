@@ -548,6 +548,9 @@ vector<int> BinaryTreeSeries::printBoundary(BinaryTree *root){
 /* 21. Vertical order traversal */
 vector<vector<int>> BinaryTreeSeries::verticalTraversal(TreeNode *root){
     map<int, map<int, multiset<int>>> nodes;
+        // instead of multiset we can take a vector as well, then we need to sort at the end
+        // map<int, map<int, vector<int>>> nodes;
+        // sort(begin(q.second), end(q.second))
     queue<pair<TreeNode *, pair<int, int>>> todo;
     todo.push({root,{0,0}});
     while(!todo.empty()){
