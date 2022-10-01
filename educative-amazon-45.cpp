@@ -415,10 +415,195 @@ string get_permutation(int n, int k) {
 
 
 //11. Find all subsets of a given set of integers
+int get_bit(int num, int bit) {
+	int temp = (1 << bit);
+	temp = temp & num;
+	if (temp == 0) {
+		return 0;
+	}
+	return 1;
+}
+
+void get_all_subsets(vector<int>& v, vector<unordered_set<int>>& sets) {	
+	int subsets_count = pow((double)2, (double)v.size());
+	for (int i = 0; i < subsets_count; ++i) {
+		unordered_set<int> set;
+		for (int j = 0; j < v.size(); ++j) {
+			if (get_bit(i, j)) {
+				set.insert(v[j]);
+			}
+		}
+		sets.push_back(set);
+	}
+}
+//runtime - Exponential, O(2^{n}* n) - where ‘n’ is number of integers in the given set.
+//space - Exponential, O(2^{n}* n) O(2n∗n)
+
 //12. Print balanced brace combinations
+void print(vector<vector<char>> result){
+  for(int i = 0; i < result.size(); i++){
+    cout << "[ ";
+    for(int j = 0; j < result[i].size(); j++){
+      cout << result[i][j] << ", "; 
+    }
+    cout << "]" << endl;
+  }
+}
+
+void print_all_braces_rec(
+    int n,
+    int left_count,
+    int right_count,
+    vector<char>& output, vector<vector<char>>& result) {
+
+  if (left_count == n && right_count == n) {
+    result.push_back(output);
+  }
+
+  if (left_count < n) {
+    output.push_back('{');
+    print_all_braces_rec(n, left_count + 1, right_count, output, result);
+    output.pop_back();
+  }
+
+  if (right_count < left_count) {
+    output.push_back('}');
+    print_all_braces_rec(n, left_count, right_count + 1, output, result);
+    output.pop_back();
+  }
+}
+
+vector<vector<char>> print_all_braces(int n) {
+  vector<vector<char>> result;
+  vector<char> output;
+  print_all_braces_rec(n, 0, 0, output, result);
+  return result;
+}
+//The runtime complexity of this solution is exponential, 2^{n}
+//The memory complexity of this solution is linear, O(n).
+
 //13. Clone a Directed Graph
+struct Node {
+  int data;
+  list<Node*> neighbors;
+  Node(int d) : data(d) {}
+};
+
+Node* clone_rec(Node* root, 
+        unordered_map<Node*, 
+        Node*>& nodes_completed) {
+  
+  if (root == nullptr) {
+    return nullptr;
+  }
+
+  Node* pNew = new Node(root->data);
+  nodes_completed[root] = pNew;
+  
+  for (Node* p : root->neighbors) {
+    auto x = nodes_completed.find(p);
+    if (x == nodes_completed.end()){
+      pNew->neighbors.push_back(clone_rec(p, nodes_completed));
+    } else {
+      pNew->neighbors.push_back(x->second /*value*/);
+    }
+  }
+  return pNew;
+}
+
+Node* clone(Node* root) {
+  unordered_map<Node*, Node*> nodes_completed;
+  return clone_rec(root, nodes_completed);
+}
+//runtime - Linear, O(n).
+//Logarithmic, O(n). ‘n’ is the number of vertices in the graph.
+
 //14. Find Low/High Index
+int find_low_index(vector<int>& arr, int key) {
+  int low = 0;
+  int high = arr.size() - 1;
+  int mid = high / 2;
+
+  while (low <= high) {
+    int mid_elem = arr[mid];
+
+    if (mid_elem < key) {
+      low = mid + 1;
+    }
+    else {
+      high = mid - 1;
+    }
+    mid = low + (high - low) / 2;
+  }
+  if (low < arr.size() && arr[low] == key) {
+    return low;
+  }
+  return -1;
+}
+
+int find_high_index(vector<int>& arr, int key) {
+  int low = 0;
+  int high = arr.size()-1;
+  int mid = high/2;
+  while (low <= high) {
+    int mid_elem = arr[mid];
+    if (mid_elem <= key) {
+      low = mid+1;
+    } else {
+      high = mid-1;
+    }
+    mid = low + (high-low)/2;
+  }
+  
+  if(high == -1)
+    return high;
+  
+  if (high < arr.size() && arr[high] == key) {
+    return high;
+  }
+
+  return -1;
+}
+//Runtime Complexity: Logarithmic, O(logn)
+//Memory Complexity: Constant, O(1)
+
 //15. Search Rotated Array
+int binary_search(vector<int>& arr, int start, int end, int key) {
+  // assuming all the keys are unique.  
+  if (start > end) {
+    return -1;
+  }
+
+  int mid = start + (end - start) / 2;
+  if (arr[mid] == key) {
+    return mid;
+  }
+
+  if (arr[start] <= arr[mid] && key <= arr[mid] && key >= arr[start]) {
+    return binary_search(arr, start, mid-1, key);
+  }
+
+  else if (arr[mid] <= arr[end] && key >= arr[mid] && key <= arr[end]) {
+    return binary_search(arr, mid+1, end, key);
+  }
+
+  else if (arr[end] <= arr[mid]) {
+    return binary_search(arr, mid+1, end, key);
+  }
+
+  else if (arr[start] >= arr[mid]) {
+    return binary_search(arr, start, mid-1, key);
+  }
+
+  return -1;
+}
+
+int binary_search_rotated(vector<int>& arr, int key) {
+  return binary_search(arr, 0, arr.size()-1, key);
+}
+//Runtime Complexity: Logarithmic, O(logn)
+//Memory Complexity: Logarithmic, O(logn)
+
 //16. K largest elements from an array
 //17. Convert a Binary tree to DLL
 //18. Given a binary tree T, find the maximum path sum. The path may start and end at any node in the tree.
