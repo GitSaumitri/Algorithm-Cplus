@@ -84,6 +84,69 @@ NodePtr merge_sorted(NodePtr head1, NodePtr head2) {
 //space - Constant, O(1)
 
 //4. Copy linked list with arbitrary pointer
+struct LinkedListNode1{
+    int data;
+    struct LinkedListNode1 *next;
+    struct LinkedListNode1 *arbitrary_pointer;
+    LinkedListNode1(int d){
+        data = d;
+        next = arbitrary_pointer = NULL;
+    }
+};
+LinkedListNode1* deep_copy_arbitrary_pointer(
+    LinkedListNode1* head) {
+
+    LinkedListNode1* curr = head, *temp;
+ 
+    // insert additional node after
+    // every node of original list
+    while (curr)
+    {
+        temp = curr->next;
+ 
+        // Inserting node
+        curr->next = new LinkedListNode1(curr->data);
+        curr->next->next = temp;
+        curr = temp;
+    }
+ 
+    curr = head;
+ 
+    // adjust the random pointers of the
+    // newly added nodes
+    while (curr)
+    {
+        if(curr->next)
+            curr->next->arbitrary_pointer = curr->arbitrary_pointer ?
+                                 curr->arbitrary_pointer->next : curr->arbitrary_pointer;
+ 
+        // move to the next newly added node by
+        // skipping an original node
+        curr = curr->next?curr->next->next:curr->next;
+    }
+ 
+    LinkedListNode1* original = head, *copy = head->next;
+ 
+    // save the start of copied linked list
+    temp = copy;
+ 
+    // now separate the original list and copied list
+    while (original && copy)
+    {
+        original->next = original->next? original->next->next : original->next;
+        copy->next = copy->next?copy->next->next:copy->next;
+        original = original->next;
+        copy = copy->next;
+    }
+ 
+    return temp;
+
+  return NULL;
+}
+//The runtime complexity of this solution is linear, O(n).
+//The memory complexity of this solution is constant, O(1).
+
+//5. Level Order Traversal of Binary Tree
 
 
 int main(){
