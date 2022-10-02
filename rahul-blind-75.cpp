@@ -240,14 +240,291 @@ public:
     return r;
     }
 
+    //7- Find Minimum in Rotated Sorted Array - https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+    // On dividing - one side will be surely sorted and othersise might not
+    int findMin(vector<int>& nums) {
+        int left = 0;
+        int right = nums.size() - 1;
+        if(nums[right] > nums[0]) 
+            return nums[0];
+        while(left < right){
+            int mid = (left + right) / 2;
+            if(nums[right] < nums[mid]) 
+                left = mid + 1;
+            else 
+                right = mid;
+        }
+        return nums[left];
+    }
+
+    int findMin1(vector<int>& nums) {
+        int low = 0;
+        int high = nums.size()-1;
+        int miin = INT_MAX;
+        
+        while(low <= high){
+            int mid = (low+high)/2;
+            if(nums[mid] <= nums[high]){
+                miin = min(nums[mid],miin);
+                high = mid-1;
+            }else{
+                miin = min(nums[low],miin);
+                low = mid+1;
+            }
+        }
+        return miin;
+    }
+
+    //8- Search in Rotated Sorted Array - https://leetcode.com/problems/search-in-rotated-sorted-array/
+    int search(vector<int>& nums, int target) {
+        int low=0,high=nums.size()-1;
+        
+        while(low<=high){
+            int mid=(low+high)>>1;
+            
+            if(nums[mid]==target) 
+                return mid;
+            
+            if(nums[low]<=nums[mid]){
+                if(nums[low]<=target && target<=nums[mid]){
+                    high=mid-1;
+                } else {
+                    low=mid+1;
+                }
+            }
+            else{
+                if(nums[high]>=target && target>=nums[mid]){
+                    low=mid+1;
+                }
+                else{
+                    high=mid-1;
+                }
+            }
+        }
+        return -1;
+    }
+
+    int search1(vector<int>& nums, int target) {
+        int low=0,high=nums.size()-1;
+        while(low<high){
+            int mid=(low+high)/2;
+            if(nums[mid]>nums[high]) low=mid+1;
+            else high=mid;
+        }
+        int point = low;
+        low=0,high=nums.size()-1;
+        while(low<=high){
+            int mid=(low+high)/2;
+            int rMid=(mid+point)%nums.size();
+            if(nums[rMid]==target) return rMid;
+            if(nums[rMid]<target) low=mid+1;
+            else high=mid-1;
+        }
+        return -1;
+    }
+
+    //9- 3Sum - https://leetcode.com/problems/3sum/
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        
+        int len = nums.size();
+        if(len < 2){
+            return {};
+        }
+        set<pair<int,int>> seen;
+        vector<vector<int>> res;
+        
+        sort(nums.begin(), nums.end());
+        for(int i=0; i<len; i++){
+            int first = i;
+            int second = i+1;
+            int end = len-1;
+            while(second < end){
+                int sum = nums[first] + nums[second] + nums[end];
+                if(sum==0){
+                    int mi = min(min(nums[first],nums[second]),nums[end]);
+                    int ma = max(max(nums[first],nums[second]),nums[end]);
+                    if(!seen.count({mi,ma})){
+                        res.push_back({nums[first],nums[second],nums[end]});
+                    }
+                    seen.insert({mi,ma});
+                    second++;
+                    end--;
+                }else if(sum > 0){
+                    end--;
+                }else{
+                    second++;
+                }
+            }
+        }
+        return res;
+    }
+
+    vector<vector<int>> threeSum1(vector<int>& arr) {
+        int n = arr.size();
+        if(n == 0)
+            return {};
+        
+        sort(arr.begin(), arr.end());
+        vector<vector<int>> res;
+        
+        for(int i = 0; i <= n - 3; i++)
+        {
+            int target = - arr[i];
+            int low = i + 1;
+            int high = n - 1;
+    
+            while(low < high)
+            {
+                if(arr[low] + arr[high] == target)
+                {
+                    res.push_back({arr[i], arr[low], arr[high]});
+                    //skip duplicates
+                    while(low < high && arr[low] == arr[low + 1]){
+                        low++;
+                    }
+                    //skip duplcates
+                    while(low < high && arr[high] == arr[high - 1]){
+                        high--;
+                    }
+                    low++;
+                    high--;
+                } else if(arr[low] + arr[high] < target) {
+                    low++;
+                } else {
+                    high--;
+                }
+            }
+            //skip duplicates
+            while(i < n - 3 && arr[i] == arr[i + 1])
+            {
+                i++;
+            }
+        }
+        
+        return res;
+    }
+
+    //10- Container With Most Water - https://leetcode.com/problems/container-with-most-water/
+    int maxArea(vector<int>& height) {
+        int ans=0,cal=0;
+        int i=0,j=height.size()-1;
+        while(i<j){
+            if(height[i]<height[j]){
+                cal=height[i]*(j-i);
+                i++;
+            }
+            else{
+                cal=height[j]*(j-i);
+                j--;
+            }
+            ans=max(ans,cal);
+        }
+        return ans;
+    }
+
+    // Bonus -Trapping Rain Water - https://leetcode.com/problems/trapping-rain-water/   (sounds similar to above but different - thing twice)
+    int trap(vector<int>& height){
+        int n = height.size();
+        int left = 0;
+        int right = n-1;
+        int res = 0;
+        int maxleft = 0, maxright=0;
+
+        while(left <= right){
+            if(height[left] <= height[right]){
+                if(height[left]>=maxleft)
+                    maxleft = height[left];
+                else    
+                    res += maxleft-height[left];
+                left++;
+            } else {
+                if(height[right]>=maxright)
+                    maxright = height[right];
+                else    
+                    res += maxright-height[right];
+                right--;
+            }
+        }
+        return res;
+    }
+
+    //11- Sum of Two Integers - https://leetcode.com/problems/sum-of-two-integers/
+    int getSum1(int a, int b) {
+        while(b){
+            unsigned c=a&b;
+            a=a^b;
+            b=c<<1;
+        }
+        return a;
+    }
+    
+    int getSum(int a, int b) {     
+        if(b>0){
+             while(b>0){
+                a++;
+                b--;
+            }  
+        } else {
+            while(b<0)
+            {
+                a--;
+                b++;
+            }
+        }
+        return a;
+    }
+
+    //12- Number of 1 Bits - https://leetcode.com/problems/number-of-1-bits/
+    int hammingWeight1(uint32_t n) {
+        int count=0;
+        while(n){
+            if(n & 0x1)
+                count++;
+            n = n >> 1;
+        }
+        return count;
+    }
+
+    int hammingWeight(uint32_t n) {
+        int count=0;
+        while(n){
+            n = n & n-1;
+            count++;
+        }
+        return count;
+    }
+
+    //13- Counting Bits - https://leetcode.com/problems/counting-bits/
+    vector<int> countBits(int n) {
+        vector<int> res;
+        for(int i=0; i<=n; i++){
+            res.push_back(hammingWeight(i));
+        }
+        return res;
+    }
+
+    //14- Missing Number - https://leetcode.com/problems/missing-number/
+
+    //15- Reverse Bits - https://leetcode.com/problems/reverse-bits/
+    
+/*
+16- Climbing Stairs - https://leetcode.com/problems/climbing-stairs/
+17- Coin Change - https://leetcode.com/problems/coin-change/
+18- Longest Increasing Subsequence - https://leetcode.com/problems/longest-increasing-subsequence/
+19- Longest Common Subsequence -
+20- Word Break Problem - https://leetcode.com/problems/word-break/
+21- Combination Sum - https://leetcode.com/problems/combination-sum-iv/
+22- House Robber - https://leetcode.com/problems/house-robber/
+23- House Robber II - https://leetcode.com/problems/house-robber-ii/
+24- Decode Ways - https://leetcode.com/problems/decode-ways/
+25- Unique Paths - https://leetcode.com/problems/unique-paths/
+26- Jump Game - https://leetcode.com/problems/jump-game/
+*/
+
 };
 
 
 
-//7- Find Minimum in Rotated Sorted Array - https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
-//8- Search in Rotated Sorted Array - https://leetcode.com/problems/search-in-rotated-sorted-array/
-//9- 3Sum - https://leetcode.com/problems/3sum/
-//10- Container With Most Water - https://leetcode.com/problems/container-with-most-water/
 
 int main(){
     return 0;
