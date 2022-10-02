@@ -150,7 +150,7 @@ public:
     }
 
     //4- Product of Array Except Self - https://leetcode.com/problems/product-of-array-except-self/
-    vector<int> productExceptSelf(vector<int>& nums) {
+    vector<int> productExceptSelf1(vector<int>& nums) {
         int len = nums.size();
         vector<int> left(len,1);
         vector<int> right(len,1);
@@ -197,11 +197,53 @@ public:
         return maxi;
     }
 
-    
+    //6- Maximum Product Subarray - https://leetcode.com/problems/maximum-product-subarray/
+    int maxProduct1(vector<int>& nums) {
+        int n = nums.size();
+        vector<int>pre(n), suf(n);
+        int mx = nums[0];
+        pre[0]=nums[0]; 
+        for(int i=1; i<n; i++) {
+            if(pre[i-1]!=0) pre[i]=pre[i-1]*nums[i];
+            else pre[i]=nums[i];
+            mx = max(mx, pre[i]);
+        }
+        for(int i=n-1; i>=0; i--) {
+            if(i==n-1) suf[i]=nums[i];
+            else if(suf[i+1]!=0) suf[i]=suf[i+1]*nums[i];
+            else suf[i]=nums[i];
+            mx = max(mx, suf[i]);
+        }
+        return mx;    
+    }
+
+    int maxProduct(vector<int>& A) {
+      // store the result that is the max we have found so far
+    int r = A[0];
+    int n = A.size();
+    // imax/imin stores the max/min product of
+    // subarray that ends with the current number A[i]
+    for (int i = 1, imax = r, imin = r; i < n; i++) {
+        // multiplied by a negative makes big number smaller, small number bigger
+        // so we redefine the extremums by swapping them
+        if (A[i] < 0)
+            swap(imax, imin);
+
+        // max/min product for the current number is either the current number itself
+        // or the max/min by the previous number times the current one
+        imax = max(A[i], imax * A[i]);
+        imin = min(A[i], imin * A[i]);
+
+        // the newly computed max value is a candidate for our global result
+        r = max(r, imax);
+    }
+    return r;
+    }
+
 };
 
 
-//6- Maximum Product Subarray - https://leetcode.com/problems/maximum-product-subarray/
+
 //7- Find Minimum in Rotated Sorted Array - https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
 //8- Search in Rotated Sorted Array - https://leetcode.com/problems/search-in-rotated-sorted-array/
 //9- 3Sum - https://leetcode.com/problems/3sum/
