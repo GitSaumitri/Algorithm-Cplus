@@ -537,6 +537,92 @@ public:
 26- Jump Game - https://leetcode.com/problems/jump-game/
 */
 
+    //27- Clone Graph - https://leetcode.com/problems/clone-graph/
+    // Definition for a Node.
+    class Node {
+    public:
+    int val;
+    vector<Node*> neighbors;
+    Node() {
+        val = 0;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val) {
+        val = _val;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+    };
+
+    //BFS
+    Node* cloneGraph(Node* node) {
+        if(node == NULL){ // if node is null, then simply return null
+            return NULL;
+        }
+        unordered_map<Node *, Node *> mp;
+        Node* first = new Node(node -> val, {}); // make a copy of first node
+        mp[node] = first;
+        
+        queue<Node*> q; //For bfs, we create queue
+        q.push(node); // push into queue
+        
+        while(q.empty() == false){ // until q. empty == false
+            Node* curr = q.front(); // extract front node
+            q.pop(); // pop that from queue
+            
+            for(auto adj: curr -> neighbors){ // now travel in adjcant
+                if(mp.find(adj) == mp.end()){ // if not present in map
+                    mp[adj] = new Node(adj -> val, {}); // then create copy
+                    q.push(adj); // push nto the queue
+                }
+                
+                mp[curr] -> neighbors.push_back(mp[adj]); // in current node push adjcant node
+            }
+        }
+        
+        return mp[node];
+    }
+    //DFS
+    void dfs1(Node *key, unordered_map<Node*, Node*>&clone) {
+        Node *new_node = new Node(key->val);
+        clone[key] = new_node;
+        
+        for (auto node: key->neighbors) {
+            if (clone.find(node) == clone.end())
+                dfs1(node, clone);
+            new_node->neighbors.push_back(clone[node]);
+        }
+    }
+    Node* cloneGraph1(Node* node) {
+        if (!node)
+            return nullptr;
+        unordered_map<Node*, Node*> clone;
+        
+        dfs1(node, clone);
+        return clone[node];
+    }
+
+
+/*
+28- Course Schedule - https://leetcode.com/problems/course-schedule/
+29- Pacific Atlantic Water Flow - https://leetcode.com/problems/pacific-atlantic-water-flow/
+30- Number of Islands - https://leetcode.com/problems/number-of-islands/
+31- Longest Consecutive Sequence - https://leetcode.com/problems/longest-consecutive-sequence/
+32- Alien Dictionary (Leetcode Premium) - https://leetcode.com/problems/alien-dictionary/
+33- Graph Valid Tree (Leetcode Premium) - https://leetcode.com/problems/graph-valid-tree/
+34- Number of Connected Components in an Undirected Graph (Leetcode Premium) - 
+https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/"
+Interval
+35- Insert Interval - https://leetcode.com/problems/insert-interval/
+36- Merge Intervals - https://leetcode.com/problems/merge-intervals/
+37- Non-overlapping Intervals - https://leetcode.com/problems/non-overlapping-intervals/
+38- Meeting Rooms (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms/
+39- Meeting Rooms II (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms-ii/
+*/
+
 };
 
 
