@@ -504,9 +504,25 @@ public:
     }
 
     //14- Missing Number - https://leetcode.com/problems/missing-number/
+    int missingNumber(vector<int>& nums) {
+        int xor1 = 0, i = 0;
+	    for (i = 0; i < nums.size(); i++) {
+		    xor1 = xor1 ^ i ^ nums[i];
+	    }
+	    return xor1 ^ i;    
+    }
 
     //15- Reverse Bits - https://leetcode.com/problems/reverse-bits/
-    
+    uint32_t reverseBits(uint32_t n) {
+        uint32_t ans;
+        for(int i=0;i<32;i++){
+            ans<<=1;
+            if(n & 1) 
+                ans++;
+            n=n>>1;
+        }
+        return ans;    
+    }
 /*
 16- Climbing Stairs - https://leetcode.com/problems/climbing-stairs/
 17- Coin Change - https://leetcode.com/problems/coin-change/
