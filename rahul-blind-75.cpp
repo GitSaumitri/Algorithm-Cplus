@@ -91,7 +91,8 @@ Heap
 using namespace std;
 #include<iostream>
 #include<bits/stdc++.h>
-
+#include<vector>
+#include<algorithm>
 
 class Solution {
 public:
@@ -605,9 +606,45 @@ public:
         return clone[node];
     }
 
+    /* 28- Course Schedule - https://leetcode.com/problems/course-schedule/
+    There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
+    For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1.
+    Return true if you can finish all courses. Otherwise, return false.
+    */
+    /* vis[id]=0 is used for node which is not yet visited, 
+       vis[id]=1 is used for the node which is visited and currently its child nodes are being visited and 
+       vis[id]=2 done when all the child nodes of a node ("id") are visited and the function returns to parent node of node ("id"). 
+       So at that time it is marked as 2 because this node does not require any further traversing.
+    */
+    bool iscycle(vector<int> adj[],vector<int> &vis,int id){
+        if(vis[id]==1)
+            return true;
+        if(vis[id]==0){
+            vis[id]=1;
+            for(auto edge : adj[id]){
+                if(iscycle(adj,vis,edge))
+                    return true;
+            }
+        }
+        vis[id] = 2; //the node is no longer in the recursive stack.
+        return false;
+    }
+    bool canFinish(int n, vector<vector<int>>& pre) {
+        vector<int> adj[n];
+        
+        for(auto edge : pre)
+            adj[edge[1]].push_back(edge[0]);
+        
+        vector<int> vis(n,0);
+        for(int i=0;i<n;i++){
+            if(iscycle(adj,vis,i))
+                return false;
+        }
+        return true;
+    }
 
 /*
-28- Course Schedule - https://leetcode.com/problems/course-schedule/
+
 29- Pacific Atlantic Water Flow - https://leetcode.com/problems/pacific-atlantic-water-flow/
 30- Number of Islands - https://leetcode.com/problems/number-of-islands/
 31- Longest Consecutive Sequence - https://leetcode.com/problems/longest-consecutive-sequence/
