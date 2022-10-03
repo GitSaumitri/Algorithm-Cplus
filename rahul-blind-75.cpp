@@ -644,7 +644,7 @@ public:
     }
 
     //29- Pacific Atlantic Water Flow - https://leetcode.com/problems/pacific-atlantic-water-flow/
-
+    // https://leetcode.com/problems/pacific-atlantic-water-flow/discuss/2641884/Solution-Explain-%2B-C%2B%2B-Code
     // Go througout the adjacent if the adjacent's height is more or equal to current height
 	void dfs(vector<vector<int>>& grid, vector<vector<bool>>& flag, int x, int y) {
         int n = flag.size();
@@ -692,10 +692,38 @@ public:
 
 		return ans;
 	}
+    
+    // 30- Number of Islands - https://leetcode.com/problems/number-of-islands/
+    void getIslands(vector<vector<char>> &grid, int i, int j, int row, int col){
+        
+        if(i<0 || i>=row || j<0 || j>=col || grid[i][j]=='0')
+            return;
+        
+        grid[i][j]='0';
+        getIslands(grid,i+1,j,row,col);
+        getIslands(grid,i-1,j,row,col);
+        getIslands(grid,i,j+1,row,col);
+        getIslands(grid,i,j-1,row,col);
+    }
+
+    int numIslands(vector<vector<char>>& grid) {
+       int row = grid.size();
+        if(row==0)
+            return 0;
+        int col = grid[0].size();
+        int count=0;
+        for(int i=0; i<row; i++){
+            for(int j=0; j<col; j++){
+                if(grid[i][j]=='1'){
+                    count++;
+                    getIslands(grid,i,j,row,col);
+                }
+            }
+        }
+        return count;
+    }
 
 /*
-
-30- Number of Islands - https://leetcode.com/problems/number-of-islands/
 31- Longest Consecutive Sequence - https://leetcode.com/problems/longest-consecutive-sequence/
 32- Alien Dictionary (Leetcode Premium) - https://leetcode.com/problems/alien-dictionary/
 33- Graph Valid Tree (Leetcode Premium) - https://leetcode.com/problems/graph-valid-tree/
