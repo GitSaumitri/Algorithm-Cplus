@@ -852,10 +852,71 @@ Edge cases
         string order = topologicalSortBFS(g);
         return order;
     }
- /*   
-33- Graph Valid Tree (Leetcode Premium) - https://leetcode.com/problems/graph-valid-tree/
-34- Number of Connected Components in an Undirected Graph (Leetcode Premium) - 
-https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/"
+ 
+    //33- Graph Valid Tree (Leetcode Premium) - https://leetcode.com/problems/graph-valid-tree/
+    bool isCyclic(map<int, vector<int>> &adj, vector<int>&vis, int v, int u) {
+        if(vis[v]) return 1;
+        vis[v]=1;
+        for(int neighbor:adj[v]) {
+            if(neighbor != u && isCyclic(adj, vis, neighbor, v)) 
+                return 1;
+        }
+        return 0;
+    }
+    
+    bool validTree(int n, vector<vector<int>>& edges) {
+        // contruct graph using map
+        map<int, vector<int>> adj;
+        for(auto &edge: edges) {
+            adj[edge[0]].push_back(edge[1]);
+            adj[edge[1]].push_back(edge[0]);
+        }
+        
+        vector<int> vis(n,0);
+        
+        if(isCyclic(adj, vis, 0, -1))
+            return 0;
+        
+        for(int i=0; i<n; i++) {
+            if(!vis[i])
+                return 0;
+        }
+        
+        return 1;
+    }
+
+    //34- Number of Connected Components in an Undirected Graph (Leetcode Premium) - 
+    //https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/"
+    //https://www.tutorialspoint.com/number-of-connected-components-in-an-undirected-graph-in-cplusplus
+    void dfs(int node, vector<int> graph[], vector<bool>& visited){
+      if(visited[node]) return;
+         visited[node] = true;
+      for(int i = 0; i < graph[node].size(); i++){
+         dfs(graph[node][i], graph, visited);
+      }
+    }
+    
+    int countComponents(int n, vector<vector<int>>& edges) {
+      vector <bool> visited(n);
+      if(!n) return 0;
+      vector <int> graph[n];
+      for(int i = 0; i < edges.size(); i++){
+         int u = edges[i][0];
+         int v = edges[i][1];
+         graph[u].push_back(v);
+         graph[v].push_back(u);
+      }
+      int ret = 0;
+      for(int i = 0; i < n; i++){
+         if(!visited[i]){
+            dfs(i, graph, visited);
+            ret++;
+         }
+      }
+      return ret;
+    }
+
+/*
 Interval
 35- Insert Interval - https://leetcode.com/problems/insert-interval/
 36- Merge Intervals - https://leetcode.com/problems/merge-intervals/
