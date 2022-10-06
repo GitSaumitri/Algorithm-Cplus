@@ -916,11 +916,73 @@ Edge cases
       return ret;
     }
 
+    //35- Insert Interval - https://leetcode.com/problems/insert-interval/
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+        vector<vector<int>> res;
+        int len = intervals.size();
+        int index = 0;
+        
+        //insert all the intervals to the result that are left to the new interval
+        while((index < len) && (intervals[index][1] < newInterval[0])){
+            res.push_back(intervals[index]);
+            index++;
+        }
+        
+        //merge all intervals that intersect with the new interval
+        while(index < len && intervals[index][0] <= newInterval[1]){
+            newInterval[0] = min(intervals[index][0],newInterval[0]);
+            newInterval[1] = max(intervals[index][1],newInterval[1]);
+            index++;
+        }
+        res.push_back(newInterval);
+        
+        //put all that is rest to this interval
+        while(index < len){
+            res.push_back(intervals[index]);
+            index++;
+        }
+        
+        return res;  
+    }
+
+    //36- Merge Intervals - https://leetcode.com/problems/merge-intervals/
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        vector<vector<int>> res;
+        sort(intervals.begin(), intervals.end());
+        vector<int> inter = intervals[0];
+        for(int i=1; i<intervals.size(); i++){
+            if(inter[1] >= intervals[i][0]){
+                inter[0] = min(inter[0], intervals[i][0]);
+                inter[1] = max(inter[1], intervals[i][1]);
+            } else {
+                res.push_back(inter);
+                inter = intervals[i];
+            }
+        }
+        res.push_back(inter);
+        return res;
+    }
+
 /*
-Interval
-35- Insert Interval - https://leetcode.com/problems/insert-interval/
-36- Merge Intervals - https://leetcode.com/problems/merge-intervals/
-37- Non-overlapping Intervals - https://leetcode.com/problems/non-overlapping-intervals/
+    //37- Non-overlapping Intervals - https://leetcode.com/problems/non-overlapping-intervals/
+    static bool comp(vector<int> &a,vector<int> &b) {
+	    return a[1]<b[1];
+    }
+
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        int ans=0;      
+		int n=intervals.size();       
+		sort(intervals.begin(),intervals.end(),comp); 
+		vector<int> prev= intervals[0];
+		for(int i=1;i<n;i++){
+			if(prev[1]>intervals[i][0]) {
+				ans++;              
+			} else { 
+                prev=intervals[i];           
+            }
+		}
+		return ans;                 
+    }
 38- Meeting Rooms (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms/
 39- Meeting Rooms II (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms-ii/
 */
