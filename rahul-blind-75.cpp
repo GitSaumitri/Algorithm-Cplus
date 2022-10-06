@@ -963,7 +963,6 @@ Edge cases
         return res;
     }
 
-/*
     //37- Non-overlapping Intervals - https://leetcode.com/problems/non-overlapping-intervals/
     static bool comp(vector<int> &a,vector<int> &b) {
 	    return a[1]<b[1];
@@ -983,9 +982,34 @@ Edge cases
 		}
 		return ans;                 
     }
-38- Meeting Rooms (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms/
-39- Meeting Rooms II (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms-ii/
-*/
+    //38- Meeting Rooms (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms/
+    
+    //39- Meeting Rooms II (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms-ii/
+    //https://www.tutorialcup.com/leetcode-solutions/meeting-rooms-ii-leetcode-solution.htm
+    int minMeetingRooms(vector<vector<int>> &intervals){
+        vector<int> start;
+        vector<int> end;
+        for (int i = 0; i < intervals.size(); i++){
+            start.push_back(intervals[i][0]);
+            end.push_back(intervals[i][1]);
+        }
+        sort(start.begin(), start.end());
+        sort(end.begin(), end.end());
+        int i = 1, j = 0;
+        int curr = 1;
+        int answer = 1;
+        while (i < start.size() && j < end.size()){
+            if (start[i] < end[j]){
+                curr++;
+                i++;
+            } else {
+                curr--;
+                j++;
+            }
+            answer = max(answer, curr);
+        }
+        return answer;
+    }
 
 };
 
