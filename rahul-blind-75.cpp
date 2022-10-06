@@ -406,6 +406,7 @@ public:
     }
 
     //10- Container With Most Water - https://leetcode.com/problems/container-with-most-water/
+    //https://medium.com/j-t-tech/leetcode-11-container-with-most-water-cd10c0064034
     int maxArea(vector<int>& height) {
         int ans=0,cal=0;
         int i=0,j=height.size()-1;
@@ -424,6 +425,9 @@ public:
     }
 
     // Bonus -Trapping Rain Water - https://leetcode.com/problems/trapping-rain-water/   (sounds similar to above but different - thing twice)
+    //https://medium.com/j-t-tech/leetcode-42-trapping-rain-water-c7e6e4e3b671
+    //Similar to Container With Most Water, the amount of water that can be contained is an area that is bounded in height by the shortest wall on the left and right. 
+    //However, in this problem the heights have widths and displace water, AND we need all the containers.
     int trap(vector<int>& height){
         int n = height.size();
         int left = 0;
@@ -723,8 +727,30 @@ public:
         return count;
     }
 
+    //31- Longest Consecutive Sequence - https://leetcode.com/problems/longest-consecutive-sequence/
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> hashSet;
+        for(int num: nums){
+            hashSet.insert(num);
+        }
+        int longestSteak = 0;
+        for(int num: nums){
+           if(!hashSet.count(num-1)){
+               int currentNum = num;
+               int currentSteak = 1;
+
+               while(hashSet.count(currentNum+1)){
+                   currentNum += 1;
+                   currentSteak +=1 ;
+               }
+
+               longestSteak = max(longestSteak, currentSteak);
+           }
+       }
+       return longestSteak;
+
+    }
 /*
-31- Longest Consecutive Sequence - https://leetcode.com/problems/longest-consecutive-sequence/
 32- Alien Dictionary (Leetcode Premium) - https://leetcode.com/problems/alien-dictionary/
 33- Graph Valid Tree (Leetcode Premium) - https://leetcode.com/problems/graph-valid-tree/
 34- Number of Connected Components in an Undirected Graph (Leetcode Premium) - 
