@@ -948,11 +948,15 @@ Edge cases
     //36- Merge Intervals - https://leetcode.com/problems/merge-intervals/
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
         vector<vector<int>> res;
+        if(intervals.size())
+            return res;
+
         sort(intervals.begin(), intervals.end());
         vector<int> inter = intervals[0];
+        
         for(int i=1; i<intervals.size(); i++){
             if(inter[1] >= intervals[i][0]){
-                inter[0] = min(inter[0], intervals[i][0]);
+                //inter[0] = min(inter[0], intervals[i][0]); //this is obvious as we have sorted intervals
                 inter[1] = max(inter[1], intervals[i][1]);
             } else {
                 res.push_back(inter);
@@ -964,6 +968,10 @@ Edge cases
     }
 
     //37- Non-overlapping Intervals - https://leetcode.com/problems/non-overlapping-intervals/
+    /* note that in previous overalapping problems we were sorting based
+    on first index, here we are sorting based on second index because if they
+    are non overlapping intervals the first index will be in already sorted if not
+    then remove that pair*/
     static bool comp(vector<int> &a,vector<int> &b) {
 	    return a[1]<b[1];
     }
@@ -983,10 +991,31 @@ Edge cases
 		return ans;                 
     }
     //38- Meeting Rooms (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms/
+    //https://spacedleet.vercel.app/solutions/meeting-rooms/cpp
+    struct Interval {
+        int start;
+        int end;
+        Interval() : start(0), end(0) {}
+        Interval(int s, int e) : start(s), end(e) {}
+    };
+    bool overlapped(const Interval& i1, const Interval& i2){
+        return max(i1.start, i2.start) < min(i1.end, i2.end);
+    }
     
+    bool canAttendMeetings(vector<Interval>& intervals) {
+        for(int i = 0; i < intervals.size(); i ++)
+            for(int j = i + 1; j < intervals.size(); j ++)
+                if(overlapped(intervals[i], intervals[j]))
+                    return false;
+        return true;
+    }
+
     //39- Meeting Rooms II (Leetcode Premium) - https://leetcode.com/problems/meeting-rooms-ii/
     //https://www.tutorialcup.com/leetcode-solutions/meeting-rooms-ii-leetcode-solution.htm
     int minMeetingRooms(vector<vector<int>> &intervals){
+        if(intervals.size())
+            return 0;
+
         vector<int> start;
         vector<int> end;
         for (int i = 0; i < intervals.size(); i++){
