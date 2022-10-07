@@ -1073,14 +1073,75 @@ Edge cases
         return recursivereverselist(head,NULL);
     }
 
-/*
-Linked List
+    //41- Detect Cycle in a Linked List - https://leetcode.com/problems/linked-list-cycle/
+    bool hasCycle(ListNode *head) {
+        if(head==NULL)
+            return false;
+        if(head->next==NULL)
+            return false;
+        if(!head->next && head==head->next)
+            return true;
+        
+        ListNode *slow=head;
+        ListNode *fast=head->next->next;
+        
+        while(fast && fast->next){
+            if(fast == slow)
+                return true;
+            fast = fast->next->next;
+            slow = slow->next;
+        }
+        return false;
+    }
 
-41- Detect Cycle in a Linked List - https://leetcode.com/problems/linked-list-cycle/
-42- Merge Two Sorted Lists - https://leetcode.com/problems/merge-two-sorted-lists/
+    bool hasCycle1(ListNode *head) {
+        ListNode * slow = head;
+        ListNode * fast = head;
+        while(fast && fast->next){
+            slow = slow->next;
+            fast = fast->next->next;
+            if(slow == fast)
+                return true;
+        }
+        return false;
+    }
+
+    //42- Merge Two Sorted Lists - https://leetcode.com/problems/merge-two-sorted-lists/
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        if(list1==NULL)
+            return list2;
+        if(list2==NULL)
+            return list1;
+        
+        ListNode result;
+        ListNode *tail;
+        tail = &result;
+        
+        while(list1 && list2){
+            if(list1->val <= list2->val){
+                tail->next = list1;
+                list1 = list1->next;
+            } else {
+                tail->next = list2;
+                list2 = list2->next;
+            }
+            tail = tail->next;
+        }
+        
+        if(list1){
+            tail -> next = list1;
+        }
+        if(list2){
+            tail -> next = list2;
+        }
+        
+        return result.next;
+    }
+/*    
 43- Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
 44- Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 45- Reorder List - https://leetcode.com/problems/reorder-list/
+
 Matrix
 46- Set Matrix Zeroes - https://leetcode.com/problems/set-matrix-zeroes/
 47- Spiral Matrix - https://leetcode.com/problems/spiral-matrix/
