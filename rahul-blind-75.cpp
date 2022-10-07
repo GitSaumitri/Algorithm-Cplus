@@ -1040,6 +1040,54 @@ Edge cases
         return answer;
     }
 
+    //40- Reverse a Linked List - https://leetcode.com/problems/reverse-linked-list/
+    struct ListNode {
+      int val;
+      ListNode *next;
+      ListNode() : val(0), next(nullptr) {}
+      ListNode(int x) : val(x), next(nullptr) {}
+      ListNode(int x, ListNode *next) : val(x), next(next) {}
+    };
+    //iterative
+    ListNode* reverseList(ListNode* head) {
+        ListNode * next = NULL;
+        ListNode * temp = head;
+        while(head!=NULL){
+            temp = head->next;
+            head->next = next;
+            next = head;
+            head = temp;
+        }
+        return next;
+    }
+
+    //recurssive
+    ListNode* recursivereverselist(ListNode* head,ListNode* prev){
+        if(head == NULL)
+            return prev;
+        ListNode* after = head->next;
+        head->next = prev;
+        return recursivereverselist(after,head);
+    }
+    ListNode* reverseList1(ListNode* head) {
+        return recursivereverselist(head,NULL);
+    }
+
+/*
+Linked List
+
+41- Detect Cycle in a Linked List - https://leetcode.com/problems/linked-list-cycle/
+42- Merge Two Sorted Lists - https://leetcode.com/problems/merge-two-sorted-lists/
+43- Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
+44- Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+45- Reorder List - https://leetcode.com/problems/reorder-list/
+Matrix
+46- Set Matrix Zeroes - https://leetcode.com/problems/set-matrix-zeroes/
+47- Spiral Matrix - https://leetcode.com/problems/spiral-matrix/
+48- Rotate Image - https://leetcode.com/problems/rotate-image/
+49- Word Search - https://leetcode.com/problems/word-search/
+String
+*/
 };
 
 
