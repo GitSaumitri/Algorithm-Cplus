@@ -1137,9 +1137,29 @@ Edge cases
         
         return result.next;
     }
-/*    
-43- Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
-44- Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+
+    //43- Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
+    
+    //44- Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+        ListNode* removeNthFromEnd(ListNode* head, int n) {
+        /* two pointers, first and second
+            first traverse till n nodes
+            second traverse till n reaches end
+        */
+        ListNode* f = head,*s=head;
+        while(n-- && f) 
+            f=f->next;
+        if(!f) 
+            return head->next;
+        while(f && f->next){
+            f=f->next;
+            s=s->next;
+        }
+        s->next = s->next->next;
+        
+        return head;    
+    }
+/*
 45- Reorder List - https://leetcode.com/problems/reorder-list/
 
 Matrix
