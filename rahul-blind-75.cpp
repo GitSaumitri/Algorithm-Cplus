@@ -1139,7 +1139,8 @@ Edge cases
     }
 
     //43- Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
-    
+    //https://leetcode.com/problems/merge-k-sorted-lists/discuss/1746240/C%2B%2B-Solution-w-Explanation-or-Step-by-step-optimisation-or-Three-different-approaches
+
     //44- Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
         ListNode* removeNthFromEnd(ListNode* head, int n) {
         /* two pointers, first and second
@@ -1159,9 +1160,32 @@ Edge cases
         
         return head;    
     }
-/*
-45- Reorder List - https://leetcode.com/problems/reorder-list/
 
+    //45- Reorder List - https://leetcode.com/problems/reorder-list/
+    void reorderList(ListNode* head) {
+        if ((!head) || (!head->next) || (!head->next->next)) 
+            return; // Edge cases
+        
+        stack<ListNode*> my_stack;
+        ListNode* ptr = head;
+        int size = 0;
+        while (ptr != NULL){ // Put all nodes in stack
+            my_stack.push(ptr);
+            size++;
+            ptr = ptr->next;
+        }
+        
+        ListNode* pptr = head;
+        for (int j=0; j<size/2; j++){ // Between every two nodes insert the one in the top of the stack
+            ListNode *element = my_stack.top();
+            my_stack.pop();
+            element->next = pptr->next;
+            pptr->next = element;
+            pptr = pptr->next->next;
+        }
+        pptr->next = NULL;
+    }
+/*
 Matrix
 46- Set Matrix Zeroes - https://leetcode.com/problems/set-matrix-zeroes/
 47- Spiral Matrix - https://leetcode.com/problems/spiral-matrix/
