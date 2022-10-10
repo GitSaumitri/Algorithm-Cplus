@@ -1140,6 +1140,51 @@ Edge cases
 
     //43- Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
     //https://leetcode.com/problems/merge-k-sorted-lists/discuss/1746240/C%2B%2B-Solution-w-Explanation-or-Step-by-step-optimisation-or-Three-different-approaches
+    class comp2{
+        public:
+        bool operator()(ListNode *a, ListNode *b){
+            return a->val > b->val;
+        }
+    };
+        
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if(lists.size()==0)
+            return NULL;
+        
+        int count=0;
+        ListNode dummy;
+        ListNode *res = &dummy;
+        priority_queue<ListNode *, vector<ListNode*>, comp2> pq;
+        int len = lists.size();
+        
+        while(true){
+            count=0;
+            for(int i=0 ; i < lists.size() ; i++){
+                if(lists[i]){
+                    pq.push(lists[i]);
+                    lists[i] = lists[i]->next;
+                } else {
+                    count++;
+                }
+            }
+           // cout<<" "<<count<<endl;
+            if(!pq.empty()){
+                res->next = pq.top();
+                res = res->next;
+                pq.pop();
+            }
+            if(count==len)
+                break;
+        }
+        while(!pq.empty()){
+            res->next = pq.top();
+            res = res->next;
+            pq.pop();        
+        }
+        res->next = nullptr;
+        
+        return dummy.next;
+    }
 
     //44- Remove Nth Node From End Of List - https://leetcode.com/problems/remove-nth-node-from-end-of-list/
         ListNode* removeNthFromEnd(ListNode* head, int n) {
@@ -1185,14 +1230,151 @@ Edge cases
         }
         pptr->next = NULL;
     }
+
 /*
 Matrix
 46- Set Matrix Zeroes - https://leetcode.com/problems/set-matrix-zeroes/
+//https://spacedleet.vercel.app/solutions/set-matrix-zeroes/cpp
+//strivers placement series 
+
 47- Spiral Matrix - https://leetcode.com/problems/spiral-matrix/
+
 48- Rotate Image - https://leetcode.com/problems/rotate-image/
 49- Word Search - https://leetcode.com/problems/word-search/
 String
 */
+
+    //74 - Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
+      class comp1{
+        public:
+        bool operator()(ListNode *a, ListNode *b){
+        return a->val > b->val;
+        }
+    };
+        
+    ListNode* mergeKLists1(vector<ListNode*>& lists) {
+        if(lists.size()==0)
+            return NULL;
+        
+        int count=0;
+        ListNode dummy;
+        ListNode *res = &dummy;
+        priority_queue<ListNode *, vector<ListNode*>, comp1> pq;
+        int len = lists.size();
+        
+        while(true){
+            count=0;
+            for(int i=0 ; i < lists.size() ; i++){
+                if(lists[i]){
+                    pq.push(lists[i]);
+                    lists[i] = lists[i]->next;
+                } else {
+                    count++;
+                }
+            }
+           // cout<<" "<<count<<endl;
+            if(!pq.empty()){
+                res->next = pq.top();
+                res = res->next;
+                pq.pop();
+            }
+            if(count==len)
+                break;
+        }
+        while(!pq.empty()){
+            res->next = pq.top();
+            res = res->next;
+            pq.pop();        
+        }
+        res->next = nullptr;
+        
+        return dummy.next;
+    }
+
+    //75- Top K Frequent Elements - https://leetcode.com/problems/top-k-frequent-elements/
+    bool static sortByVal(const pair<int, int> &a, 
+               const pair<int, int> &b) { 
+        return (a.second > b.second); 
+    } 
+    //public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int,int>ints_cnt;
+        vector<int> res;
+        vector<pair<int, int>> vec;
+        unordered_map<int, int> :: iterator it;
+        
+        for(auto i:nums){
+            auto it = ints_cnt.find(i);
+            if(it == ints_cnt.end()){
+                ints_cnt[i]=1;        
+            }else{
+                ints_cnt[i]++;
+            }
+        }
+        
+        // copy key-value pairs from the map to the vector
+        unordered_map<int, int> :: iterator it2;
+        for (it2=ints_cnt.begin(); it2!=ints_cnt.end(); it2++) 
+        {
+            vec.push_back(make_pair(it2->first, it2->second));
+        }
+        
+        // sort the vector by increasing order of its pair's second value
+        sort(vec.begin(), vec.end(), sortByVal); 
+        
+        
+        // print the vector
+	    cout << "The map, sorted by value is: " << endl;
+	    for (int i = 0; i < k; i++)
+	    {
+		    cout << vec[i].first << ": " << vec[i].second << endl;
+            res.push_back(vec[i].first);
+	    }
+        
+        return res;   
+    }
+    //76- Find Median from Data Stream - https://leetcode.com/problems/find-median-from-data-stream/
+    //https://medium.com/kode-shaft/find-median-from-data-stream-ffbf44c63b22
+class MedianFinder {
+     priority_queue<int> left; // maxheap
+    priority_queue<int, vector<int>, greater<int>> right; // minheap
+    public:
+    MedianFinder() {
+        
+    }
+    
+    void addNum(int num) {
+         if(!left.size() && !right.size()){
+            left.push(num);
+            return;
+        }
+        
+        if((left.size() + right.size()) % 2){ // odd
+            if(num >= left.top()) 
+                right.push(num);
+            else{
+                right.push(left.top());
+                left.pop();
+                left.push(num);
+            }
+        }
+        else{ // even
+            if(num <= right.top()) 
+                left.push(num);
+            else{
+                left.push(right.top());
+                right.pop();
+                right.push(num);
+            }
+        }  
+    }
+    
+    double findMedian() {
+        if((left.size() + right.size()) % 2) 
+            return left.top();
+        return (left.top() + right.top()) / 2.0;
+    }
+    };
 };
 
 
