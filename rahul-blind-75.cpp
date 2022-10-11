@@ -1231,18 +1231,98 @@ Edge cases
         pptr->next = NULL;
     }
 
-/*
-Matrix
-46- Set Matrix Zeroes - https://leetcode.com/problems/set-matrix-zeroes/
-//https://spacedleet.vercel.app/solutions/set-matrix-zeroes/cpp
-//strivers placement series 
+    //46- Set Matrix Zeroes - https://leetcode.com/problems/set-matrix-zeroes/
+    //https://spacedleet.vercel.app/solutions/set-matrix-zeroes/cpp
+    //strivers placement series 
+    void setZeroes(vector<vector<int>>& matrix) {
+        bool bFirstColZero = false;
+        int rows = matrix.size(); 
+        int cols = matrix[0].size();
+        
+        for (int i=0; i<rows; ++i) {
+            if (matrix[i][0] == 0) 
+                bFirstColZero = true;
+            for (int j=1; j<cols; ++j)
+                if (matrix[i][j] == 0) 
+                    matrix[i][0] = matrix[0][j] = 0;
+        }
+        
+        for (int i=rows-1; i>=0; --i) {
+            for (int j=cols-1; j>0; --j)
+                if (matrix[i][0] == 0 || matrix[0][j] == 0) 
+                    matrix[i][j] = 0;
+            if (bFirstColZero) 
+                matrix[i][0] = 0;
+        }
+    }
 
-47- Spiral Matrix - https://leetcode.com/problems/spiral-matrix/
+    //47- Spiral Matrix - https://leetcode.com/problems/spiral-matrix/
 
-48- Rotate Image - https://leetcode.com/problems/rotate-image/
-49- Word Search - https://leetcode.com/problems/word-search/
-String
-*/
+    //48- Rotate Image - https://leetcode.com/problems/rotate-image/
+    
+    //49- Word Search - https://leetcode.com/problems/word-search/
+    //boundary check
+    bool isvalid(int i,int j,int n,int m){
+        if(i>=0 &&i<n &&j>=0 &&j<m) return true;
+        return false;
+    }
+    bool  existword(vector<vector<char>>& board, string word,int index,vector<vector<bool>>& visit,int x,int y){
+        int m,n;
+        n=board.size();
+        m=board[0].size();
+      
+        //if we reach till end we must found the word so return true
+        if(index==word.size()){
+              return true;
+        }
+      
+        //four directions
+        int dx[]={1,0,-1,0};
+        int dy[]={0,1,0,-1};
+      
+        for(int i=0;i<4;i++){
+            int newx=x+dx[i];
+            int newy=y+dy[i];
+            
+            //check if the char match with the direction and if it is visited or not
+            if(isvalid(newx,newy,n,m) && board[newx][newy]==word[index] && visit[newx][newy]==false){
+                
+                //if we are going to that index mark this visited
+               visit[newx][newy]=true;
+               
+                if(existword(board,word,index+1,visit,newx,newy)) 
+                   return true;
+                
+                //if ans not found mark this false so it can be included in other search
+                visit[newx][newy]=false;
+            }
+        }
+        return false;
+    }
+    bool exist(vector<vector<char>>& board, string word) {
+        int m,n,i,j;
+        n=board.size();
+        m=board[0].size();
+    
+        //vector to check if node visited or not(already included or not)
+        vector<vector<bool>> visit(n,vector<bool>(m,false));
+    
+        //loop to check from where to start, start only when first char match
+        for(i=0;i<n;i++){
+            for(j=0;j<m;j++){
+                //mark 1st char visited
+                visit[i][j]=true;
+            
+                //check the condition if it matchs first char call function for  the rest
+                if(board[i][j]==word[0] && existword(board,word,1,visit,i,j)) 
+                    return true;
+            
+                //if not found with previous search mark this as false, so it can be used with others
+                visit[i][j]=false;
+            }
+        }
+        return false;
+    }
 
     //74 - Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
       class comp1{
