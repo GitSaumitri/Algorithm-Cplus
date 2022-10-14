@@ -1475,8 +1475,40 @@ Edge cases
         }
         return st.empty();
     }
+
+    //56- Valid Palindrome - https://leetcode.com/problems/valid-palindrome/
+    bool isValidChar(char ch){
+        if(ch>='a' && ch<='z')
+            return true;
+        if(ch>='A' && ch<='Z')
+            return true;
+        if(ch>='0' && ch<='9')
+            return true;
+        return false;
+    }
+    //public:
+    bool isPalindrome(string s) {
+        int start=0;
+        int end = s.size()-1;
+        
+        while(start < end){
+
+            if(!isValidChar(s[start])){
+                start++;
+                continue;
+            }
+            if(!isValidChar(s[end])){
+                end--;
+                continue;
+            }
+            if(tolower(s[start])!=tolower(s[end]))
+                return false;
+            start++;end--;
+        }
+        
+        return true;
+    }
 /*
-56- Valid Palindrome - https://leetcode.com/problems/valid-palindrome/
 57- Longest Palindromic Substring - https://leetcode.com/problems/longest-palindromic-substring/
 58- Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
 59- Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
