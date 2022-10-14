@@ -1259,11 +1259,43 @@ Edge cases
     //47- Spiral Matrix - https://leetcode.com/problems/spiral-matrix/
 
     //48- Rotate Image - https://leetcode.com/problems/rotate-image/
-    
+    void reverse(vector<int>& matrix){
+        int i=0;
+        int j=matrix.size()-1;
+        while(i<j){
+            int temp = matrix[i];
+            matrix[i] = matrix[j];
+            matrix[j] = temp;i++;j--;
+        }
+    }
+    //public:
+    void rotate(vector<vector<int>>& matrix) {
+        int rows = matrix.size();
+        int cols = matrix[0].size();
+        
+        //transpose of the matrix
+        for(int i=0; i<rows; i++){
+            for(int j=i+1; j<cols; j++){
+                //if(i < j){
+                    int temp = matrix[i][j];
+                    matrix[i][j] = matrix[j][i];
+                    matrix[j][i] = temp;
+                //}
+            }
+        }
+
+        //reverse each row
+        for(int i=0; i<rows; i++){
+            reverse(matrix[i]);
+        }
+        return;
+    }
+
     //49- Word Search - https://leetcode.com/problems/word-search/
     //boundary check
     bool isvalid(int i,int j,int n,int m){
-        if(i>=0 &&i<n &&j>=0 &&j<m) return true;
+        if(i>=0 &&i<n &&j>=0 &&j<m) 
+            return true;
         return false;
     }
     bool  existword(vector<vector<char>>& board, string word,int index,vector<vector<bool>>& visit,int x,int y){
@@ -1285,14 +1317,15 @@ Edge cases
             int newy=y+dy[i];
             
             //check if the char match with the direction and if it is visited or not
-            if(isvalid(newx,newy,n,m) && board[newx][newy]==word[index] && visit[newx][newy]==false){
+            if(isvalid(newx,newy,n,m) && 
+                board[newx][newy]==word[index] && 
+                visit[newx][newy]==false){
                 
                 //if we are going to that index mark this visited
-               visit[newx][newy]=true;
-               
+                visit[newx][newy]=true;
                 if(existword(board,word,index+1,visit,newx,newy)) 
-                   return true;
-                
+                    return true;
+            
                 //if ans not found mark this false so it can be included in other search
                 visit[newx][newy]=false;
             }
@@ -1323,6 +1356,55 @@ Edge cases
         }
         return false;
     }
+
+    //50- Longest Substring Without Repeating Characters - https://leetcode.com/problems/longest-substring-without-repeating-characters/
+    int lengthOfLongestSubstring(string s) {
+        int freq[256] = {0};
+
+        int l = 0, r = -1; // sliding window: s[l...r]
+        int res = 0;
+
+        while(r + 1 < s.size()){
+
+            if( freq[s[r + 1]] == 0 )
+                freq[s[++r]] ++;
+            else    //freq[s[r+1]] == 1
+                freq[s[l++]] --;
+
+            res = max(res, r - l + 1);
+        }
+
+        return res;
+    }
+
+/*
+String
+51- Longest Repeating Character Replacement - https://leetcode.com/problems/longest-repeating-character-replacement/
+52- Minimum Window Substring - https://leetcode.com/problems/minimum-window-substring/
+53- Valid Anagram - https://leetcode.com/problems/valid-anagram/
+54- Group Anagrams - https://leetcode.com/problems/group-anagrams/
+55- Valid Parentheses - https://leetcode.com/problems/valid-parentheses/
+56- Valid Palindrome - https://leetcode.com/problems/valid-palindrome/
+57- Longest Palindromic Substring - https://leetcode.com/problems/longest-palindromic-substring/
+58- Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
+59- Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
+Tree
+60- Maximum Depth of Binary Tree - https://leetcode.com/problems/maximum-depth-of-binary-tree/
+61- Same Tree - https://leetcode.com/problems/same-tree/
+62- Invert/Flip Binary Tree - https://leetcode.com/problems/invert-binary-tree/
+63- Binary Tree Maximum Path Sum - https://leetcode.com/problems/binary-tree-maximum-path-sum/
+64- Binary Tree Level Order Traversal - https://leetcode.com/problems/binary-tree-level-order-traversal/
+65- Serialize and Deserialize Binary Tree - https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+66- Subtree of Another Tree - https://leetcode.com/problems/subtree-of-another-tree/
+67- Construct Binary Tree from Preorder and Inorder Traversal - 
+https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/"
+68- Validate Binary Search Tree - https://leetcode.com/problems/validate-binary-search-tree/
+69- Kth Smallest Element in a BST - https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+70- Lowest Common Ancestor of BST - https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+71- Implement Trie (Prefix Tree) - https://leetcode.com/problems/implement-trie-prefix-tree/
+72- Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
+73- Word Search II - https://leetcode.com/problems/word-search-ii/
+*/
 
     //74 - Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
       class comp1{
