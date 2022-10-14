@@ -1418,11 +1418,64 @@ Edge cases
         // Return the sequence we have passes, which is s.length() - beg...
         return s.length() - beg;
     }
-/*    
-52- Minimum Window Substring - https://leetcode.com/problems/minimum-window-substring/
-53- Valid Anagram - https://leetcode.com/problems/valid-anagram/
-54- Group Anagrams - https://leetcode.com/problems/group-anagrams/
-55- Valid Parentheses - https://leetcode.com/problems/valid-parentheses/
+    
+    //52- Minimum Window Substring - https://leetcode.com/problems/minimum-window-substring/
+
+    //53- Valid Anagram - https://leetcode.com/problems/valid-anagram/
+    bool isAnagram(string s, string t) {
+        int count[26]={0};
+        
+        for(int i=0; i<s.size(); i++){
+            count[s[i]-'a']++;
+        }
+        for(int i=0; i<t.size(); i++){
+            count[t[i]-'a']--;
+        }
+        for(int i=0; i< 26; i++){
+            if(count[i]!=0)
+                return false;
+        }
+        return true;
+    }
+
+    //54- Group Anagrams - https://leetcode.com/problems/group-anagrams/
+        vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        map<string,vector<string>>m;
+        vector<vector<string>> res;
+        
+        for(int i=0; i<strs.size(); i++){
+            string s = strs[i];
+            sort(s.begin(),s.end());
+            m[s].push_back(strs[i]);
+        }
+        for(auto it=m.begin(); it!=m.end(); it++){
+            res.push_back(it->second);
+        }
+        
+        return res;
+    }
+
+    //55- Valid Parentheses - https://leetcode.com/problems/valid-parentheses/
+    bool isValid(string s) {
+        
+        stack<char> st;
+        for(char ch:s){
+            if(ch=='(' || ch=='[' || ch=='{'){
+                st.push(ch);
+            }else{
+                if(st.empty())
+                    return false;
+                if(ch==')' && st.top()=='(' ||
+                   ch==']' && st.top()=='[' ||
+                   ch=='}' && st.top()=='{')
+                    st.pop();
+                else
+                    return false;
+            }
+        }
+        return st.empty();
+    }
+/*
 56- Valid Palindrome - https://leetcode.com/problems/valid-palindrome/
 57- Longest Palindromic Substring - https://leetcode.com/problems/longest-palindromic-substring/
 58- Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
