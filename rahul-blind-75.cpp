@@ -1377,9 +1377,48 @@ Edge cases
         return res;
     }
 
-/*
-String
-51- Longest Repeating Character Replacement - https://leetcode.com/problems/longest-repeating-character-replacement/
+    int lengthOfLongestSubstring1(string s) {
+
+        int last[256];
+        memset(last, -1, sizeof(last));
+
+        int l = 0, r = -1; // sliding window: s[l...r]
+        int res = 0;
+        while(r + 1 < s.size()){
+
+            r ++;
+            if(last[s[r]] != -1)
+                l = max(l, last[s[r]] + 1);
+
+            res = max(res, r - l + 1);
+            last[s[r]] = r;
+        }
+
+        return res;
+    }
+
+    //51- Longest Repeating Character Replacement - https://leetcode.com/problems/longest-repeating-character-replacement/
+    int characterReplacement(string s, int k) {
+         // Base case...
+        if (s.size() == 0) return 0;
+        // Make an array...
+        vector <int> arr(128);
+        // Initialize largestCount & beg pointer...
+        int beg = 0, largestCount = 0;
+        // Traverse all characters through the loop...
+        for (int end = 0; end < s.size(); end++) {
+            // Get the largest count of a single, unique character in the current window...
+            largestCount = max(largestCount, ++arr[s[end]]);
+            // We are allowed to have at most k replacements in the window...
+            // So, if max character frequency + distance between beg and end is greater than k...
+            // That means we have met a largest possible sequence, we can move the window to right...
+            if (end - beg + 1 - largestCount > k) // The main equation is: end - beg + 1 - largestCount...
+                arr[s[beg++]]--;
+        }
+        // Return the sequence we have passes, which is s.length() - beg...
+        return s.length() - beg;
+    }
+/*    
 52- Minimum Window Substring - https://leetcode.com/problems/minimum-window-substring/
 53- Valid Anagram - https://leetcode.com/problems/valid-anagram/
 54- Group Anagrams - https://leetcode.com/problems/group-anagrams/
