@@ -1619,6 +1619,7 @@ class placement{
     /* 62. leetcode 33. Search in rotated sorted array
         Given the array nums after the rotation and an integer target, if it is nums, or -1 if it is not in nums.
         - O(log) time.
+        https://leetcode.com/problems/search-in-rotated-sorted-array-ii/discuss/1890199/C%2B%2B-oror-Algorithm-oror-Binary-Search
     */
     int rotateSearch(vector<int>&a, int target){
         int low = 0, high = a.size()-1;
@@ -1643,6 +1644,40 @@ class placement{
             }
         }
         return -1;
+    }
+
+    //if duplicates are allowed in the above case
+        bool search(vector<int>& nums, int target) {
+        int low = 0, high = nums.size() - 1;
+        while(low <= high){
+            while(low < high && nums[low] == nums[low + 1]){
+                low++;
+            }
+            while(low < high && nums[high] == nums[high - 1]){
+                high--;
+            }
+            int mid = low + (high - low)/2;
+            if(nums[mid] == target){
+                return true;
+            }
+            if(nums[low] <= nums[mid]){
+                if(target >= nums[low] && target <= nums[mid]){
+                    high = mid - 1;
+                }
+                else{
+                    low = mid + 1;
+                }
+            }
+            else{
+                if(target >= nums[mid] && target <= nums[high]){
+                    low = mid + 1;
+                }
+                else{
+                    high = mid - 1;
+                }
+            }
+        }
+        return false;
     }
 
     /* 63. Median of row wise sorted matrix

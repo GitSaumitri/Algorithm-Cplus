@@ -15,6 +15,19 @@ struct TreeNode {
 class Solution{
   public:
 
+/*
+1. Biggest Island (easy)
+2. 'K' Closest Points to the Origin (easy)
+3. Right View of a Binary Tree (easy)
+4. Number of Islands (Medium)
+5. Merge 'K' Sorted Lists (medium)
+6. Tasks Scheduling (medium)
+7. Merge Intervals (medium)
+8. Zigzag Traversal (medium)
+9. Minimum Meeting Rooms (hard)
+10. Alien Dictionary (hard)
+*/
+
 /* 1. Minimum number of Jumps */
 /* Given an array of N integers arr[] where each element represents 
 the max length of the jump that can be made forward from that element. 
@@ -887,6 +900,7 @@ https://practice.geeksforgeeks.org/problems/merge-sort/1?page=1&difficulty[]=1&c
             merge(arr, l, mid, r);
         }
     }
+
 
 
 

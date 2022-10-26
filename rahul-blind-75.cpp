@@ -1513,16 +1513,169 @@ Edge cases
 58- Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
 59- Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
 Tree
-60- Maximum Depth of Binary Tree - https://leetcode.com/problems/maximum-depth-of-binary-tree/
-61- Same Tree - https://leetcode.com/problems/same-tree/
-62- Invert/Flip Binary Tree - https://leetcode.com/problems/invert-binary-tree/
-63- Binary Tree Maximum Path Sum - https://leetcode.com/problems/binary-tree-maximum-path-sum/
-64- Binary Tree Level Order Traversal - https://leetcode.com/problems/binary-tree-level-order-traversal/
+*/
+    //Definition for a binary tree node.
+    struct TreeNode {
+       int val;
+       TreeNode *left;
+       TreeNode *right;
+       TreeNode() : val(0), left(nullptr), right(nullptr) {}
+       TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+       TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+    };
+    //60- Maximum Depth of Binary Tree - https://leetcode.com/problems/maximum-depth-of-binary-tree/
+    int maxDepth(TreeNode* root) {
+        if(root==NULL)
+            return 0;
+        return 1 + max(maxDepth(root->left),maxDepth(root->right));
+    }
+
+    //61- Same Tree - https://leetcode.com/problems/same-tree/
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if(p==nullptr && q==nullptr){
+            return true;
+        }
+        
+        if(p==nullptr || q==nullptr){
+            return false;
+        }
+        
+        if(p->val != q->val)
+            return false;
+        
+        return isSameTree(p->left,q->left) && isSameTree(p->right,q->right);
+    }
+    
+    //62- Invert/Flip Binary Tree - https://leetcode.com/problems/invert-binary-tree/
+    TreeNode* invertTree(TreeNode* root) {
+        // Base case...
+        if(root == NULL){
+            return root;
+        }
+        // Call the function recursively for the left subtree...
+        invertTree(root->left);
+        // Call the function recursively for the right subtree...
+        invertTree(root->right);
+        // swapping process...
+        TreeNode* curr = root->left;
+        root->left = root->right;
+        root->right = curr;
+        return root;        // Return the root...   
+    }
+
+    void invert(TreeNode *root, TreeNode *left, TreeNode *right){
+        if((left==NULL && right==NULL)||
+           root == NULL)
+            return;
+        
+        root->left = right;
+        root->right = left;
+        if(left!=NULL)
+            invert(left,left->left, left->right);
+        if(right!=NULL)
+            invert(right,right->left, right->right);
+        return;
+    }
+    //public:
+    TreeNode* invertTree1(TreeNode* root) {
+        if(root)
+            invert(root, root->left, root->right);
+        return root;
+    }
+
+    //63- Binary Tree Maximum Path Sum - https://leetcode.com/problems/binary-tree-maximum-path-sum/
+    int findMaxSum(TreeNode*root, int& res){
+        if(!root)
+            return 0;
+       
+        int left = max(findMaxSum(root->left,res),0);
+        int right = max(findMaxSum(root->right,res),0);
+        
+        res = max(res, left+right+root->val);
+        
+        return root->val + max(left,right);
+    }
+    //public:
+    int maxPathSum(TreeNode* root) {
+        int m=INT_MIN;
+        findMaxSum(root,m);
+        return m;
+    }
+    //64- Binary Tree Level Order Traversal - https://leetcode.com/problems/binary-tree-level-order-traversal/
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        
+        if(!root)
+            return res;
+        queue<TreeNode*> q;
+        q.push(root);
+        q.push(NULL);
+        while(!q.empty()){
+            vector<int> row;
+            while(q.front() != NULL){
+                TreeNode* t = q.front();q.pop();
+                if(t->left)
+                    q.push(t->left);
+                if(t->right)
+                    q.push(t->right);
+                row.push_back(t->val);
+            }
+            res.push_back(row);
+            q.pop();q.push(NULL);
+            if(q.front()==NULL)
+                break;
+        }
+        return res;
+    }
+
+    vector<vector<int>> levelOrder1(TreeNode* root) {
+        vector<vector<int>> res;
+        
+        if(!root)
+            return res;
+        queue<TreeNode*> q;
+        q.push(root);
+        
+        while(!q.empty()){
+            int len = q.size();
+            vector<int> row;
+            for(int i=0; i<len; i++){
+                TreeNode* t = q.front();q.pop();
+                if(t->left)
+                    q.push(t->left);
+                if(t->right)
+                    q.push(t->right);
+                row.push_back(t->val);
+            }
+            res.push_back(row);
+        }
+        return res;
+    }
+/*
 65- Serialize and Deserialize Binary Tree - https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
 66- Subtree of Another Tree - https://leetcode.com/problems/subtree-of-another-tree/
 67- Construct Binary Tree from Preorder and Inorder Traversal - 
 https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/"
-68- Validate Binary Search Tree - https://leetcode.com/problems/validate-binary-search-tree/
+*/
+    //68- Validate Binary Search Tree - https://leetcode.com/problems/validate-binary-search-tree/
+        bool validateBST(TreeNode *root, TreeNode *min, TreeNode *max){
+        if(!root)
+            return true;
+        
+        if(min && root->val <= min->val)
+            return false;
+        if(max && root->val >= max->val)
+            return false;
+        
+        return validateBST(root->left,min,root) && validateBST(root->right,root,max);
+        
+    }
+    bool isValidBST(TreeNode* root) {
+       if(!root || (!root->left && !root->right))
+           return true;
+        return validateBST(root,NULL,NULL);
+    }
+/*
 69- Kth Smallest Element in a BST - https://leetcode.com/problems/kth-smallest-element-in-a-bst/
 70- Lowest Common Ancestor of BST - https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
 71- Implement Trie (Prefix Tree) - https://leetcode.com/problems/implement-trie-prefix-tree/
