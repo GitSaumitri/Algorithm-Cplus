@@ -1651,12 +1651,74 @@ Tree
         }
         return res;
     }
-/*
-65- Serialize and Deserialize Binary Tree - https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
-66- Subtree of Another Tree - https://leetcode.com/problems/subtree-of-another-tree/
-67- Construct Binary Tree from Preorder and Inorder Traversal - 
-https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/"
-*/
+    
+    //65- Serialize and Deserialize Binary Tree - https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        if(root==NULL)
+            return "X";
+        string left = serialize(root->left);
+        string right = serialize(root->right);
+        return to_string(root->val)+","+left+","+right;
+    }
+    
+    void getDataInQueue(string data, queue<string> &input){
+        int len = data.size();
+        int index = 0;
+        while(index < len){
+            string s="";
+            while(index < len && data[index]!=','){
+                s += data[index++];
+            }
+            //cout<<" "<<s<<endl;
+            input.push(s);
+            index++;
+        }
+        return;
+    }
+
+    TreeNode * getTree(queue<string> &input){
+        string s = input.front(); input.pop();
+        //cout<<" "<<s;
+        if(s=="X")
+            return NULL;
+        TreeNode * node = new TreeNode(stoi(s)); 
+        node->left = getTree(input);
+        node->right = getTree(input);
+        return node;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        queue<string> input;
+        getDataInQueue(data, input);
+        //cout<<" "<<data<<endl;
+        return getTree(input);
+    }
+    
+    //66- Subtree of Another Tree - https://leetcode.com/problems/subtree-of-another-tree/
+    bool isSametree(TreeNode* s, TreeNode* t){
+       if(!s || !t){
+           return s==NULL && t==NULL;
+       } else if(s->val == t->val){    
+           return isSametree(s->left,t->left) && isSametree(s->right,t->right);
+       } else{
+           return false;
+       }
+   }
+   bool isSubtree(TreeNode* s, TreeNode* t) {
+         if(!s){
+             return false;
+         }else if(isSametree(s,t)){
+             return true;
+         }else{
+             return isSubtree(s->left,t) || isSubtree(s->right,t);
+         }
+   }
+
+    //67- Construct Binary Tree from Preorder and Inorder Traversal - 
+    //https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/"
+
     //68- Validate Binary Search Tree - https://leetcode.com/problems/validate-binary-search-tree/
         bool validateBST(TreeNode *root, TreeNode *min, TreeNode *max){
         if(!root)
