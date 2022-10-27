@@ -1755,6 +1755,26 @@ Tree
     }
 
 //69- Kth Smallest Element in a BST - https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+    void inorder(TreeNode* root, int& k, int &ans){
+        if(k==0)
+            return;
+        if(!root)
+            return;
+        inorder(root->left,k,ans);
+        k--;
+        if(k==0){
+            ans=root->val;
+            return;
+        }
+        inorder(root->right,k,ans);
+        //return;
+    }
+    //public:
+    int kthSmallest(TreeNode* root, int k) {
+        int ans=0;
+        inorder(root, k, ans);
+        return ans;
+    }
 
 //70- Lowest Common Ancestor of BST - https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
 
