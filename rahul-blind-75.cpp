@@ -1775,14 +1775,170 @@ Tree
         inorder(root, k, ans);
         return ans;
     }
-
 //70- Lowest Common Ancestor of BST - https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(root == NULL)
+            return NULL;
+        if(p->val < root->val && q->val < root->val)
+            return lowestCommonAncestor(root->left, p, q);
+        else if(p->val > root->val && q->val > root->val)
+            return lowestCommonAncestor(root->right, p, q);
+        else 
+            return root;
+    }
 
 //71- Implement Trie (Prefix Tree) - https://leetcode.com/problems/implement-trie-prefix-tree/
+    class Trie {
+    public:
+    Trie* children[26] = {};
+    bool isWord = false;
+    
+    Trie() {
+        
+    }
+    
+    void insert(string word) {
+        Trie* cur = this;
+        for (char c : word) {
+            c -= 'a';
+            if (cur->children[c] == nullptr)
+                cur->children[c] = new Trie();
+            cur = cur->children[c];
+        }
+        cur->isWord = true;    
+    }
+    
+    bool search(string word) {
+        Trie* cur = this;
+        for (char c : word) {
+            c -= 'a';
+            if (cur->children[c] == nullptr) 
+                return false;
+            cur = cur->children[c];
+        }
+        return cur->isWord;
+    }
+    
+    bool startsWith(string prefix) {
+        Trie* cur = this;
+        for (char c : prefix) {
+            c -= 'a';
+            if (cur->children[c] == nullptr) return false;
+            cur = cur->children[c];
+        }
+        return true;    
+    }
+    };
+
+    /**
+    * Your Trie object will be instantiated and called as such:
+    * Trie* obj = new Trie();
+    * obj->insert(word);
+    * bool param_2 = obj->search(word);
+    * bool param_3 = obj->startsWith(prefix);
+    */
 
 //72- Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
+//https://leetcode.com/problems/design-add-and-search-words-data-structure/discuss/1725327/JavaC%2B%2BPython-A-very-well-detailed-EXPLANATION!
+class TrieNode{
+public:
+    TrieNode *child[26];
+    bool end = false;
+    TrieNode(){
+        for(int i = 0; i < 26; i++)
+            child[i] = NULL;
+    }
+};
+
+class WordDictionary {
+    TrieNode *root ;
+public:
+        WordDictionary() {
+        root =  new TrieNode();
+    }
+    
+    void addWord(string word) {
+        int idx = 0;
+        TrieNode * node = root;
+        for(char c: word) {
+            idx = c -'a';
+            if(!node->child[idx])
+                node->child[idx] = new TrieNode();
+            node = node->child[idx];
+        }
+        node->end = true;
+    }
+    
+    bool search(string word) {
+        TrieNode *node = root;
+        return search(word, 0, node);
+    }
+    bool search(string &word, int idx , TrieNode *node ) {
+        if(!node) return 0;
+        if(idx == word.size()) return node->end;
+        if(word[idx] != '.')
+            return search(word, idx+1, node->child[word[idx]-'a']);
+
+        for(int key = 0; key< 26; key++)
+            if(search(word, idx+1, node->child[key]))
+                return true;
+        return false;
+    }
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
+ */
 
 //73- Word Search II - https://leetcode.com/problems/word-search-ii/
+  struct TrieNode1 {
+    TrieNode1* children[26] = {};
+    string* word;
+    void addWord(string& word) {
+        TrieNode1* cur = this;
+        for (char c : word) {
+            c -= 'a';
+            if (cur->children[c] == nullptr) cur->children[c] = new TrieNode1();
+            cur = cur->children[c];
+        }
+        cur->word = &word;
+    }
+  };
+
+ //public: 
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        int m, n;
+        vector<string> ans;
+        m = board.size(); n = board[0].size();
+        TrieNode1 trieNode;
+        for (string& word : words) 
+            trieNode.addWord(word);
+        
+        for (int r = 0; r < m; ++r)
+            for (int c = 0; c < n; ++c)
+                dfs(board, r, c, &trieNode, ans);
+        return ans;
+    }
+    
+    void dfs(vector<vector<char>>& board, int r, int c, TrieNode1* cur, vector<string>& ans) {
+        if (r < 0 || r == board.size() || c < 0 || c == board[0].size() 
+            || board[r][c] == '#' || cur->children[board[r][c]-'a'] == nullptr) 
+            return;
+        char orgChar = board[r][c];
+        cur = cur->children[orgChar - 'a'];
+        int DIR[5] = {0, 1, 0, -1, 0};
+        if (cur->word != nullptr) {
+            ans.push_back(*cur->word);
+            cur->word = nullptr; // Avoid duplication!
+        }
+        board[r][c] = '#'; // mark as visited!
+        for (int i = 0; i < 4; ++i) 
+            dfs(board, r + DIR[i], c + DIR[i+1], cur, ans);
+        board[r][c] = orgChar; // restore org state
+    }
 
     //74 - Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
       class comp1{
