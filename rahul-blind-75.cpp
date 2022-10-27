@@ -1718,9 +1718,25 @@ Tree
 
     //67- Construct Binary Tree from Preorder and Inorder Traversal - 
     //https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/"
+        TreeNode* build(vector<int>& preorder, vector<int>& inorder, int& rootIdx, int left, int right) {
+        if (left > right) return NULL;
+        int pivot = left;  // find the root from inorder
+        while(inorder[pivot] != preorder[rootIdx]) pivot++;
+        
+        rootIdx++;
+        TreeNode* newNode = new TreeNode(inorder[pivot]);
+        newNode->left = build(preorder, inorder, rootIdx, left, pivot-1);
+        newNode->right = build(preorder, inorder, rootIdx, pivot+1, right);
+        return newNode;
+    }
+    
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        int rootIdx = 0;
+        return build(preorder, inorder, rootIdx, 0, inorder.size()-1);
+    }
 
     //68- Validate Binary Search Tree - https://leetcode.com/problems/validate-binary-search-tree/
-        bool validateBST(TreeNode *root, TreeNode *min, TreeNode *max){
+    bool validateBST(TreeNode *root, TreeNode *min, TreeNode *max){
         if(!root)
             return true;
         
@@ -1737,13 +1753,16 @@ Tree
            return true;
         return validateBST(root,NULL,NULL);
     }
-/*
-69- Kth Smallest Element in a BST - https://leetcode.com/problems/kth-smallest-element-in-a-bst/
-70- Lowest Common Ancestor of BST - https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
-71- Implement Trie (Prefix Tree) - https://leetcode.com/problems/implement-trie-prefix-tree/
-72- Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
-73- Word Search II - https://leetcode.com/problems/word-search-ii/
-*/
+
+//69- Kth Smallest Element in a BST - https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+
+//70- Lowest Common Ancestor of BST - https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+
+//71- Implement Trie (Prefix Tree) - https://leetcode.com/problems/implement-trie-prefix-tree/
+
+//72- Add and Search Word - https://leetcode.com/problems/add-and-search-word-data-structure-design/
+
+//73- Word Search II - https://leetcode.com/problems/word-search-ii/
 
     //74 - Merge K Sorted Lists - https://leetcode.com/problems/merge-k-sorted-lists/
       class comp1{
