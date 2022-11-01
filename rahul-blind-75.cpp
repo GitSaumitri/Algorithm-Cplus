@@ -528,19 +528,46 @@ public:
         }
         return ans;    
     }
-/*
-16- Climbing Stairs - https://leetcode.com/problems/climbing-stairs/
-17- Coin Change - https://leetcode.com/problems/coin-change/
-18- Longest Increasing Subsequence - https://leetcode.com/problems/longest-increasing-subsequence/
-19- Longest Common Subsequence -
-20- Word Break Problem - https://leetcode.com/problems/word-break/
-21- Combination Sum - https://leetcode.com/problems/combination-sum-iv/
-22- House Robber - https://leetcode.com/problems/house-robber/
-23- House Robber II - https://leetcode.com/problems/house-robber-ii/
-24- Decode Ways - https://leetcode.com/problems/decode-ways/
-25- Unique Paths - https://leetcode.com/problems/unique-paths/
-26- Jump Game - https://leetcode.com/problems/jump-game/
-*/
+
+    //16- Climbing Stairs - https://leetcode.com/problems/climbing-stairs/
+    int climbStairs(int n) {
+        if(n==0)
+            return 1;
+        if(n==1)
+            return 1;
+        return climbStairs(n-1) + climbStairs(n-2);
+    }
+    int climbStairs1(int n) {
+        int m1 = 1;
+        int m2 = 1;
+        int temp;
+        for(int i=n-2;i>=0;i--) {
+            temp = m1+m2;
+            m2 = m1;
+            m1 = temp;
+            
+        }
+        return m1;
+    }
+    //17- Coin Change - https://leetcode.com/problems/coin-change/
+    
+    //18- Longest Increasing Subsequence - https://leetcode.com/problems/longest-increasing-subsequence/
+    
+    //19- Longest Common Subsequence -
+    
+    //20- Word Break Problem - https://leetcode.com/problems/word-break/
+    
+    //21- Combination Sum - https://leetcode.com/problems/combination-sum-iv/
+    
+    //22- House Robber - https://leetcode.com/problems/house-robber/
+    
+    //23- House Robber II - https://leetcode.com/problems/house-robber-ii/
+    
+    //24- Decode Ways - https://leetcode.com/problems/decode-ways/
+    
+    //25- Unique Paths - https://leetcode.com/problems/unique-paths/
+
+    //26- Jump Game - https://leetcode.com/problems/jump-game/
 
     //27- Clone Graph - https://leetcode.com/problems/clone-graph/
     // Definition for a Node.
@@ -1420,6 +1447,41 @@ Edge cases
     }
     
     //52- Minimum Window Substring - https://leetcode.com/problems/minimum-window-substring/
+     string minWindow(string s, string t) {
+        vector<int> m(128, 0);
+	    // Statistic for count of char in t
+	    for (auto c : t) m[c]++;
+	    // counter represents the number of chars of t to be found in s.
+	    size_t start = 0, end = 0, counter = t.size(), minStart = 0, minLen = INT_MAX;
+	    size_t size = s.size();
+	
+	    // Move end to find a valid window.
+	    while (end < size) {
+		    // If char in s exists in t, decrease counter
+		    if (m[s[end]] > 0)
+			    counter--;
+            
+		    // Decrease m[s[end]]. If char does not exist in t, m[s[end]] will be negative.
+		    m[s[end]]--;
+		    end++;
+            
+		    // When we found a valid window, move start to find smaller window.
+		    while (counter == 0) {
+			    if (end - start < minLen) {
+				    minStart = start;
+				    minLen = end - start;
+			    }
+			    m[s[start]]++;
+			    // When char exists in t, increase counter.
+			    if (m[s[start]] > 0)
+				    counter++;
+			    start++;
+		    }
+	    }
+	    if (minLen != INT_MAX)
+		    return s.substr(minStart, minLen);
+	    return "";
+    }
 
     //53- Valid Anagram - https://leetcode.com/problems/valid-anagram/
     bool isAnagram(string s, string t) {
@@ -1508,12 +1570,101 @@ Edge cases
         
         return true;
     }
-/*
-57- Longest Palindromic Substring - https://leetcode.com/problems/longest-palindromic-substring/
-58- Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
-59- Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
-Tree
-*/
+
+    //57- Longest Palindromic Substring - https://leetcode.com/problems/longest-palindromic-substring/
+    string longestPalindrome(string s) {
+        string res="";
+        int n = s.size();
+        if(n<=0)
+            return "";
+        
+        vector<vector<int>> dp(n,vector<int>(n,0));
+        int start=0;
+        int maxlen = 1;
+        
+        //all substring of len 1 is palindrom
+        for(int i=0; i<n; i++){
+            dp[i][i]=true;
+        }
+        
+        //check for substring of len 2
+        for(int i=0; i<n-1; i++){
+            if(s[i]==s[i+1]){
+                dp[i][i+1]=true;
+                start=i;
+                maxlen=2;
+            }
+        }
+        
+        //len more than 2
+        for (int k = 3; k <= n; ++k) { 
+            // Fix the starting index 
+            for (int i = 0; i < n - k + 1; ++i) { 
+                // Get the ending index of substring from 
+                // starting index i and length k 
+                int j = i + k - 1; 
+  
+                // checking for sub-string from ith index to 
+                // jth index iff str[i+1] to str[j-1] is a 
+                // palindrome 
+                //cout<<" "<<i<<" "<<j<<" "<<endl; 
+                if (dp[i + 1][j - 1] && s[i] == s[j]) { 
+                    dp[i][j] = true; 
+  
+                    if (k > maxlen) { 
+                        start = i; 
+                        maxlen = k; 
+                    } 
+                } 
+            } 
+        }
+        
+        cout<<" start"<<start<<" len"<<maxlen<<endl;
+        while(res.size()<maxlen)
+            res += s[start++];
+        return res;
+    }
+
+   //58- Palindromic Substrings - https://leetcode.com/problems/palindromic-substrings/
+    int countSubstrings(string s) {
+        int len = s.size();
+        if (len<=1) return len;
+        
+        vector< vector<bool> > dp(len, vector<bool>(len, false));
+        
+        int cnt = 0;
+        for( int i=len-1; i>=0; i--) {
+            for (int j=i; j<=len-1; j++) {              
+                if ( i == j  || ( s[i] == s[j] && ( j-i<2 || dp[i+1][j-1]) ) ) {
+                    dp[i][j] = true;
+                    cnt++;
+                }
+            }
+        }                            
+        return cnt;       
+    }
+   //59- Encode and Decode Strings (Leetcode Premium) - https://leetcode.com/problems/encode-and-decode-strings/
+    // Encodes a list of strings to a single string.
+    string encode(vector<string>& strs) {
+        string s = "";
+        for(string &str : strs)
+            s += to_string(str.size()) + "@" + str;
+        return s;
+    }
+
+    // Decodes a single string to a list of strings.
+    vector<string> decode(string s) {
+        vector<string> vtr;
+        int ptr = 0;
+        while(ptr < s.size()){
+            int pos = s.find("@", ptr);
+            int len = stoi(s.substr(ptr, pos - ptr + 1));
+            vtr.push_back(s.substr(pos + 1, len));
+            ptr = pos + len + 1;
+        }
+        return vtr;
+    }
+//Tree
     //Definition for a binary tree node.
     struct TreeNode {
        int val;
