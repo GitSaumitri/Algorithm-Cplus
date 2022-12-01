@@ -233,6 +233,8 @@ int numsIslands(vector<vector<char>>& grid){
 
 /* 9. Floodfill algorithm
     - can be done in DFS or BFS
+    - BFS is more optimised, with minimum steps
+    - however here we just need to fill so any traversal is fine
     space complexity - O(n*m) + O(n*m)
     time complexity - every node traverse in 4 directions
                     -   x nodes with 4 direction - O(x) + 4 * O(x) = O(x)
