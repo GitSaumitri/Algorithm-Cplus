@@ -270,7 +270,7 @@ vector<vector<int>> floodFill(vector<vector<int>> &image,
     - each orange rotten all it's neighbor 
     - all fresh oranges in the same level - BFS
     - if we would have taken DFS - it will take more time to reach all it's neighbors
-    - since we want to rotten then simultaniously so BFS
+    - since we want to rotten then simultaniously (with minimum time) so BFS
 */
 int orangeRotting(vector<vector<int>>& grid){
     int n = grid.size();
@@ -280,13 +280,14 @@ int orangeRotting(vector<vector<int>>& grid){
     queue<pair<pair<int,int>,int>> q;
     int vis[n][m]={{0}};
     int cntFresh = 0;
+    //find all rotten oranges
     for(int i=0; i<n; i++){
         for(int j=0; j<m; j++){
             if(grid[i][j]==2){
                 q.push({{i,j},0});
                 vis[i][j] = 2;
             } else {
-                vis[i][j] = 0;
+                vis[i][j] = 0; //this is not needed if we have initialized to 0
             }
             if(grid[i][j]==1)
                 cntFresh++;
@@ -306,7 +307,7 @@ int orangeRotting(vector<vector<int>>& grid){
             int nrow = r + dir[i][0];
             int ncol = c + dir[i][1];
             if(nrow>=0 && nrow<n && ncol >= 0 && ncol < m &&
-                grid[nrow][ncol] == 1 && vis[nrow][ncol] != 2){
+                grid[nrow][ncol] == 1 && vis[nrow][ncol] == 0){//a fresh orange and not visited
                     vis[nrow][ncol] = 2;
                     q.push({{nrow,ncol}, t+1});
                     cnt++;
@@ -314,7 +315,8 @@ int orangeRotting(vector<vector<int>>& grid){
         }
     }
 
-    /* check all orange are rotten
+    /* check all orange are rotten, 
+    //if the cntFresh is not at the beginning
     for(int i=0; i<n; i++){
         for(int j=0; j<m; j++){
             if(vis[i][j]!=2 && grid[i][j]==1)
@@ -326,6 +328,48 @@ int orangeRotting(vector<vector<int>>& grid){
         return -1;
 
     return tm;
+}
+
+/* 11. Detect a cycle in an undirected graph using BFS
+   - cycle - start from a node and visit all nodes and come back to the same node
+   - cycle - start from a node in different direction and collide in a single node
+   - For connected components - we need to call this algorithm on each component
+   - to check if the graph having cycle mean - any of its components is having a cycle
+   time : O(N+2E) same as BFS + O(N) for for loop
+   space : O(N)
+*/
+
+bool detect(int src, vector<int> adj[], int vis[]){
+    vis[src]=1;
+    queue<pair<int>> q;
+    q.push({src,-1});
+    while(!q.empty()){
+        int node = q.front().first;
+        int parent = q.front().second;
+        q.pop();
+
+        for(auto adjacentNode: adj[node]){
+            if(!vis[adjacentNode]){
+                vis[adjacentNode] = 1;
+                q.push({adjacentNode, node});
+            }
+            //this node is visited and it is not parent
+            else if(parent != adjacentNode) {
+		        return true;
+	        }
+        }
+    }
+    return false;
+}
+
+bool isCycle(int v, vector<int> adj[]){
+    int vis[v] = {0};
+    for(int i=0; i<v; i++){
+        if(!vis[i]){
+            if(detect(i, adj, vis))
+     		return true;
+        }
+    }
 }
 
 
