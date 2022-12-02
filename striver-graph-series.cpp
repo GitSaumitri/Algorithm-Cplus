@@ -341,7 +341,7 @@ int orangeRotting(vector<vector<int>>& grid){
 
 bool detect(int src, vector<int> adj[], int vis[]){
     vis[src]=1;
-    queue<pair<int>> q;
+    queue<pair<int,int>> q;
     q.push({src,-1});
     while(!q.empty()){
         int node = q.front().first;
@@ -371,6 +371,41 @@ bool isCycle(int v, vector<int> adj[]){
         }
     }
 }
+
+/* 12. Detect a cycle in an undirected graph using BFS
+   space: O(N)
+   time: O(N+2E) + O(E) for the for loop
+*/
+
+bool detect1(int node, int parent, vector<int> vis[], vector<int> adj[]){
+    vis[node] = 1;
+    for(auto adjacentNode: adj[node]){
+        if(!vis[adjacentNode]){
+            if(detect1(adjacentNode, node, vis, adj) == true)
+                return true;
+        }
+        else if(adjacentNode != parent) return true;
+    }
+    return false;
+}
+
+bool isCycle1(int V, vector<int> adj[]){
+    int vis[V] = {0};
+    for(int i=0; i<V; i++){
+        if(!vis[i]){
+            if(detect1(i, -1, vis, adj) == true)
+                return true;
+        }
+    }
+}
+
+/* 13. Distance of nearest cell having 1, 0/1 matrix
+    - 0/1 matrix is given, find the matrix is having nearest one of each cell
+    - distance is calculated only the row and col distance (not diagonally)
+    - nearest distance so think about BFS
+    - with 1 step - reach all 0 at a distance 1, with step 2, each all 0 at distance 2
+    - multi source BFS, put all source at queue and stat BFS
+*/
 
 
 int main(){
