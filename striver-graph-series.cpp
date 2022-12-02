@@ -448,9 +448,74 @@ vector<vector<int> nearest(vector<vector<int>> grid) {
     return dist;
 }
 
+/* 14. Surrounded Regions
+    - Every element is either O or X, replace all O with X that are surrounded by X.
+    - A 'O' or a set of O is is considered to be surrounded by X if there are X
+    at location, just below, above, left and just right to it.
+    - that means - boundary O can be ignored - not surrounded by X
+    - if a O is not connected to a boundary O, that means it can be converted
+    - so find out all the boundary O and it's connected which can't be converted 
+    space: O(N*M)
+    time: O(N*M)
+*/
+
+void dfs(int row, int col, vector<vector<int>>& vis,
+    vector<vector<int>>& mat){
+
+    int n = mat.size();
+    int m = mat[0].size();
+    int delrow[] = {-1, 0, +1, 0};
+    int delcol[] = {0, +1, 0, -1};
+   
+    vis[row][col] = 1;
+    for(int i=0; i<4; i++){
+        int nrow = row + delrow[i];
+        int ncol = col + delcol[i];
+        if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m
+        && !vis[nrow][ncol] && mat[nrow][ncol] == 'O'){
+            dfs(nrow, col, vis, mat);
+        }
+    }
+}
+
+vector<vector<char> fill(int n, int m, vector<vector<char>> mat){
+    vector<vector<int>> vis(n, vector<int>(m,0));
+    //traverse first and last row
+    for(int j=0; j<m; j++){
+        //first row
+        if(!vis[0][j] && mat[0][j] == 'O')
+            dfs(0, j, vis, mat);
+        //last row
+        if(!vis[n-1][j] && mat[n-1][j]=='O')
+            dfs(n-1, j, vis, mat);
+    }
+
+    //traverse first and last column
+    for(int i=0; i<n; i++){
+        //first column
+        if(!vis[i][0] && mat[i][0]=='O')
+           dfs(i, 0, vis, mat);
+        if(!vis[i][m-1] && mat[i][m-1]=='O')
+           dfs(i, m-1, vis, mat);
+    }
+
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            if(!vis[i][j] && mat[i][j] == 'O')
+                mat[i][j] = 'X';
+        }
+    }
+    return mat;
+}
+
+/*
+
+*/
+
 
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;
-
+    cout<<"Graph Series restart after 10 - 01/12/2022"<<endl;
+	
     return 0;
 }
