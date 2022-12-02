@@ -508,10 +508,64 @@ vector<vector<char> fill(int n, int m, vector<vector<char>> mat){
     return mat;
 }
 
-/*
-
+/* 15. Number of Enclaves
+   - 0 represents a sea, 1 represents a land cell, can move in 4 directions
+   - find number of land cells in grid for which we can't walk off the boundary 
+   of the grid in any number of moves.
+   - something connected to bundary never be a naswer and all those connected to them as well
+   space: O(n*m)
+   time: O(n*m) * 4 for 4 directions
 */
 
+
+int numberOfEnclaves(vector<vector<int>> &grid){
+    queue<pair<int,int>> q;
+    int n = grid.size();
+    int m = grid[0].size();
+    int vis[n][m] = {0};
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            //first row, first col, last row, last col
+            if(i == 0 || j == 0 || i == n-1 || j == m-1){
+                if(grid[i][j] == 1){
+                    q.push({i,j});
+                    vis[i][j] = 1;
+                }
+            }
+        }
+    }
+
+    int delrow[] = {-1, 0, +1, 0};
+    int delcol[] = {0, +1, 0, -1};
+
+    while(!q.emptry()){
+        int row = q.front().first;
+        int col = q.front().second;
+        q.pop();
+        //traverse all four directions
+        for(int i=0; i<4; i++){
+            int nrow = row + delrow[i];
+            int ncol = col + delcol[i];
+            if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m
+            && vis[nrow][ncol] = 0 && grid[nrow][ncol] == 1){
+                q.push({nrow,ncol});
+                vis[nrow][ncol] = 1;
+            }
+        }
+    }
+    int cnt = 0;
+    for(int i=0; i<n; i++) {
+       for(int j=0; j<m; j++) {
+           if(grid[i][j] == 1 && vis[i][j]==0)
+               cnt++;
+       }
+    }
+}
+
+/* 16. Number of distinct Islands
+
+
+*/
 
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;
