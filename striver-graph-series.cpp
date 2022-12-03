@@ -137,13 +137,13 @@ vector<int> bfsOfGraph(int v, vector<int> adj[]) {
     time complexity - O(N) + O(2E) 
                     - calling recurssion once + degree of graph (number of times each node will be called)
 */
-void dfs(int node, vector<int> adj[], int vis[], vector<int> &ls){
+void dfs1(int node, vector<int> adj[], int vis[], vector<int> &ls){
     vis[node] = 1;
     ls.push_back(node);
     //traverse all its neighbor
     for(auto it: adj[node]){
         if(!vis[it]){
-            dfs(it, adj, vis, ls);
+            dfs1(it, adj, vis, ls);
         }
     }
 }
@@ -152,7 +152,7 @@ vector<int> dfsOfGraph(int v, vector<int> adj[]){
     int vis[v] = {0};
     int start = 0;
     vector<int> ls;
-    dfs(start, adj, vis, ls);
+    dfs1(start, adj, vis, ls);
     return ls;
 }
 
@@ -163,11 +163,11 @@ vector<int> dfsOfGraph(int v, vector<int> adj[]){
     space complexity - O(N) for visited array - O(N) recurssion stack space
     time complexity - O(N) + O(v + 2E)
 */
-void dfs1(int node, vector<int> adj[], int vis[]){
+void dfs2(int node, vector<int> adj[], int vis[]){
     vis[node]=1;
     for(auto it: adj[node]){
         if(!vis[it]){
-            dfs1(it, adj, vis);
+            dfs2(it, adj, vis);
         }
     }
 }
@@ -178,7 +178,7 @@ int numProvinces(int v, vector<int> adj[]){
     for(int i=0; i<v; i++){
         if(!vis[i]){
             cnt++;
-            dfs1(i, adj, vis);
+            dfs2(i, adj, vis);
         }
     }
     return cnt;
@@ -189,7 +189,7 @@ int numProvinces(int v, vector<int> adj[]){
     - space complex - O(N*N) - visiting the matrix
     - time complex - O(N*N) + 9 rows - O(N*N)
 */
-void bfs(int i, int j, vector<vector<int>>& vis, vector<vector<char>>& grid){
+void bfs3(int i, int j, vector<vector<int>>& vis, vector<vector<char>>& grid){
     int n = grid.size();
     int m = grid[0].size();
     vis[i][j] = 1;
@@ -224,7 +224,7 @@ int numsIslands(vector<vector<char>>& grid){
         for(int col=0; col<m; col++){
             if(!vis[row][col] && grid[row][col]=='1'){
                 cnt++;
-                bfs(row, col, vis, grid);
+                bfs3(row, col, vis, grid);
             }
         }
     }
@@ -240,7 +240,7 @@ int numsIslands(vector<vector<char>>& grid){
                     -   x nodes with 4 direction - O(x) + 4 * O(x) = O(x)
                     - O(n*m)
 */
-void dfs(int row, int col, 
+void dfs4(int row, int col, 
         vector<vector<int>>&dimage, 
         vector<vector<int>>&simage, 
         int initColor, int newColor){
@@ -253,7 +253,7 @@ void dfs(int row, int col,
         int ncol = col + dir[i][1];
         if(nrow>=0 && nrow<n && ncol>=0 && ncol<m &&
             simage[nrow][ncol] == initColor && dimage[nrow][ncol] != newColor){
-                dfs(nrow, ncol, dimage, simage, initColor, newColor);
+                dfs4(nrow, ncol, dimage, simage, initColor, newColor);
             }
     }
 }
@@ -262,7 +262,7 @@ vector<vector<int>> floodFill(vector<vector<int>> &image,
                                 int sr, int sc, int newColor ){
     int initColor = image[sr][sc];
     vector<vector<int>> ans = image;
-    dfs(sr,sc,ans,image, initColor, newColor);
+    dfs4(sr,sc,ans,image, initColor, newColor);
     return ans;
 }
 
@@ -377,7 +377,7 @@ bool isCycle(int v, vector<int> adj[]){
    time: O(N+2E) + O(E) for the for loop
 */
 
-bool detect1(int node, int parent, vector<int> vis[], vector<int> adj[]){
+bool detect1(int node, int parent, int vis[], vector<int> adj[]){
     vis[node] = 1;
     for(auto adjacentNode: adj[node]){
         if(!vis[adjacentNode]){
@@ -408,8 +408,8 @@ bool isCycle1(int V, vector<int> adj[]){
     time : O(n*m)
     space : O(n*m)
 */
-vector<vector<int> nearest(vector<vector<int>> grid) {
-    int n = grid.size()
+vector<vector<int>> nearest(vector<vector<int>> grid) {
+    int n = grid.size();
     int m = grid[0].size();
     vector<vector<int>> vis(n, vector<int>(m,0));
     vector<vector<int>> dist(n, vector<int>(m,0));
@@ -428,7 +428,7 @@ vector<vector<int> nearest(vector<vector<int>> grid) {
     int delrow[] = {-1, 0, +1, 0};
     int delcol[] = {0, +1, 0, -1};
 
-    while(!q.emptry()){
+    while(!q.empty()){
         int row = q.front().first.first;
         int col = q.front().first.second;
         int steps = q.front().second;
@@ -459,8 +459,8 @@ vector<vector<int> nearest(vector<vector<int>> grid) {
     time: O(N*M)
 */
 
-void dfs(int row, int col, vector<vector<int>>& vis,
-    vector<vector<int>>& mat){
+void dfs5(int row, int col, vector<vector<int>>& vis,
+    vector<vector<char>>& mat){
 
     int n = mat.size();
     int m = mat[0].size();
@@ -473,30 +473,30 @@ void dfs(int row, int col, vector<vector<int>>& vis,
         int ncol = col + delcol[i];
         if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m
         && !vis[nrow][ncol] && mat[nrow][ncol] == 'O'){
-            dfs(nrow, col, vis, mat);
+            dfs5(nrow, col, vis, mat);
         }
     }
 }
 
-vector<vector<char> fill(int n, int m, vector<vector<char>> mat){
+vector<vector<char>> fill(int n, int m, vector<vector<char>> mat){
     vector<vector<int>> vis(n, vector<int>(m,0));
     //traverse first and last row
     for(int j=0; j<m; j++){
         //first row
         if(!vis[0][j] && mat[0][j] == 'O')
-            dfs(0, j, vis, mat);
+            dfs5(0, j, vis, mat);
         //last row
-        if(!vis[n-1][j] && mat[n-1][j]=='O')
-            dfs(n-1, j, vis, mat);
+        if(!vis[n-1][j] && mat[n-1][j]== 'O')
+            dfs5(n-1, j, vis, mat);
     }
 
     //traverse first and last column
     for(int i=0; i<n; i++){
         //first column
         if(!vis[i][0] && mat[i][0]=='O')
-           dfs(i, 0, vis, mat);
+           dfs5(i, 0, vis, mat);
         if(!vis[i][m-1] && mat[i][m-1]=='O')
-           dfs(i, m-1, vis, mat);
+           dfs5(i, m-1, vis, mat);
     }
 
     for(int i=0; i<n; i++){
@@ -538,7 +538,7 @@ int numberOfEnclaves(vector<vector<int>> &grid){
     int delrow[] = {-1, 0, +1, 0};
     int delcol[] = {0, +1, 0, -1};
 
-    while(!q.emptry()){
+    while(!q.empty()){
         int row = q.front().first;
         int col = q.front().second;
         q.pop();
@@ -547,7 +547,7 @@ int numberOfEnclaves(vector<vector<int>> &grid){
             int nrow = row + delrow[i];
             int ncol = col + delcol[i];
             if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m
-            && vis[nrow][ncol] = 0 && grid[nrow][ncol] == 1){
+            && (vis[nrow][ncol] == 0) && (grid[nrow][ncol] == 1)){
                 q.push({nrow,ncol});
                 vis[nrow][ncol] = 1;
             }
@@ -571,8 +571,8 @@ int numberOfEnclaves(vector<vector<int>> &grid){
    time: O(n*m)
 */
 
-void dfs(int row, int col, vector<vector<int>>& vis,
-     vector<vector<int>>& grid, vector<vector<int>>& vec, 
+void dfs6(int row, int col, vector<vector<int>>& vis,
+     vector<vector<int>>& grid, vector<pair<int,int>>& vec, 
      int row0, int col0){
     int n = grid.size();
     int m = grid[0].size();
@@ -585,8 +585,8 @@ void dfs(int row, int col, vector<vector<int>>& vis,
         int nrow = row + delrow[i];
         int ncol = col + delcol[i];
         if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m
-        && !vis[nrow][ncol] && grid[nrow][ncol]==1){
-            dfs(nrow, ncol, vis, grid, vec, row0, col0);
+        && !vis[nrow][ncol] && (grid[nrow][ncol] == 1)){
+            dfs6(nrow, ncol, vis, grid, vec, row0, col0);
         }
     }        
 } 
@@ -600,7 +600,7 @@ int countDistinctIslands(vector<vector<int>>& grid){
         for(int j=0; j<m; j++){
             if(!vis[i][j] && grid[i][j] == 1){
                 vector<pair<int,int>> vec;
-                dfs(i, j, grid, vis, vec);
+                dfs6(i, j, grid, vis, vec, i, j);
                 st.insert(vec);
             }
         }
