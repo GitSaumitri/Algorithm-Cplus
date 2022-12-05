@@ -372,7 +372,7 @@ bool isCycle(int v, vector<int> adj[]){
     }
 }
 
-/* 12. Detect a cycle in an undirected graph using BFS
+/* 12. Detect a cycle in an undirected graph using DFS
    space: O(N)
    time: O(N+2E) + O(E) for the for loop
 */
@@ -688,9 +688,101 @@ bool isBipartiteDfs(int V, vector<int>adj[]){
     return true;
 }
 
-/* 20. Find eventual free states
-
+/* 19. Detect cycle in a directed graph
+   - This is a not a cycle if the neighbor is already visited - it's true for undirected
+   - In case of firected, on the same path, the node has to be visited again to be a cycle.
+   space and time: same as DFS
 */
+bool dfsCheck(int node, vector<int> adj[], int vis[], 
+    int pathVis[]){
+    vis[node] = 1;
+    pathVis[node]=1;
+    
+    //traverse for adjacent nodes
+    for(auto it: adj[node]){
+        //node is not visited
+        if(!vis[it]){
+            if(dfsCheck(it, adj, vis, pathVis) == true){
+                return true;
+            }
+        }
+        //when node has been previously visited
+        // but it has to be visited on the same path
+        else if(pathVis[it]){
+            return true;
+        }
+    }
+    pathVis[node]=0;
+    return false;
+}
+
+vector<int> isCycleDirected(int V, vector<int> adj[]){
+    int vis[V] = {0};
+    int pathVis[V] = {0};
+    
+    for(int i=0; i<V; i++){
+        if(!vis[i]){
+           if(dfsCheck(i, adj, vis, pathVis)==true)
+               return true;     
+        }
+    }
+    return false;
+}
+
+/* 20. Eventual free states
+   - A node is a termina node if there are no outgoing edges.
+   - A node is a safe node if every possible path starting from that node 
+   leads to a terminal node.
+   - You have to return an array containing all the safe nodes of the graph
+   - the answer should be sorted in asending order.
+   == A node ending somewhere is a safe node.
+   == If a a node is part of a cycle, it can't be a safe node.
+   space: three arrays
+   time : DFS
+*/
+bool dfsCheck1(int node, vector<int> adj[], int vis[], 
+    int pathVis[], int check[]){
+    vis[node] = 1;
+    pathVis[node]=1;
+    check[node]=0;
+    //traverse for adjacent nodes
+    for(auto it: adj[node]){
+        if(!vis[it]){
+            if(dfsCheck(it, adj, vis, pathVis, check) == true){
+                check[node] = 0;
+                return true;
+            }
+        }
+        //when node has been previously visited
+        // but it has to be visited on the same path
+        else if(pathVis[it]){
+            check[node]=0;
+            return true;
+        }
+    }
+    check[node]=1;
+    pathVis[node]=0;
+    return false;
+}
+
+vector<int> eventualSafeNodes(int V, vector<int> adj[]){
+    int vis[V] = {0};
+    int pathVis[V] = {0};
+    int check[V] = {0};
+    vector<int> safeNodes;
+    for(int i=0; i<V; i++){
+        if(!vis[i]){
+           dfsCheck1(i, adj, vis, pathVis, check);     
+        }
+    }
+    for(int i=0; i<V; i++){
+        if(check[i] == 1)
+            safeNodes.push_back(i);
+    }
+    return safeNodes;
+}
+
+
 
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;
