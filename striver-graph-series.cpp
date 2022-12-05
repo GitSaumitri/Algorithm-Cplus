@@ -654,9 +654,43 @@ bool isBipartite(int V, vector<int>adj[]){
 }
 
 /* 18. Bipartite Graph - DFS
- 
+   space and time is same as DFS
 */
+bool checkBipartiteDfs(int node, int col, vector<int>adj[], int col[]){
+    color[node] = col;
 
+    for(auto it: adj[node]){
+        //if the adjacent node is not colored
+        if(color[it] == -1){
+            if(checkBipartiteDfs(it, !col, adj, color)==false)
+                return false;
+        }
+        //if the adjacent node having same color
+        else if(color[it] == col){
+            return false;
+        }
+    }
+    return true;
+}
+
+bool isBipartiteDfs(int V, vector<int>adj[]){
+    int color[V];
+    for(int i=0; i<V; i++)
+        color[i]=-1;
+
+    for(int i=0; i<V; i++){
+        if(color[i] == -1){
+            if(checkBipartiteDfs(i, 0, adj, color) == false){
+                return false;
+            }
+        }
+    }   
+    return true;
+}
+
+/* 20. Find eventual free states
+
+*/
 
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;
