@@ -608,8 +608,55 @@ int countDistinctIslands(vector<vector<int>>& grid){
     return st.size();
 }
 
-/* 17. Bipartite Graph
+/* 17. Bipartite Graph - BFS
+   - color the graph with two colors such that no two adjacent nodes have same color.
+   - Any graph with even cycle length can also be bipartite
+   - Any graph with odd cycle length can NEVER be bipartite
+   space, time is same as BFS   
 */
+bool checkBipartite(int start, int V, vector<int>adj[], int col[]){
+    queue<int> q;
+    q.push(start);
+    int color[V];
+    color[start] = 0;
+    while(!q.empty()){
+        int node = q.front();
+        q.pop();
+ 
+        for(auto it: adj[node]){
+            //if the adjacent node is not colored
+            if(color[it] == -1){
+                color[it] = !color[node];
+                q.push(it);
+            }
+            //if the adjacent node having same color
+            else if(color[it] == color[node]){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool isBipartite(int V, vector<int>adj[]){
+    int color[V];
+    for(int i=0; i<V; i++)
+        color[i]=-1;
+
+    for(int i=0; i<V; i++){
+        if(color[i] == -1){
+            if(checkBipartite(i, V, adj, color) == false){
+                return false;
+            }
+        }
+    }   
+    return true;
+}
+
+/* 18. Bipartite Graph - DFS
+ 
+*/
+
 
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;
