@@ -782,7 +782,12 @@ vector<int> eventualSafeNodes(int V, vector<int> adj[]){
     return safeNodes;
 }
 
-
+/* 21. Topological sorting - DFS
+   - it only exist on DAG (directed acyclic grap - directed graph with no cycles)
+   - Any linear ordering of vertices such that if there is an edge between u and v than
+    'u' always appear before 'v' in that ordering.
+   - 
+*/
 
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;
