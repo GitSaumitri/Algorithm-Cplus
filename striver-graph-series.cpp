@@ -861,8 +861,50 @@ vector<int> topoSortBFS(int V, vector<int> adj[]){
 
 /* 23. Detect a cycle in a directed graph
    - BFS / topological sort / Kahn's algo
-
+   - toposort is a linear order of a DAG
+   - if there is a cycle then we can't have toposort
+   - so if topo sort don't have all the nodes so there is a cycle
+   space and time as as topo sort
 */
+bool isCyclic(int V, vector<int> adj[]){
+    int indegree[V]={0};
+
+    //calculate indegree
+    for(int i=0; i<V; i++){
+        for(auto it: adj[i]){
+           indegree[it]++;
+        }
+    }
+
+    queue<int> q;
+    for(int i=0; i<V; i++){
+        if(indegree[i]==0){
+            q.push(i);
+        }
+    }
+
+    int cnt=0;
+    while(!q.empty()){
+        int node = q.front();
+        q.pop();
+        cnt++;
+        //node is in topo sort
+        //remove it from indegree
+        for(auto it: adj[node]){
+            indegree[it]--;
+            if(indegree[it]==0)
+                q.push(it);
+        }
+    }
+
+    if(cnt == V) 
+	    return false;
+    return true;
+}
+
+/* 24. Course schedule - I and II
+*/
+
 
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;
