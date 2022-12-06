@@ -786,7 +786,82 @@ vector<int> eventualSafeNodes(int V, vector<int> adj[]){
    - it only exist on DAG (directed acyclic grap - directed graph with no cycles)
    - Any linear ordering of vertices such that if there is an edge between u and v than
     'u' always appear before 'v' in that ordering.
-   - 
+   - ordering - reverse of dfs
+   - space and time as as DFS
+*/
+bool dfsTopo(int node, int vis[], stack<int> &st, vector<int> adj[]){
+    vis[node] = 1;
+ 
+    //traverse for adjacent nodes
+    for(auto it: adj[node]){
+        //node is not visited
+        if(!vis[it]){
+            dfsTopo(it, vis, st, adj);
+        }
+    }
+    st.push(node);
+}
+
+//function to return list containing vertices in topological order
+vector<int> topoSort(int V, vector<int> adj[]){
+    int vis[V] = {0};
+    stack<int> st;
+    
+    for(int i=0; i<V; i++){
+        if(!vis[i]){
+           dfsTopo(i, vis, st, adj);
+        }
+    }
+
+    vector<int> ans;
+    while(!st.empty()){
+        ans.push_back(st.top());
+        st.pop();
+    }
+    return ans;
+}
+
+/* 22. Topological sorting - DFS - Kahn's algorithm
+   - time O(V+E)
+*/
+//function to return list containing vertices in topological order
+vector<int> topoSortBFS(int V, vector<int> adj[]){
+    int indegree[V]={0};
+
+    //calculate indegree
+    for(int i=0; i<V; i++){
+        for(auto it: adj[i]){
+           indegree[it]++;
+        }
+    }
+
+    queue<int> q;
+    for(int i=0; i<V; i++){
+        if(indegree[i]==0){
+            q.push(i);
+        }
+    }
+
+    vector<int> topo;
+    while(!q.empty()){
+        int node = q.front();
+        q.pop();
+        topo.push_back(node);
+
+        //node is in topo sort
+        //remove it from indegree
+        for(auto it: adj[node]){
+            indegree[it]--;
+            if(indegree[it]==0)
+                q.push(it);
+        }
+    }
+    return topo;
+}
+
+/* 23. Detect a cycle in a directed graph
+   - BFS / topological sort / Kahn's algo
+
 */
 
 int main(){
