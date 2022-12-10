@@ -983,8 +983,46 @@ vector<int> eventualFafeNodes1(int V, vector<int> adj[]){
 }
 
 /* 26. Alien Dictionary
+- find the first differential factor between two strings
+- find the edge for the first two different chars
+- create a direct acyclic graph
+- do the topo sort to get the order
+- ORDER IS NOT POSSIBLE
+    - sorted string should be always before larger string when everyone matches
+    - if sorter string is after larger string in above case then it's possible
+    - e.g - abcd, abc 
+    - if there is a cyclic dependency, then it's not possible
+    - abc, bat, ade  - a < b < a
+- add above check to make sure to check if ans is not possible
+*/
+
+/* answer is always possible */
+string findOrder(string dict[], int N, int K){
+    vector<int> adj[K];
+    for(int i=0; i<N-1; i++){
+        string s1 = dict[i];
+        string s2 = dict[i+1];
+        int len = min(s1.size(), s2.size());
+        for(int ptr=0; ptr < len; ptr++){
+            if(s1[ptr] != s2[ptr]){
+                adj[s1[ptr] - 'a'].push_back(s2[ptr]-'a');
+                break;
+            }
+        }
+    }
+
+    vector<int> topo = topoSort(K, adj);
+    string ans = "";
+    for(auto it: topo){
+        ans = ans + char(it + 'a');
+    }
+    return ans;
+}
+
+/*
 
 */
+
 
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;
