@@ -944,9 +944,47 @@ bool isPossible(int V, vector<pair<int,int>> &prereq){
 }
 
 /* 25. Find eventual safe states - BFS - toposort
+   - already served with DFS, this is with BFS
+   - toposort of reverse direction will be eventual nodes
+   - reverse all the edges 
+   - get all the nodes with indegree zero
+   - do the removal of edges on adjacent nodes 
+*/
+vector<int> eventualFafeNodes1(int V, vector<int> adj[]){
+    vector<int> adjRev[V];
+    int indegree[V] = {0};
+    for(int i=0; i<V; i++){
+        for(auto it: adj[i]){
+            adjRev[it].push_back(i);
+            indegree[i]++;
+        }
+    }
+
+    queue<int> q;
+    vector<int> safeNodes;
+    for(int i=0; i<V; i++){
+        if(indegree[i] == 0)
+            q.push(i);
+    }
+
+    while(!q.empty()){
+        int node = q.front();
+        q.pop();
+        safeNodes.push_back(node);
+        for(auto it: adjRev[node]){
+            indegree[it]--;
+            if(indegree[it] == 0)
+                q.push(it);
+        }
+    }
+
+    sort(safeNodes.begin(), safeNodes.end());
+    return safeNodes;
+}
+
+/* 26. Alien Dictionary
 
 */
-
 
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;
