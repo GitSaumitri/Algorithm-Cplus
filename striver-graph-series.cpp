@@ -1126,7 +1126,41 @@ vector<int> shortestPath(vector<vector<int>>&edges, int N, int M, int src){
 }
 
 /* G-29 Word Ladder - I
-https://practice.geeksforgeeks.org/problems/word-ladder/1
+   https://practice.geeksforgeeks.org/problems/word-ladder/1
+  - shortest path from a starting word to ending work for a given dict
+  - shortest means BFS
+  - N * word length * 26 * log N (for set)
+*/
+int wordLadderLength(string startWord, string targetWord,
+                      vector<string>& wordList){
+    queue<pair<string, int>> q;
+    q.push({startWord, 1});
+    unordered_set<string> st(wordList.begin(), wordList.end());
+    st.erase(startWord);
+    while(!q.empty()){
+        string word = q.front().first;
+        int steps = q.front().second;
+        q.pop();
+        if(word == targetWord)
+            return steps;
+        for(int i=0; i<word.size(); i++){
+            char original = word[i];
+            for(int ch='a'; ch<='z'; ch++){
+                word[i] = ch;
+                //if exist in set
+                if(st.find(word) != st.end()){
+                    st.erase(word);
+                    q.push({word, steps+1});
+                }
+            }
+            word[i] = original;
+        }
+    }
+    return 0;
+}
+	
+/* G-30: Word Ladder - 2
+   - in the above problem - return all possible word orders
 */
 	
 	
