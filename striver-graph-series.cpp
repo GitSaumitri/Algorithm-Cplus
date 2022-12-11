@@ -1087,6 +1087,49 @@ vector<int> shortestPath(int N, int M, vector<int> edges[]){
     return dist;
 }
 
+/* 28. Shortest path in undirected graph having unit distance
+ - Given a undirected graph, having unit weight, find the shortest distance
+ - from src to all the points, if path is not possible then put -1.
+ - kind of BFS but why it works ? as each vertex at distance 1 and queue sorts it already
+*/
+vector<int> shortestPath(vector<vector<int>>&edges, int N, int M, int src){
+    vector<int> adj[N];
+    for(auto it: edges){
+        adj[it[0]].push_back(it[1]);
+        adj[it[1]].push_back(it[0]);
+    }
+
+    it dist[N];
+    for(int i=0; i<N; i++)
+        dist[i] = 1e9;
+    dist[src] = 0;
+    queue<int> q;
+    q.push(src);
+    while(!q.empty()){
+        int node = q.front();
+        q.pop();
+        for(auto it: adj[node]){
+            if(dist[node] + 1 < dist[it]){
+                dist[it] = 1 + dist[node];
+                q.push(it);
+            }
+        }
+    }
+    
+    vector<int> ans(N, -1);
+    for(int i=0; i<M; i++){
+        if(dist[i] != 1e9){
+            ans[i] = dist[i];
+        }
+    }
+    return ans;
+}
+
+/* G-29 Word Ladder - I
+
+*/
+	
+	
 
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;
