@@ -1020,8 +1020,72 @@ string findOrder(string dict[], int N, int K){
 }
 
 /*
+    27. Shortest path in DAG - toposort
+    - this a directed acyclic weighed graph
+- distance of all nodes from source node
+- topo sort with relaxation
+- take the node out of stack and relax the edges
+- for each node in stack, calculate the shortest distance
+- why topo sort? we can use some standart algoithm as well
+Find the shortest path to the vertex is easy if you already know 
+the shortest paths to all the vertices that can preceed it
+Find the longest path in DAG is easy if you already know
+the longest path to all the vertices that preceed it.
 
+Processing the vertices in topological order ensures that by the time
+you get to the vertex, you have already processed all the vertices 
+that can preceed it.
+
+Dijkstra's algo is not necessary for the graph that can contain cycles,
+because they can't be topological sorted.
 */
+
+void topoSort(int node, vector<pair<int,int>> adj[],
+            int vis[]. stacl<int>&st){
+    vis[node]=1;
+    for(auto it: adj[node]){
+        int v = it.first;
+        if(!vis[v])
+            topoSort(v, adj, vis, st);
+    }
+    st.push(node);
+}
+vector<int> shortestPath(int N, int M, vector<int> edges[]){
+    for(pair<int,int>> adj[];
+    for(int i=0; i<M; i++){
+        int u = edges[i][0];
+        int v = edges[i][1];
+        int wt = edges[i][2];
+        adj[u].push_back({v,wt});
+    }
+
+    //find the topo sort
+    int vis[N] = {0};
+    stack<int> st;
+    //DFS O(N+M)
+    for(int i=0; i<N; i++){
+        if(!vis[i]){
+            topoSort(i, adj, vis, st);
+        }
+    }
+
+    vector<int> dist(N);
+    for(int i=0;i<N; i++) dist[i] = INT_MAX;
+    dist[0] = 0;
+    //O(N+M)
+    while(!st.empty()){
+        int node = st.top();
+        st.pop();
+        for(auto it: adj[node]){
+            int v = it.first;
+            int wt = it.second;
+            if(dist[node] + wt < dist[v]){
+                dist[v] = dist[node] + wt;
+            }
+        }
+    }
+    return dist;
+}
 
 
 int main(){
