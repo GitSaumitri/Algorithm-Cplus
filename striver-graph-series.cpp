@@ -1161,8 +1161,66 @@ int wordLadderLength(string startWord, string targetWord,
 	
 /* G-30: Word Ladder - 2
    - in the above problem - return all possible word orders
+   
+https://practice.geeksforgeeks.org/problems/word-ladder-ii/1
 */
 	
+vector<vector<string>> findSequences(string beginWord, string endWord,
+                                         vector<string>& wordList){
+	
+    unordered_set<string> st(wordList.begin(), wordList.end());
+    queue<vector<string>> q;
+    q.push({beginWord});
+    vector<string> usedOnLevel;
+    usedOnLevel.push_back(beginWord);
+    int level = 0;
+    vector<vector<string>> ans;
+
+    while(!q.empty()){
+        vector<string> vec = q.front();
+        q.pop();
+        //erase all words that has been 
+        //used in the previous levels to transform
+        if(vec.size() > level){
+            level++;
+            for(auto it: usedOnLevel){
+                st.erase(it);
+            }
+            usedOnLevel.clear();
+        }
+
+        string word = vec.back();
+        //store the answer
+        if(word == endWord){
+            if(ans.size()==0)
+                ans.push_back(vec);
+            else if(ans[0].size() == vec.size())
+                ans.push_back(vec);
+        }
+
+        //wordlength * 26
+        for(int i=0; i<word.size(); i++){
+            char original = word[i];
+            for(int ch='a'; ch<='z'; ch++){
+                word[i] = ch;
+                //if exist in set
+                if(st.find(word) != st.end()){
+                    vec.push_back(word);
+                    q.push_back(vec);
+                    //mark as visited on the level
+                    usedOnLevel.push_back(word);
+                    vec.pop_bcak();
+                }
+            }
+            word[i] = original;
+        }
+    }
+    return ans;
+}
+
+/* 31 Word Ladder -2 
+
+*/	
 	
 
 int main(){
