@@ -1222,7 +1222,49 @@ vector<vector<string>> findSequences(string beginWord, string endWord,
 
 */	
 	
+/* 32. Dijkstra's algorithm - using priority queue
+ Function to find the shortest distance of all the 
+ vertices from the source vertex S.
 
+ - earier we have see with DAG - no need of dijkstra
+ - it is needed when we have edges with weight
+ - it is not applicable for edges with negative weight 
+ - since negative weight can create a infinite loop.
+ 
+ time: O(E log V) - E is number is edges and V is the number of vertices
+*/
+vector<int> dijkstra(int V, vector<vector<int>> adj[], int S){
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+    vector<int> dist<V);
+    for(int i=0; i<V; i++)
+        dist[i] = 1e9;
+    dist[S] = 0;
+    pq.push({0,S});
+
+    while(!pq.empty()){
+        int dis = pq.top().first;
+        int node = pq.top().second;
+        pq.pop();
+
+        for(auto it: adj[node]){
+            int adjNode = it[0];
+            int edgeWeight = it[1];
+
+            if(dis + edgeWeight < dist[adjNode]){
+                dist[adjNode] = dis + edgeWeight;
+                pq.push({dist[adjNode], adjNode});
+            }
+        }
+    }
+    return dist;
+}
+
+/* 33. Dijkstra's algorithm - using set
+  - always want the minimum distance first (that why we were using priority queue)
+  - set stores in ascending order so kind of same as priority queue
+  - 
+*/
+	
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;
     cout<<"Graph Series restart after 10 - 01/12/2022"<<endl;
