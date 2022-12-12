@@ -30,6 +30,31 @@
         29. Word ladder - 1 - shortest paths
         30. Word ladder - 2 - shortest paths
         31. Word ladder - 2 - optimised approach 
+	32. Dijkstra's algorithm - using priority queue
+	33. Dijkstra's algorithm - using set
+	34. Dijkstra's algorithm - using set not PQ
+	35. Dijkstra's algorithm - print shortest path
+	36. Shortest distance in a binary maze
+	37. Path with minimum effort
+	38. Cheapest flight within K stops
+	39. Minimum multiplication to reach end
+	40. Number of ways to arrive at destination
+	41. Bellman Ford algorithm
+	42. Flyod warshall algorithm
+	43. Find the city with smallest number of neighbors
+	44. Minimum spanning tree - theory
+	45. Prim's algorithm - MST
+	46. Disjoint set
+	47. Kruskal's algorithm
+	48. Number of operations to make network connected 
+	49. Accounts Merge - DSU
+	50. Number of Islands - II
+	51. Number of Islands - II DSU
+	52. Making a larget islan - DSU
+	53. Most stones removed with same row and col - DSU
+	54. Strongly connected components
+	55. Bridges in graph - using trajan's algorithm
+	56. Articaulation point in a graph
     */
 #include<iostream>
 using namespace std;
