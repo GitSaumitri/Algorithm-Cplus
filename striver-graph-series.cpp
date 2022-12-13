@@ -1287,8 +1287,48 @@ vector<int> dijkstra(int V, vector<vector<int>> adj[], int S){
 /* 33. Dijkstra's algorithm - using set
   - always want the minimum distance first (that why we were using priority queue)
   - set stores in ascending order so kind of same as priority queue
-  - 
+  - set over priority
+  - erase on set is logn time
+  - so based on the graph, we can choose pq or set
+  COMPARISION
+  -  time of the priority queue method be O(ElogE) instead of O(ElogV) 
+     as there can be more than one instance of a node in the priority queue 
+     whereas in the treeset method it will be O(ElogV) 
+  - set is better as it saves the number of iterations when E > V
+  - however set takes a logn extra because of extra erase
 */
+vector<int> dijkstra1(int V, vector<vector<int>> adj[], int S){
+    set<pair<int,int>> st;
+    vector<int> dist(V, 1e9);
+
+    st.insert({0, S});
+    dist[S] = 0;
+
+    while(!st.empty()){
+        auto it = *(st.begin());
+        int node = it.second;
+        int dist = it.first;
+        st.erase(it);
+
+        for(auto it: adj[node]){
+            int adjNode = it[0];
+            int edgW = it[1];
+
+            if(dis + edgW < dist[adjNode]){
+                //erase if it existed
+		// as we have a better distance now to same vertex
+                if(dist[adjNode] != 1e9)
+                    st.erase({dist[adjNode], adjNode});
+
+                dist[adjNode] = dis + edgW;
+                st.insert({dist[adjNode], adjNode});
+            }
+        }
+    }
+    return dist;
+} 
+
+
 	
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;
