@@ -1328,7 +1328,20 @@ vector<int> dijkstra1(int V, vector<vector<int>> adj[], int S){
     return dist;
 } 
 
+/* 34.
+1. why PQ or set not a Queue ?
+with Queue need to check through all the paths to find the optimize path - a lot of paths to travel
+  - un-necessary explorations paths 
+with PQ, once we traverse the minimum distance first - optimize path - the non-optimise will get ignored so less paths to travel
+  - explore minimum 
+2.
+Time - O(ElogV)
+*/
 
+/* 35. Print shortest path
+   - where are you coming from with dijkstra
+*/
+	
 	
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;
