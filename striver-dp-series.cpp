@@ -68,3 +68,60 @@ int f(int n){
    return prev1;
 }
 */
+
+/* 3. Frog Jump
+Can jump only 1 or 2 steps
+Find the minimum steps to reach from 1 to n.
+- all possible ways 
+- express in terms of index
+- do all possible for that index
+- take the min of all possible
+
+
+Recurssion to DP
+memoziation - look at the parameters changing
+*/
+
+int f(int ind, vector<int>& heights){
+    if(n==0) 
+        return n;
+
+    int first = f(ind-1,heights,dp) + abs(heights[ind]-heights[ind-1]);
+    int second = INT_MAX;
+    if(ind>1) 
+        second = f(ind-2,heights,dp) + abs(heights[ind]-heights[ind-2]);
+    return min(left,right);
+}
+
+int f1(int ind, vector<int>& heights, vector<int>&dp){
+    if(n==0) 
+        return n;
+    if(dp[ind]!=-1) 
+        return dp[ind];
+    int first = f(ind-1,heights,dp) + abs(heights[ind]-heights[ind-1]);
+    int second = INT_MAX;
+    if(ind>1) 
+        second = f(ind-2,heights,dp) + abs(heights[ind]-heights[ind-2])
+    return dp[ind] = min(left,right);
+}
+
+int frogJump(int n, vector<int>& heights){
+    
+    //return f(n-1, heights);
+
+    vector<int>dp(n+1,-1);
+    //return f1(n-1, heights, dp);
+
+    dp[0] = 0;
+    for(int ind=1; i<n; i++){
+    	int first = dp[ind-1] + abs(heights[ind]-heights[ind-1]);
+    	int second = INT_MAX;
+    	if(ind > 1) 
+        	second = dp[ind-2] + abs(heights[ind]-heights[ind-2])
+        dp[ind] = min(first,second);
+    }
+    return dp[n-1];
+    //can optimize the space further
+}
+
+
