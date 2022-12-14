@@ -1,9 +1,60 @@
 /* Steivers Dynamic Programming playlist 
     1. Introduction
-    2.
-    3. Frog Jump - 1DP
-    4. 
-
+    2. Climbing Stairs
+    3. Frog Jump
+    4. Frog Jump with K distance
+    5. Maximum sum of non-adjacent elements
+    6. House Robber 2
+    7. Ninja's training
+    8. Grid Unique Paths
+    9. Unique Paths 2
+    10. Minimum path sum in grid
+    11. Triangle, Fixed starting point and variable ending
+    12. Minimum/Maximum falling path sum
+    13. Cherry Pickup II / 3D DP
+    14. Subset sum equals to target
+    15. Partition equals to subset sum
+    16. Partition a set into two subset with min abs sum diff
+    17. Count subsets with sum K
+    18. Count partition with given diff
+    19. 0/1 knapsack
+    20. Minimum coins
+    21. Target Sum
+    22. Coin change 2
+    23. Unbounded knapsack
+    24. Rod cutting problem
+    25. Longest common subsequence
+    26. Print LCS
+    27. Longest common substring
+    28. Longest Palindromic subsequence
+    29. Minimum insertion to make string palindrom
+    30. Minimum insertion/deletion to convert string a to b
+    31. Shortest common supersequence
+    32. Distinct subsequences
+    33. Edit distance
+    34. Wild card matching
+    35. Best time to buy and sell stocks
+    36. Buy and sell stock - II
+    37. Buy and sell stock - III
+    38. Buy and sell stock - IV
+    39. Buy and sell stock with cooldown
+    40. Buy and sell stock with transaction fee
+    41. Longest increasing subsequence
+    42. printing LIS
+    43. Longest increasing subsequence - bs
+    44. Largest divisible subset
+    45. Longest string chain
+    46. Longest Bitonic subsequence
+    47. Number of longest increasing subsequence
+    48. Matrix chain multiplication - partition DP
+    49. MCM - bottom up - tabulation
+    50. Minimum cost to cut sticks
+    51. Burst Balloons
+    52. Evaluate boolean expression to true
+    53. Palindrome partitioning - II // front parition
+    54. Partition array for maximum sum 
+    55. Maximum rectange area with all 1's
+    56. Count submatrices with all ones - DP on rectanges
 */
 
 
