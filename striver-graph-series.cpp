@@ -1516,6 +1516,46 @@ int cheapestFlight(int n, vector<vector<int>>& flights,
 */
 
 		       
+/* 40. Number of ways to Arrive at destination
+
+https://practice.geeksforgeeks.org/problems/number-of-ways-to-arrive-at-destination/1
+  - time same as dijkstra
+*/
+int countPaths(int n, vector<vector<int>>& roads){
+    vector<pair<int,int>> adj[n];
+    for(auto it: roads){
+         adj[it[0]].push_back({it[1], it[2]});
+         adj[it[1]].push_back({it[0], it[2]});
+    }
+
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>>pq;
+    vector<int> dist(n, 1e9), ways(n,0);
+    dist[0] = 0;
+    ways[0] = 1;
+    pq.push({0,0});
+    while(!pq.empty()){
+        int dis = pq.top().first;
+        int node = pq.top().second;
+        pq.pop();
+ 
+        for(auto it: adj[node]){
+           int adjNode = it.first;
+           int adW = it.second;
+           if(dis + adW < dist[adjNode]){
+               dist[adjNode] = dis + adW;
+               pq.push({dis+adW, adjNode});
+               ways[adjNode] = ways[node];
+           }else if(dis+adW == dist[adjNode]){
+	       //number of ways to its parent + this
+               ways[adjNode] = ways[adjNode] + ways[node];
+           }
+        }
+   }
+   return ways[n-1];
+}
+		       
+
+		       
 	
 int main(){
     cout<<"Graph Series - 11/09/2022"<<endl;
