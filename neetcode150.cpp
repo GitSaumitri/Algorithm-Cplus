@@ -60,5 +60,50 @@
     }
 
 //5. https://leetcode.com/problems/top-k-frequent-elements/
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        map<int,int> hash;
+        vector<int> res;
+        vector<pair<int,int>> arr;
+        
+        for(int i=0; i<nums.size(); i++){
+            hash[nums[i]]++;
+        }
+            
+        map<int, int>::iterator it;
+        for(it = hash.begin(); it!= hash.end(); it++){
+            arr.push_back(pair(it->second, it->first));
+        }
+        sort(arr.begin(), arr.end(), greater());
+        for(int i=0; i<arr.size() && i<k ; i++){
+            res.push_back(arr[i].second);
+            
+        }
+        return res;
+    }
 
+//6. https://leetcode.com/problems/product-of-array-except-self/
 
+    vector<int> productExceptSelf(vector<int>& nums) {
+        vector<int> prefix(nums.size());
+        vector<int> suffix(nums.size());
+        vector<int> result(nums.size());
+        prefix[0] = 1;
+        suffix[nums.size()-1] = 1;
+
+        //Caluculating prefix array
+        for(int i=1; i<nums.size(); i++){
+            prefix[i] = nums[i-1] * prefix[i-1];
+        }
+
+        //Caluculating suffix array
+        for(int i=nums.size()-2; i>=0; i--){
+            suffix[i] = nums[i+1] * suffix[i+1];
+        }
+
+        // Caluculating nums array
+        for(int i=0; i<nums.size(); i++){
+            result[i] = suffix[i] * prefix[i];
+        }
+        return result;
+    }
+//how to optimise space??
