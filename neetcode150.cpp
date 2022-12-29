@@ -107,3 +107,140 @@
         return result;
     }
 //how to optimise space??
+
+//7.  https://leetcode.com/problems/valid-sudoku/
+
+//8.  https://leetcode.com/problems/encode-and-decode-strings/
+   
+//9. https://leetcode.com/problems/longest-consecutive-sequence/   
+
+  int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> hashSet;
+        for(int num: nums){
+            hashSet.insert(num);
+        }
+        int longestSteak = 0;
+        for(int num: nums){
+           if(!hashSet.count(num-1)){
+               int currentNum = num;
+               int currentSteak = 1;
+
+               while(hashSet.count(currentNum+1)){
+                   currentNum += 1;
+                   currentSteak +=1 ;
+               }
+
+               longestSteak = max(longestSteak, currentSteak);
+           }
+       }
+       return longestSteak;
+    }
+
+
+
+
+class MinStack {
+private:
+    stack<int> mainStack;
+    stack<int> minStack;
+    
+public:
+    void push(int x) {
+        mainStack.push(x);
+        // if x == currentMin, also push x to minStack
+        // because when popping, x == currentMin will be
+        // popped
+        if (minStack.empty() || minStack.top() >= x) {
+            minStack.push(x);
+        }
+    }
+
+    void pop() {
+        int x = mainStack.top();
+        mainStack.pop();
+        if (x == minStack.top()) {
+            minStack.pop();
+        }
+    }
+
+    int top() {
+        return mainStack.top();
+    }
+
+    int getMin() {
+        return minStack.top();
+    }
+};
+
+class MinStack {
+public:
+    MinStack() {
+        min_val = INT_MAX;
+    }  
+    void push(int x) {
+        if (x <= min_val) {
+            st.push(min_val);
+            min_val = x;
+        }
+        st.push(x);
+    }   
+    void pop() {
+        int t = st.top(); st.pop();
+        if (t == min_val) {
+            min_val = st.top(); st.pop();
+        }
+    }  
+    int top() {
+        return st.top();
+    }    
+    int getMin() {
+        return min_val;
+    }
+
+private:
+    int min_val;
+    stack<int> st;
+};
+
+
+class MinStack {
+private : 
+vector<int> arr;
+int start;
+int min;
+public:
+    MinStack() {
+       min = INT_MAX; 
+       start = 0;
+    }
+    
+    void push(int val) {
+        if (start == arr.size()) arr.push_back(0);
+        if (val <= min)
+        {
+            arr[start++] = min;
+            min = val;
+        }
+        if (start == arr.size()) arr.push_back(0);
+        arr[start++] = val;
+    }
+    
+    void pop() {
+        if (arr[start-1]==min)
+        {
+            start--;
+            min = arr[--start];
+        }
+        else
+        start--;
+    }
+    
+    int top() {
+        return arr[start-1];
+    }
+    
+    int getMin() {
+        return min;
+    }
+};
+
