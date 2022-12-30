@@ -1,5 +1,27 @@
 // https://neetcode.io/roadmap
 
+/* 1. Array & Hashing (9)
+   2. Two pointers (5) 
+   3. Stack (7)
+   4. Binary Search (7)
+   5. Sliding Window (6)
+   6. Linkedlist (11)
+   7. Trees (15)
+   8. Tries (3)
+   9. Back tracking (9)
+  10. Heap/ Priority Queue (7)
+  11. Graphs (13)
+  12. 1D DP (12)
+  13. Intervals (6) 
+  14. Greedy (8)
+  15. Advanced graph (6)
+  16. 2D DP (11)
+  17. Bit Manipulation (7)
+  18. Math & Geometry (8)
+*/
+
+
+
 /* Arrays & Hashing */
 
 //1. https://leetcode.com/problems/contains-duplicate/
@@ -172,6 +194,53 @@ bool isPalindrome(string s) {
         return vector<int>();
     }
 
+//https://leetcode.com/problems/3sum/
+vector<vector<int>> threeSum(vector<int>& arr) {
+        int n = arr.size();
+        if(n == 0)
+            return {};
+        
+        sort(arr.begin(), arr.end());
+        vector<vector<int>> res;
+        
+        for(int i = 0; i <= n - 3; i++)
+        {
+            int target = - arr[i];
+            int low = i + 1;
+            int high = n - 1;
+    
+            while(low < high)
+            {
+                if(arr[low] + arr[high] == target)
+                {
+                    res.push_back({arr[i], arr[low], arr[high]});
+                    //skip duplicates
+                    while(low < high && arr[low] == arr[low + 1]){
+                        low++;
+                    }
+                    //skip duplcates
+                    while(low < high && arr[high] == arr[high - 1]){
+                        high--;
+                    }
+                    low++;
+                    high--;
+                } else if(arr[low] + arr[high] < target) {
+                    low++;
+                } else {
+                    high--;
+                }
+            }
+            //skip duplicates
+            while(i < n - 3 && arr[i] == arr[i + 1])
+            {
+                i++;
+            }
+        }
+        
+        return res;
+    }
+
+
 
 // STACK 
 
@@ -332,3 +401,44 @@ public:
         }
     }
 };
+
+
+// BINARY SEARCH
+
+//https://leetcode.com/problems/binary-search/
+  
+int search(vector<int>& nums, int target) {
+        
+        int high = nums.size()-1;
+        int low = 0;
+        int mid = 0;
+
+        while (high >= low){
+            mid = (high+low) /2 ;
+            if(nums[mid] < target){
+                low = mid + 1;
+            }
+            else if (nums[mid] > target){
+                high = mid - 1;
+            }
+            else {
+                return mid;
+            }
+        }
+        return -1;
+    }
+
+// SLIDING WINDOW
+//LINKED LIST
+//TREES
+//TRIES
+//BACKTRACKING
+//HEAP
+//GRAPHS
+//1D DP
+//INTERVALS
+//GREEDY
+//ADVANCE GRAPH
+//2D DP
+//BIT MANIPULATION
+//MATH & GEOMETRY
