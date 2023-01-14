@@ -53,6 +53,24 @@
         return true;
     }
 
+    // hashmap solution
+    bool isAnagram1(string s, string t) {
+        if(s.size() != t.size()) return false;
+        
+        unordered_map<char,int> smap;
+        unordered_map<char,int> tmap;
+        
+        for(int i = 0; i < s.size(); i++){
+            smap[s[i]]++;
+            tmap[t[i]]++;
+        }
+        
+        for(int i = 0; i < smap.size(); i++){
+            if(smap[i] != tmap[i]) return false;
+        }
+        return true;
+    }
+
 // 3. https://leetcode.com/problems/two-sum/
     vector<int> twoSum(vector<int>& nums, int target) {
         unordered_map<int,int> um;
@@ -63,6 +81,35 @@
         }
         return {-1,-1};
     }
+ 
+    //soln
+/*
+    Given int array & target, return indices of 2 nums that add to target
+    Ex. nums = [2,7,11,15] & target = 9 -> [0,1], 2 + 7 = 9
+
+    At each num, calculate complement, if exists in hash map then return
+
+    Time: O(n)
+    Space: O(n)
+*/
+    vector<int> twoSum1(vector<int>& nums, int target) {
+        unordered_map<int, int> m;
+        vector<int> result;
+        
+        for (int i = 0; i < nums.size(); i++) {
+            int complement = target - nums[i];
+            if (m.find(complement) != m.end()) {
+                result.push_back(m[complement]);
+                result.push_back(i);
+                break;
+            } else {
+                m.insert({nums[i], i});
+            }
+        }
+        
+        return result;
+    }
+
 
 //4. https://leetcode.com/problems/group-anagrams/
     vector<vector<string>> groupAnagrams(vector<string>& strs) {
@@ -80,6 +127,47 @@
         
         return res;
     }
+
+//soln
+/*
+    Given array of strings, group anagrams together (same letters diff order)
+    Ex. strs = ["eat","tea","tan","ate","nat","bat"] -> [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+    Count chars, for each string use total char counts (naturally sorted) as key
+
+    Time: O(n x l) -> n = length of strs, l = max length of a string in strs
+    Space: O(n x l)
+*/
+class Solution4 {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> m;
+        for (int i = 0; i < strs.size(); i++) {
+            string key = getKey(strs[i]);
+            m[key].push_back(strs[i]);
+        }
+        
+        vector<vector<string>> result;
+        for (auto it = m.begin(); it != m.end(); it++) {
+            result.push_back(it->second);
+        }
+        return result;
+    }
+private:
+    string getKey(string str) {
+        vector<int> count(26);
+        for (int j = 0; j < str.size(); j++) {
+            count[str[j] - 'a']++;
+        }
+        
+        string key = "";
+        for (int i = 0; i < 26; i++) {
+            key.append(to_string(count[i] + 'a'));
+        }
+        return key;
+    }
+};
+
 
 //5. https://leetcode.com/problems/top-k-frequent-elements/
     vector<int> topKFrequent(vector<int>& nums, int k) {
@@ -102,6 +190,74 @@
         }
         return res;
     }
+
+/*
+    Given an integer array nums & an integer k, return the k most frequent elements
+    Ex. nums = [1,1,1,2,2,3] k = 2 -> [1,2], nums = [1] k = 1 -> [1]
+    
+    Heap -> optimize w/ freq map & bucket sort (no freq can be > n), get results from end
+*/
+
+// Time: O(n log k)
+// Space: O(n + k)
+
+// class Solution {
+// public:
+//     vector<int> topKFrequent(vector<int>& nums, int k) {
+//         unordered_map<int, int> m;
+//         for (int i = 0; i < nums.size(); i++) {
+//             m[nums[i]]++;
+//         }
+//         priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+//         for (auto it = m.begin(); it != m.end(); it++) {
+//             pq.push({it->second, it->first});
+//             if (pq.size() > k) {
+//                 pq.pop();
+//             }
+//         }
+//         vector<int> result;
+//         while (!pq.empty()) {
+//             result.push_back(pq.top().second);
+//             pq.pop();
+//         }
+//         return result;
+//     }
+// };
+
+// Time: O(n)
+// Space: O(n)
+
+class Solution5 {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        int n = nums.size();
+        
+        unordered_map<int, int> m;
+        for (int i = 0; i < n; i++) {
+            m[nums[i]]++;
+        }
+        
+        vector<vector<int>> buckets(n + 1);
+        for (auto it = m.begin(); it != m.end(); it++) {
+            buckets[it->second].push_back(it->first);
+        }
+        
+        vector<int> result;
+        
+        for (int i = n; i >= 0; i--) {
+            if (result.size() >= k) {
+                break;
+            }
+            if (!buckets[i].empty()) {
+                result.insert(result.end(), buckets[i].begin(), buckets[i].end());
+            }
+        }
+        
+        return result;
+    }
+};
+
+
 
 //6. https://leetcode.com/problems/product-of-array-except-self/
 
