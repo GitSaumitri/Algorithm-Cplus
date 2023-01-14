@@ -1,6 +1,17 @@
 /* Arrays & Hashing */
 
 //1. https://leetcode.com/problems/contains-duplicate/
+//2. https://leetcode.com/problems/valid-anagram/
+//3. https://leetcode.com/problems/two-sum/
+//4. https://leetcode.com/problems/group-anagrams/
+//5. https://leetcode.com/problems/top-k-frequent-elements/
+//6. https://leetcode.com/problems/product-of-array-except-self/
+//7.  https://leetcode.com/problems/valid-sudoku/
+//8.  https://leetcode.com/problems/encode-and-decode-strings/
+//9. https://leetcode.com/problems/longest-consecutive-sequence/   
+
+
+//1. https://leetcode.com/problems/contains-duplicate/
 
    bool containsDuplicate(vector<int>& nums) {
         unordered_map<int,int> umap;
@@ -264,8 +275,96 @@ public:
 
 //7.  https://leetcode.com/problems/valid-sudoku/
 
+/*
+    Determine if a 9x9 Sudoku board is valid (no repeats)
+
+    Boolean matrices to store seen values. Check rows, cols, 3x3 sub-boxes
+
+    Time: O(cnt^2)
+    Space: O(cnt^2)
+*/
+
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        const int cnt = 9;
+        bool row[cnt][cnt] = {false};
+        bool col[cnt][cnt] = {false};
+        bool sub[cnt][cnt] = {false};
+        
+        for(int r = 0; r < cnt; ++r){
+            for(int c = 0; c < cnt; ++c){
+                if(board[r][c] == '.')
+                    continue; // if not number pass
+                
+                int idx = board[r][c] - '0' - 1; //char to num idx
+                int area = (r/3) * 3 + (c/3);
+                
+                //if number already exists
+                if(row[r][idx] || col[c][idx] || sub[area][idx]){
+                    return false;
+                }
+                
+                row[r][idx] = true;
+                col[c][idx] = true;
+                sub[area][idx] = true;
+            }
+        }
+        return true;
+    }
+};
+
 //8.  https://leetcode.com/problems/encode-and-decode-strings/
-   
+/*
+    Design algorithm to encode/decode: list of strings <-> string
+
+    Encode/decode w/ non-ASCII delimiter: {len of str, "#", str}
+
+    Time: O(n)
+    Space: O(1)
+*/
+
+class Codec {
+public:
+
+    // Encodes a list of strings to a single string.
+    string encode(vector<string>& strs) {
+        string result = "";
+        
+        for (int i = 0; i < strs.size(); i++) {
+            string str = strs[i];
+            result += to_string(str.size()) + "#" + str;
+        }
+        
+        return result;
+    }
+
+    // Decodes a single string to a list of strings.
+    vector<string> decode(string s) {
+        vector<string> result;
+        
+        int i = 0;
+        while (i < s.size()) {
+            int j = i;
+            while (s[j] != '#') {
+                j++;
+            }
+            int length = stoi(s.substr(i, j - i));
+            string str = s.substr(j + 1, length);
+            result.push_back(str);
+            i = j + 1 + length;
+        }
+        
+        return result;
+    }
+private:
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec;
+// codec.decode(codec.encode(strs));
+
+
 //9. https://leetcode.com/problems/longest-consecutive-sequence/   
 
   int longestConsecutive(vector<int>& nums) {
@@ -290,5 +389,35 @@ public:
        return longestSteak;
     }
 
+//soln
+/*
+    Given unsorted array, return length of longest consecutive sequence
+    Ex. nums = [100,4,200,1,3,2] -> 4, longest is [1,2,3,4]
+
+    Store in hash set, only check for longer seq if it's the beginning
+
+    Time: O(n)
+    Space: O(n)
+*/
+
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int>s(nums.begin(), nums.end());
+        int longest = 0;
+        for(auto &n: s){
+            //if this is the start of the sequence
+            if(!s.count(n - 1)){
+                int length = 1; 
+                while(s.count(n + length))
+                    ++length;
+                longest = max(longest, length);
+            } 
+
+        }
+        return longest;
+    }
+};
 
 
