@@ -1813,7 +1813,47 @@ class placement{
         }
         return 1;
     }
+    
+   /* leetcode. 4. Median of two sorted arrays
+	Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.
 
+The overall run time complexity should be O(log (m+n)).
+		*/
+   double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int len1 = nums1.size();
+        int len2 = nums2.size();
+        
+        if(len1 > len2){
+            return findMedianSortedArrays(nums2,nums1);
+        }
+        int low = 0;int high=len1;
+        int combinedlen = len1+len2;
+        
+        while(low <= high){
+            int partition1 = low + (high-low)/2;
+            int left1 = (partition1==0?INT_MIN:nums1[partition1-1]);
+            int right1 = (partition1==len1?INT_MAX:nums1[partition1]);
+            
+            int partition2 = (combinedlen+1)/2 - partition1;
+            int left2 = (partition2==0?INT_MIN:nums2[partition2-1]);
+            int right2 = (partition2==len2?INT_MAX:nums2[partition2]);
+            
+            if(left1 <= right2 && right1 >= left2){
+                if(combinedlen%2==0){
+                    return (max(left1,left2)+min(right1,right2))/2.0;
+                }
+                return max(left1,left2);
+            }
+            if(left1 > right2){
+                high = partition1-1;
+            }else{
+                low = partition1+1;
+            }
+        }
+        return -1;
+    }
+
+	
     /* 66. Power set - Print all subsequences 
         https://takeuforward.org/data-structure/power-set-print-all-the-possible-subsequences-of-the-string/
         - O(2 to the powe n * n)
