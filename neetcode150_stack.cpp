@@ -102,6 +102,8 @@ private:
     stack<pair<int, int>> minStk;
 };
 
+
+
 /**
  * Your MinStack object will be instantiated and called as such:
  * MinStack* obj = new MinStack();
@@ -111,6 +113,48 @@ private:
  * int param_4 = obj->getMin();
  */
 
+
+class MinStack {
+public:
+    stack<int> minStack;
+    stack<int> mainStack;
+
+    MinStack() {
+        
+    }
+    
+    void push(int val) {
+        mainStack.push(val);
+        if(minStack.empty() || minStack.top()>=val){
+            minStack.push(val);
+        }    
+    }
+    
+    void pop() {
+        int val = mainStack.top();
+        mainStack.pop();
+        if(val==minStack.top()){
+            minStack.pop();
+        }
+    }
+    
+    int top() {
+        return mainStack.top();
+    }
+    
+    int getMin() {
+        return minStack.top();
+    }
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(val);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */
 
 //https://leetcode.com/problems/evaluate-reverse-polish-notation/
 
