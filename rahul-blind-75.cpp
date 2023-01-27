@@ -556,7 +556,59 @@ public:
     //19- Longest Common Subsequence -
     
     //20- Word Break Problem - https://leetcode.com/problems/word-break/
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> words(wordDict.begin(), wordDict.end());
+        unordered_map<string, vector<string>> mp;
+        return dfs(s, words, mp);
+    }
+    vector<string> dfs(string s, unordered_set<string>& wordDict, unordered_map<string, vector<string>>& mp) {
+        if (mp.find(s) != mp.end()) {
+            return mp[s];
+	/*
+	That is precisely where you are reaping the benefits of dynamic programming 
+	(which is simply memorizing past computations). In this case, what is happening is, 
+	if we have already computed the list of possible strings for this string s 
+	(perhaps because we calculated it before when we split up a bigger string in the past), 
+	just return it without redoing it again.
+	*/
+        }
+        vector<string> sentences;
+        if (s.empty()) {
+            return {""};
+        }
+        for (string word : wordDict) {
+            if (s.size() >= word.size() && s.substr(0, word.size()) == word) {
+                vector<string> subs = dfs(s.substr(word.size()), wordDict, mp);
+                for (string sub : subs) {
+                    sentences.push_back(word + (sub.size() ? " " + sub : ""));
+                }
+            }
+        }
+        mp[s] = sentences;
+        return sentences;
+    }	
     
+    //Related
+    https://leetcode.com/problems/concatenated-words
+     vector<string> findAllConcatenatedWordsInADict(vector<string>& words) {
+        unordered_set<string> s(words.begin(), words.end());
+        vector<string> res;
+        for (auto w : words) {
+            int n = w.size();
+            vector<int> dp(n+1);
+            dp[0] = 1;
+            for (int i = 0; i < n; i++) {
+                if (dp[i] == 0) continue;
+                for (int j = i+1; j <= n; j++) {
+                    if (j - i < n && s.count(w.substr(i, j-i))) dp[j] = 1;
+                }
+                if (dp[n]) { res.push_back(w); break; }
+            }
+        }
+        return res;
+    }	
+	
+	
     //21- Combination Sum - https://leetcode.com/problems/combination-sum-iv/
     
     //22- House Robber - https://leetcode.com/problems/house-robber/
