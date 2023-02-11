@@ -74,12 +74,12 @@ class BinaryTreeSeries{
     - A ghaph is a set of edges and vertexes
     - cycles in a graph (start and end in the same node) 
     - if there is a cycle in a graph - undirected/directed cyclic graph
-    - acyclic grpah (if there are no cycles in the graph)
+    - acyclic graph (if there are no cycles in the graph)
     - path in a graph (a node can't appear twice in a graph)
-    - degrees in a graph 
-        undirected graph    - degress of a vertex is the number of edges attached to it 
-                            - total degree of the grpah is twice the number of edge.
-        directed grpah  - it can have indegree (incoming edges) or outdegree (outgoing edges)
+    - degree's in a graph 
+        un-directed graph    - degress of a vertex is the number of edges attached to it 
+                            - total degree of the graph is twice the number of edge.
+        directed grpah  - it can have in-degree (incoming edges) or out-degree (outgoing edges)
         edge weight     - each edge can have weight (default can be considered as 1 )  
 */
 
@@ -90,17 +90,17 @@ class BinaryTreeSeries{
         - set of edges connecting vertices
         - 0 Based or 1 based vertices (generally 0 based)
     - Store
-        - adjecency graph (matrix way)
+        - adjacency graph (matrix way)
         -   1 based matrix - adj[n+1][m+1] 
         -   edge between two nodes is set, all other cells are not-set
-        -   in case of wighted graph - in stead of setting the cell place the wight
-        -   space needed is O(nxn)
+        -   in case of wighted graph - in-stead-of setting the cell, place the weight
+        -   space needed is O(n*n)
         - adjacency list (vector way)
         -   vector<int>adj[n+1]
         -   each index in the vector will contain all the neighbor nodes
         -   in case of weighted graph   -   in stead of storing only the neighbor node
                                         -   store the node with weight in a pair
-        -   O(2E) in case of undirected and O(E) in case of directed
+        -   O(2E) in case of un-directed and O(E) in case of directed
 */
 
 /*
@@ -108,10 +108,10 @@ class BinaryTreeSeries{
 */
 
 /*  4. Connected components
-        - different coponents of single graph
-        - traversal algorithm can traverse only one coponent
+        - different components of a single graph
+        - traversal algorithm can traverse only one component
         - can't traverse from one component to other so need to use a visited array
-        - visited array to make sure that all the coponents (nodes) are traversed
+        - visited array to make sure that all the components (nodes) are traversed
         - so in summary, starting from one node, we can't make sure all the nodes will get traverse
     for(i -> 1 to 10)
         if(!vis[i])
@@ -123,9 +123,9 @@ class BinaryTreeSeries{
     - need a starting node (from where the traversal starts)
     - a queue data structure (starting node will be in queue to start with)
     - a visited array (starting node mark as visited)
-    - while queue is not empty - (take the element taken out from the queue)   
+    - while queue is not empty - (take the element out from the queue)   
         - push all the neighbors into queue (if it's not visited)
-        - mark the nodes as visited (visited arrat)
+        - mark the nodes as visited (visited array)
     - based on starting node - the result traversal will be different
     space complexity - O(3N) ~ O(N)
     time complexity - O(N) + O(2E)
@@ -151,13 +151,13 @@ vector<int> bfsOfGraph(int v, vector<int> adj[]) {
 }
 
 /* 5. Depth First Search (DFS)
-    - before traversing all neighbor(libe BFS) - traversal one node in depth first
+    - before traversing all neighbor(like BFS) - traversal one node in depth first
     - goes in depth before going to next neighbor
     - based on the starting node - traversal will be different
     - start with the root 
         - recurssively call the node
         - mark them visited for the recurssive visited nodes
-        - once return from above recurssive call the same for next node
+        - once return from above recurssive, call the same for next node
     space complexity - O(3N) ~ O(N)
     time complexity - O(N) + O(2E) 
                     - calling recurssion once + degree of graph (number of times each node will be called)
@@ -182,9 +182,9 @@ vector<int> dfsOfGraph(int v, vector<int> adj[]){
 }
 
 /* 7. Number of Provinces - connected components
-    - find out number of connected components
+    - find out, number of connected components
     - any traversal can be used - BFS or DFS
-    - traverse till the nodes are not visited 
+    - traverse till all the nodes are not visited 
     space complexity - O(N) for visited array - O(N) recurssion stack space
     time complexity - O(N) + O(v + 2E)
 */
@@ -292,7 +292,7 @@ vector<vector<int>> floodFill(vector<vector<int>> &image,
 }
 
 /* 10. Rotten Oranges 
-    - each orange rotten all it's neighbor 
+    - each orange rottens all it's neighbor 
     - all fresh oranges in the same level - BFS
     - if we would have taken DFS - it will take more time to reach all it's neighbors
     - since we want to rotten then simultaniously (with minimum time) so BFS
@@ -367,7 +367,7 @@ int orangeRotting(vector<vector<int>>& grid){
 bool detect(int src, vector<int> adj[], int vis[]){
     vis[src]=1;
     queue<pair<int,int>> q;
-    q.push({src,-1});
+    q.push({src,-1});  //{current node, parent node (node visisted, previous to this node)}
     while(!q.empty()){
         int node = q.front().first;
         int parent = q.front().second;
@@ -427,9 +427,9 @@ bool isCycle1(int V, vector<int> adj[]){
 /* 13. Distance of nearest cell having 1, 0/1 matrix
     - 0/1 matrix is given, find the matrix is having nearest one of each cell
     - distance is calculated only the row and col distance (not diagonally)
-    - nearest distance so think about BFS
+    - nearest distance, so think about BFS
     - with 1 step - reach all 0 at a distance 1, with step 2, each all 0 at distance 2
-    - multi source BFS, put all source at queue and stat BFS
+    - multi source BFS, put all source at queue and start BFS
     time : O(n*m)
     space : O(n*m)
 */
@@ -478,7 +478,7 @@ vector<vector<int>> nearest(vector<vector<int>> grid) {
     - A 'O' or a set of O is is considered to be surrounded by X if there are X
     at location, just below, above, left and just right to it.
     - that means - boundary O can be ignored - not surrounded by X
-    - if a O is not connected to a boundary O, that means it can be converted
+    - if a O is not connected to a boundary, that means it can be converted to X
     - so find out all the boundary O and it's connected which can't be converted 
     space: O(N*M)
     time: O(N*M)
@@ -589,7 +589,7 @@ int numberOfEnclaves(vector<vector<int>> &grid){
 
 /* 16. Number of distinct Islands
    - Given a boolean 2D matrix grid of size n * m. 
-   You have to find the number of distinct islands where a group of connected 1s 
+   You have to find the number of distinct islands where a group of connected 1's 
    (horizontally or vertically) forms an island. Two islands are considered to be 
    distinct if and only if one island is not equal to another (not rotated or reflected)
    space: O(n*m)
@@ -715,7 +715,7 @@ bool isBipartiteDfs(int V, vector<int>adj[]){
 
 /* 19. Detect cycle in a directed graph
    - This is a not a cycle if the neighbor is already visited - it's true for undirected
-   - In case of firected, on the same path, the node has to be visited again to be a cycle.
+   - In case of directed, on the same path, the node has to be visited again to be a cycle.
    space and time: same as DFS
 */
 bool dfsCheck(int node, vector<int> adj[], int vis[], 
@@ -808,7 +808,7 @@ vector<int> eventualSafeNodes(int V, vector<int> adj[]){
 }
 
 /* 21. Topological sorting - DFS
-   - it only exist on DAG (directed acyclic grap - directed graph with no cycles)
+   - it only exist on DAG (directed acyclic graph - directed graph with no cycles)
    - Any linear ordering of vertices such that if there is an edge between u and v than
     'u' always appear before 'v' in that ordering.
    - ordering - reverse of dfs
