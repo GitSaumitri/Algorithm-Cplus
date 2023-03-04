@@ -1,8 +1,6 @@
 
 # 1. sliding window
-
-
-##[2444. Count Subarrays With Fixed Bounds](https://leetcode.com/problems/count-subarrays-with-fixed-bounds)
+[2444. Count Subarrays With Fixed Bounds](https://leetcode.com/problems/count-subarrays-with-fixed-bounds)
 
 You are given an integer array nums and two integers minK and maxK.
 
