@@ -32,6 +32,12 @@ Koko likes to eat slowly but still wants to finish eating all the bananas before
 
 Return the minimum integer k such that she can eat all the bananas within h hours.
 
+links:
+
+https://leetcode.com/tag/binary-search/
+
+https://leetcode.com/discuss/study-guide/3266833/op-binary-search-questions
+
 # 2. sliding window
 [2444. Count Subarrays With Fixed Bounds](https://leetcode.com/problems/count-subarrays-with-fixed-bounds)
 
